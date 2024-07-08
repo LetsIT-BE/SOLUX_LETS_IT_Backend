@@ -1,6 +1,7 @@
 package letsit_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,6 +33,34 @@ public class Member {
 
     @Column(nullable = false)
     private String gender;
+
+    @Column
+    private String picture;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Role role;
+
+    @Builder
+    public Member(String name, String email, String picture, Role role) {
+        this.name = name;
+        this.email = email;
+        this.picture = picture;
+        this.role = role;
+    }
+
+    public Member update(String name, String picture) {
+        this.name = name;
+        this.picture = picture;
+
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
+
+
 
     // 가입일
     // 본인인증여부
