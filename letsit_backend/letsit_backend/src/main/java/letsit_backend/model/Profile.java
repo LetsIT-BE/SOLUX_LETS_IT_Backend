@@ -29,7 +29,7 @@ public class Profile {
 
     private int mannerGrade;
 
-    private String name;
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     private Age age;
