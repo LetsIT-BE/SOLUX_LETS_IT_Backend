@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Builder
 @Getter
@@ -30,9 +31,17 @@ public class Post {
     @Column(nullable = false)
     private int peopleNum;
 
-    // TODO 기간어떻게받을지...
-    private Timestamp recruitPeriod;
-    private Timestamp projectPeriod;
+    @Column(nullable = false)
+    private Timestamp recruitPeriodStart;
+
+    @Column(nullable = false)
+    private Timestamp recruitPeriodEnd;
+
+    @Column(nullable = false)
+    private Timestamp projectPeriodStart;
+
+    @Column(nullable = false)
+    private Timestamp projectPeriodEnd;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
@@ -66,7 +75,22 @@ public class Post {
     private Boolean deadline;
 
     // TODO 요구스택 엔티티랑 매핑
-    private Long stackId;
+    //private Long stackId;
 
+    @ElementCollection
+    private List<String> stack;
 
+    private String preference;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AgeGroup ageGroup;
+
+    public enum AgeGroup {
+        s10,
+        s20a,
+        s20b,
+        s20c,
+        _30s30대이상
+    }
 }
