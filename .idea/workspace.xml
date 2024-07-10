@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0ba6b3-e61e-4c27-93e0-c68dadc60926" name="변경" comment="구인 게시판 기본 세팅(1차)">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="2d0ba6b3-e61e-4c27-93e0-c68dadc60926" name="변경" comment="구인 게시판 기본 세팅(2차)-테스트 통과-지역, 카테고리 제외">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +78,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Gradle.PostServiceTest.testCreatePost">
+  <component name="RunManager" selected="Spring Boot.LetsitBackendApplication">
     <configuration name="PostServiceTest.testCreatePost" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -154,7 +151,7 @@
       <workItem from="1720090082081" duration="2318000" />
       <workItem from="1720471766242" duration="2891000" />
       <workItem from="1720509534154" duration="4465000" />
-      <workItem from="1720592040993" duration="5258000" />
+      <workItem from="1720592040993" duration="7057000" />
     </task>
     <task id="LOCAL-00001" summary="구인 게시판 기본 세팅(1차)">
       <option name="closed" value="true" />
@@ -164,7 +161,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720593025324</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="구인 게시판 기본 세팅(2차)-테스트 통과-지역, 카테고리 제외">
+      <option name="closed" value="true" />
+      <created>1720597621856</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1720597621856</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -172,6 +177,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="구인 게시판 기본 세팅(1차)" />
-    <option name="LAST_COMMIT_MESSAGE" value="구인 게시판 기본 세팅(1차)" />
+    <MESSAGE value="구인 게시판 기본 세팅(2차)-테스트 통과-지역, 카테고리 제외" />
+    <option name="LAST_COMMIT_MESSAGE" value="구인 게시판 기본 세팅(2차)-테스트 통과-지역, 카테고리 제외" />
   </component>
 </project>

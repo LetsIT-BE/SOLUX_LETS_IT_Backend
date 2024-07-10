@@ -58,4 +58,13 @@ public class PostService {
 
         return responseDto;
     }
+
+    public boolean deletePost(Long postId) {
+        if (postRepository.existsById(postId)) {
+            postRepository.deleteById(postId);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
