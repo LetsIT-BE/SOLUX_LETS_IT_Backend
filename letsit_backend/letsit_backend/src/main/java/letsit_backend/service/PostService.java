@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,30 +17,42 @@ public class PostService {
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
         Post post = Post.builder()
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
                 .peopleNum(requestDto.getPeopleNum())
                 .recruitPeriodStart(requestDto.getRecruitPeriod().getStartDate())
                 .recruitPeriodEnd(requestDto.getRecruitPeriod().getEndDate())
-                .preference(requestDto.getPreference())
-                .content(requestDto.getContent())
-                .regionId(requestDto.getProjectInfo().getRegionId())
                 .projectPeriodStart(requestDto.getProjectInfo().getProjectPeriodStart())
                 .projectPeriodEnd(requestDto.getProjectInfo().getProjectPeriodEnd())
-                .stack(requestDto.getStack())
-                .ageGroup(requestDto.getProjectInfo().getAgeGroup())
+                .difficulty(requestDto.getDifficulty())
+                .onOff(requestDto.getOnOff())
+//                .region(null)  // 설정 필요 시 설정
+                .categoryId(requestDto.getCategoryId())
+                .viewCount(0)
+                .scrapCount(0)
                 .createdAt(new Timestamp(System.currentTimeMillis()))
                 .updatedAt(new Timestamp(System.currentTimeMillis()))
+                .deadline(false)
+                .stack(requestDto.getStack())
+                .preference(requestDto.getPreference())
+                .ageGroup(requestDto.getProjectInfo().getAgeGroup())
                 .build();
 
         Post savedPost = postRepository.save(post);
 
         PostResponseDto responseDto = new PostResponseDto();
         responseDto.setPostId(savedPost.getPostId());
+        responseDto.setTitle(savedPost.getTitle());
+        responseDto.setContent(savedPost.getContent());
         responseDto.setPeopleNum(savedPost.getPeopleNum());
         responseDto.setRecruitPeriod(requestDto.getRecruitPeriod());
         responseDto.setPreference(savedPost.getPreference());
-        responseDto.setContent(savedPost.getContent());
         responseDto.setProjectInfo(requestDto.getProjectInfo());
         responseDto.setStack(savedPost.getStack());
+        responseDto.setDifficulty(savedPost.getDifficulty());
+        responseDto.setOnOff(savedPost.getOnOff());
+        responseDto.setCategoryId(savedPost.getCategoryId());
+        responseDto.setAgeGroup(savedPost.getAgeGroup());
         responseDto.setCreatedAt(savedPost.getCreatedAt());
         responseDto.setUpdatedAt(savedPost.getUpdatedAt());
 

@@ -12,12 +12,18 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PostRequestDto {
+    private String title;
+    private String content;
     private int peopleNum;
     private RecruitPeriod recruitPeriod;
     private String preference;
     private ProjectInfo projectInfo;
     private List<String> stack;
-    private String content;
+    private Post.Difficulty difficulty;
+    private Boolean onOff;
+    private Long regionId;
+    private Long categoryId;
+
 
     @Getter
     @Setter
@@ -31,7 +37,7 @@ public class PostRequestDto {
     @Setter
     @NoArgsConstructor
     public static class ProjectInfo {
-        private Long regionId;
+//        private Long regionId;
         private Timestamp projectPeriodStart;
         private Timestamp projectPeriodEnd;
         private Post.AgeGroup ageGroup;

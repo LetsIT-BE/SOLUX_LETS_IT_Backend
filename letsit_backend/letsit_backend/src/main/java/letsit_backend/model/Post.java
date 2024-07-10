@@ -58,7 +58,7 @@ public class Post {
     // TODO 지역엔티티랑 매핑
     private Long regionId;
 
-    // TODO 지역엔티티랑 매핑
+    // TODO 분야엔티티랑 매핑
     private Long categoryId;
 
     private int viewCount;
@@ -84,10 +84,10 @@ public class Post {
     private AgeGroup ageGroup;
 
     public enum AgeGroup {
-        s10,
-        s20a,
-        s20b,
-        s20c,
-        s30
+        s10, //10 대
+        s20a, //20대 초
+        s20b,  // 20대 중
+        s20c, // 20대 후
+        s30 // 30대
     }
 }
