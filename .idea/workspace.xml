@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0ba6b3-e61e-4c27-93e0-c68dadc60926" name="변경" comment="" />
+    <list default="true" id="2d0ba6b3-e61e-4c27-93e0-c68dadc60926" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -57,8 +60,9 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.LetsitBackendApplication (1).executor": "Run",
     "Spring Boot.LetsitBackendApplication.executor": "Run",
-    "git-widget-placeholder": "features/posts",
+    "git-widget-placeholder": "feature/posts",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "F:/Project/solux_backend/SOLUX_LETS_IT_Backend",
     "node.js.detected.package.eslint": "true",
@@ -69,15 +73,34 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.LetsitBackendApplication">
+    <configuration name="LetsitBackendApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="letsit_backend.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="letsit_backend.LetsitBackendApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="letsit_backend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="LetsitBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="letsit_backend.letsit_backend.main" />
+      <module name="letsit_backend.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="letsit_backend.LetsitBackendApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.LetsitBackendApplication (1)" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -98,6 +121,7 @@
       <workItem from="1720090082081" duration="2318000" />
       <workItem from="1720471766242" duration="2891000" />
       <workItem from="1720509534154" duration="4465000" />
+      <workItem from="1720592040993" duration="654000" />
     </task>
     <servers />
   </component>
