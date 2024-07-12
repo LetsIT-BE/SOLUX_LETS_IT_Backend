@@ -24,7 +24,7 @@ public class TeamMember {
     //private Long profileId;
 
     @Enumerated(EnumType.STRING)
-    private Role teamLeader;
+    private Role teamMemberRole;
     public enum Role {
         Team_Leader,
         Team_Member;
