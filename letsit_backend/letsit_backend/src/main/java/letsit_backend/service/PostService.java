@@ -45,9 +45,9 @@ public class PostService {
         responseDto.setTitle(savedPost.getTitle());
         responseDto.setContent(savedPost.getContent());
         responseDto.setPeopleNum(savedPost.getPeopleNum());
-        responseDto.setRecruitPeriod(requestDto.getRecruitPeriod());
+        responseDto.setRecruitPeriod(new PostResponseDto.RecruitPeriod(savedPost.getRecruitPeriodStart(), savedPost.getRecruitPeriodEnd()));
         responseDto.setPreference(savedPost.getPreference());
-        responseDto.setProjectInfo(requestDto.getProjectInfo());
+        responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(savedPost.getRegionId().toString(), savedPost.getProjectPeriod(), savedPost.getAgeGroup()));
         responseDto.setStack(savedPost.getStack());
         responseDto.setDifficulty(savedPost.getDifficulty());
         responseDto.setOnOff(savedPost.getOnOff());
@@ -59,39 +59,51 @@ public class PostService {
         return responseDto;
     }
 
-    public boolean deletePost(Long postId) {
-        if (postRepository.existsById(postId)) {
-            postRepository.deleteById(postId);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-//    public PostResponseDto getPostById(Long postId) {
-//        Optional<Post> optionalPost = postRepository.findById(postId);
-//        if (optionalPost.isPresent()) {
-//            Post post = optionalPost.get();
-//            PostResponseDto responseDto = new PostResponseDto();
-//            responseDto.setPostId(post.getPostId());
-//            responseDto.setTitle(post.getTitle());
-//            responseDto.setContent(post.getContent());
-//            responseDto.setPeopleNum(post.getPeopleNum());
-//            responseDto.setRecruitPeriod(new PostResponseDto.RecruitPeriod(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
-//            responseDto.setPreference(post.getPreference());
-//            responseDto.setProjectInfo(new PostResponseDto.ProjectInfo("온라인 협업", post.getRegionId().toString(), post.getProjectPeriodStart(), post.getProjectPeriodEnd(), post.getAgeGroup()));
-//            responseDto.setStack(post.getStack());
-//            responseDto.setDifficulty(post.getDifficulty());
-//            responseDto.setOnOff(post.getOnOff());
-//            responseDto.setCategoryId(post.getCategoryId());
-//            responseDto.setAgeGroup(post.getAgeGroup());
-//            responseDto.setCreatedAt(post.getCreatedAt());
-//            responseDto.setUpdatedAt(post.getUpdatedAt());
-//            responseDto.setViewCount(post.getViewCount());
-//            responseDto.setScrapCount(post.getScrapCount());
-//            return responseDto;
+//    public boolean deletePost(Long postId) {
+//        if (postRepository.existsById(postId)) {
+//            postRepository.deleteById(postId);
+//            return true;
 //        } else {
-//            throw new IllegalArgumentException("Invalid region parameter");
+//            return false;
 //        }
 //    }
+
+    public boolean deletePost(Long userId, Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            if (post.getUserId().getUserId().equals(userId)) {
+                postRepository.deleteById(postId);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public PostResponseDto getPostById(Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            PostResponseDto responseDto = new PostResponseDto();
+            responseDto.setPostId(post.getPostId());
+            responseDto.setTitle(post.getTitle());
+            responseDto.setContent(post.getContent());
+            responseDto.setPeopleNum(post.getPeopleNum());
+            responseDto.setRecruitPeriod(new PostResponseDto.RecruitPeriod(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
+            responseDto.setPreference(post.getPreference());
+            responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId().toString(), post.getProjectPeriod(), post.getAgeGroup()));
+            responseDto.setStack(post.getStack());
+            responseDto.setDifficulty(post.getDifficulty());
+            responseDto.setOnOff(post.getOnOff());
+            responseDto.setCategoryId(post.getCategoryId());
+            responseDto.setAgeGroup(post.getAgeGroup());
+            responseDto.setCreatedAt(post.getCreatedAt());
+            responseDto.setUpdatedAt(post.getUpdatedAt());
+            responseDto.setViewCount(post.getViewCount());
+            responseDto.setScrapCount(post.getScrapCount());
+            return responseDto;
+        } else {
+            throw new IllegalArgumentException("Invalid post ID");
+        }
+    }
 }

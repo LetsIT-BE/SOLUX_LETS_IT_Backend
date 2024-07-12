@@ -16,9 +16,9 @@ public class PostResponseDto {
     private String title;
     private String content;
     private int peopleNum;
-    private PostRequestDto.RecruitPeriod recruitPeriod;
+    private RecruitPeriod recruitPeriod;
     private String preference;
-    private PostRequestDto.ProjectInfo projectInfo;
+    private ProjectInfo projectInfo;
     private List<String> stack;
     private Post.Difficulty difficulty;
     private Boolean onOff;
@@ -40,6 +40,7 @@ public class PostResponseDto {
             this.startDate = startDate;
             this.endDate = endDate;
         }
+
     }
 
     @Getter
