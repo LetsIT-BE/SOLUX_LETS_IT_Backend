@@ -54,4 +54,15 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(false, "Invalid region parameter"));
         }
     }
+
+    @PostMapping("/{postId}/close")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<String> closePost(@PathVariable Long postId) {
+        boolean isClosed = postService.closePost(postId);
+        if (isClosed) {
+            return new Response<>(true, "모집이 마감되었습니다.");
+        } else {
+            return new Response<>(false, "모집 마감에 실패했습니다.");
+        }
+    }
 }

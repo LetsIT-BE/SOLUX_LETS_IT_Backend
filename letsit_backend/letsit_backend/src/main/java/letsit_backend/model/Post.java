@@ -100,4 +100,8 @@ public class Post {
         s20c, // 20대 후
         s30 // 30대
     }
+
+    public void setDeadline(Boolean deadline) {
+        this.deadline = deadline;
+    }
 }

@@ -106,4 +106,16 @@ public class PostService {
             throw new IllegalArgumentException("Invalid post ID");
         }
     }
+
+    public boolean closePost(Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.setDeadline(true);
+            postRepository.save(post);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
