@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,7 @@ public class PostService {
                 .peopleNum(requestDto.getPeopleNum())
                 .recruitPeriodStart(requestDto.getRecruitPeriod().getStartDate())
                 .recruitPeriodEnd(requestDto.getRecruitPeriod().getEndDate())
-                .projectPeriodStart(requestDto.getProjectInfo().getProjectPeriodStart())
-                .projectPeriodEnd(requestDto.getProjectInfo().getProjectPeriodEnd())
+                .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
                 .difficulty(requestDto.getDifficulty())
                 .onOff(requestDto.getOnOff())
 //                .region(null)  // 설정 필요 시 설정
@@ -67,4 +67,31 @@ public class PostService {
             return false;
         }
     }
+
+//    public PostResponseDto getPostById(Long postId) {
+//        Optional<Post> optionalPost = postRepository.findById(postId);
+//        if (optionalPost.isPresent()) {
+//            Post post = optionalPost.get();
+//            PostResponseDto responseDto = new PostResponseDto();
+//            responseDto.setPostId(post.getPostId());
+//            responseDto.setTitle(post.getTitle());
+//            responseDto.setContent(post.getContent());
+//            responseDto.setPeopleNum(post.getPeopleNum());
+//            responseDto.setRecruitPeriod(new PostResponseDto.RecruitPeriod(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
+//            responseDto.setPreference(post.getPreference());
+//            responseDto.setProjectInfo(new PostResponseDto.ProjectInfo("온라인 협업", post.getRegionId().toString(), post.getProjectPeriodStart(), post.getProjectPeriodEnd(), post.getAgeGroup()));
+//            responseDto.setStack(post.getStack());
+//            responseDto.setDifficulty(post.getDifficulty());
+//            responseDto.setOnOff(post.getOnOff());
+//            responseDto.setCategoryId(post.getCategoryId());
+//            responseDto.setAgeGroup(post.getAgeGroup());
+//            responseDto.setCreatedAt(post.getCreatedAt());
+//            responseDto.setUpdatedAt(post.getUpdatedAt());
+//            responseDto.setViewCount(post.getViewCount());
+//            responseDto.setScrapCount(post.getScrapCount());
+//            return responseDto;
+//        } else {
+//            throw new IllegalArgumentException("Invalid region parameter");
+//        }
+//    }
 }

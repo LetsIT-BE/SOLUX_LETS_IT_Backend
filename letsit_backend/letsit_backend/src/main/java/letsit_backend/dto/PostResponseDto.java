@@ -26,4 +26,34 @@ public class PostResponseDto {
     private Post.AgeGroup ageGroup;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private int viewCount;
+    private int scrapCount;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class RecruitPeriod {
+        private Timestamp startDate;
+        private Timestamp endDate;
+
+        public RecruitPeriod(Timestamp startDate, Timestamp endDate) {
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class ProjectInfo {
+        private String regionId;
+        private Post.projectPeriod projectPeriod;
+        private Post.AgeGroup ageGroup;
+
+        public ProjectInfo(String regionId, Post.projectPeriod projectPeriod, Post.AgeGroup ageGroup) {
+            this.regionId = regionId;
+            this.projectPeriod = projectPeriod;
+            this.ageGroup = ageGroup;
+        }
+    }
 }

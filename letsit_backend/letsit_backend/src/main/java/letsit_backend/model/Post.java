@@ -37,11 +37,21 @@ public class Post {
     @Column(nullable = false)
     private Timestamp recruitPeriodEnd;
 
-    @Column(nullable = false)
-    private Timestamp projectPeriodStart;
+//    @Column(nullable = false)
+//    private Timestamp projectPeriodStart;
+//
+//    @Column(nullable = false)
+//    private Timestamp projectPeriodEnd;
 
-    @Column(nullable = false)
-    private Timestamp projectPeriodEnd;
+    @Enumerated(EnumType.STRING)
+    private projectPeriod projectPeriod;
+    public enum projectPeriod {
+        oneMonth,
+        twoMonths,
+        threeMonths,
+        fourMonths,
+        fiveMonths
+    }
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;

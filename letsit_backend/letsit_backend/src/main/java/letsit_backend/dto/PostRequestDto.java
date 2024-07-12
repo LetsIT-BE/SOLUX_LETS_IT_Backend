@@ -37,9 +37,7 @@ public class PostRequestDto {
     @Setter
     @NoArgsConstructor
     public static class ProjectInfo {
-//        private Long regionId;
-        private Timestamp projectPeriodStart;
-        private Timestamp projectPeriodEnd;
+        private Post.projectPeriod projectPeriod;
         private Post.AgeGroup ageGroup;
     }
 }
