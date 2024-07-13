@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -117,5 +119,32 @@ public class PostService {
         } else {
             return false;
         }
+    }
+
+    // 최신순으로 게시글 조회
+    public List<PostResponseDto> getAllPostsOrderByCreatedAt() {
+        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
+        return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
+    }
+
+    private PostResponseDto convertToResponseDto(Post post) {
+        PostResponseDto responseDto = new PostResponseDto();
+        responseDto.setPostId(post.getPostId());
+        responseDto.setTitle(post.getTitle());
+        responseDto.setContent(post.getContent());
+        responseDto.setPeopleNum(post.getPeopleNum());
+        responseDto.setRecruitPeriod(new PostResponseDto.RecruitPeriod(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
+        responseDto.setPreference(post.getPreference());
+        responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId() != null ? post.getRegionId().toString() : null, post.getProjectPeriod(), post.getAgeGroup()));
+        responseDto.setStack(post.getStack());
+        responseDto.setDifficulty(post.getDifficulty());
+        responseDto.setOnOff(post.getOnOff());
+        responseDto.setCategoryId(post.getCategoryId());
+        responseDto.setAgeGroup(post.getAgeGroup());
+        responseDto.setCreatedAt(post.getCreatedAt());
+        responseDto.setUpdatedAt(post.getUpdatedAt());
+        responseDto.setViewCount(post.getViewCount());
+        responseDto.setScrapCount(post.getScrapCount());
+        return responseDto;
     }
 }

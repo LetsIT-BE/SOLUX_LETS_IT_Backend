@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -64,5 +66,12 @@ public class PostController {
         } else {
             return new Response<>(false, "모집 마감에 실패했습니다.");
         }
+    }
+
+    // 최신순으로 모든 게시글 조회
+    @GetMapping("/list")
+    public ResponseEntity<List<PostResponseDto>> getAllPosts() {
+        List<PostResponseDto> posts = postService.getAllPostsOrderByCreatedAt();
+        return ResponseEntity.ok(posts);
     }
 }
