@@ -74,4 +74,11 @@ public class PostController {
         List<PostResponseDto> posts = postService.getAllPostsOrderByCreatedAt();
         return ResponseEntity.ok(posts);
     }
+
+    // 스크랩순으로 모든 게시글 조회
+    @GetMapping("/list/scrap")
+    public ResponseEntity<List<PostResponseDto>> getAllPostsOrderByScrapCount() {
+        List<PostResponseDto> posts = postService.getAllPostsOrderByScrapCount();
+        return ResponseEntity.ok(posts);
+    }
 }

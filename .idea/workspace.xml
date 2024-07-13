@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="구인 게시판 기본 세팅(8차)-PeopleNum 엔티티타입 수정-지역, 카테고리 제외">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="구인 게시판 목록 기본 세팅(1차)-최신순으로 list-지역, 카테고리 제외" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,6 +37,9 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -129,7 +130,7 @@
       <workItem from="1720800857897" duration="4380000" />
       <workItem from="1720805419396" duration="4805000" />
       <workItem from="1720816978385" duration="5587000" />
-      <workItem from="1720851928242" duration="2760000" />
+      <workItem from="1720851928242" duration="3151000" />
     </task>
     <task id="LOCAL-00001" summary="구인 게시판 기본 세팅(4차)-기본 타입 다시 세팅-지역, 카테고리 제외">
       <option name="closed" value="true" />
@@ -171,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720854022249</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="구인 게시판 목록 기본 세팅(1차)-최신순으로 list-지역, 카테고리 제외">
+      <option name="closed" value="true" />
+      <created>1720855323713</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1720855323713</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,6 +193,7 @@
     <MESSAGE value="구인 게시판 기본 세팅(6차)-모집마감버튼 구현-지역, 카테고리 제외" />
     <MESSAGE value="구인 게시판 기본 세팅(7차)-테스트 실행(1차)-지역, 카테고리 제외" />
     <MESSAGE value="구인 게시판 기본 세팅(8차)-PeopleNum 엔티티타입 수정-지역, 카테고리 제외" />
-    <option name="LAST_COMMIT_MESSAGE" value="구인 게시판 기본 세팅(8차)-PeopleNum 엔티티타입 수정-지역, 카테고리 제외" />
+    <MESSAGE value="구인 게시판 목록 기본 세팅(1차)-최신순으로 list-지역, 카테고리 제외" />
+    <option name="LAST_COMMIT_MESSAGE" value="구인 게시판 목록 기본 세팅(1차)-최신순으로 list-지역, 카테고리 제외" />
   </component>
 </project>
