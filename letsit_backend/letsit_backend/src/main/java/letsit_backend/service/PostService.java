@@ -26,7 +26,7 @@ public class PostService {
                 .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
                 .difficulty(requestDto.getDifficulty())
                 .onOff(requestDto.getOnOff())
-//                .region(null)  // 설정 필요 시 설정
+                .regionId(requestDto.getRegionId()) // 추가
                 .categoryId(requestDto.getCategoryId())
                 .viewCount(0)
                 .scrapCount(0)

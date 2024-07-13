@@ -1,103 +1,114 @@
 package letsit_backend.service;
 
 import letsit_backend.dto.PostRequestDto;
-import letsit_backend.dto.PostRequestDto.ProjectInfo;
-import letsit_backend.dto.PostRequestDto.RecruitPeriod;
 import letsit_backend.dto.PostResponseDto;
+import letsit_backend.model.Member;
 import letsit_backend.model.Post;
+import letsit_backend.repository.MemberRepository;
 import letsit_backend.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles("test")
 public class PostServiceTest {
 
     @Autowired
     private PostService postService;
 
-    @MockBean
+    @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    private PostRequestDto postRequestDto;
+    private Long userId;
 
     @BeforeEach
     public void setUp() {
-        Post post = Post.builder()
-                .postId(1L)
-                .title("Test Title")
-                .content("Test Content")
-                .peopleNum(5)
-                .recruitPeriodStart(Timestamp.valueOf("2024-07-01 00:00:00"))
-                .recruitPeriodEnd(Timestamp.valueOf("2024-07-31 23:59:59"))
-                .projectPeriodStart(Timestamp.valueOf("2024-08-01 00:00:00"))
-                .projectPeriodEnd(Timestamp.valueOf("2024-10-31 23:59:59"))
-                .difficulty(Post.Difficulty.basic)
-                .onOff(true)
-//                .region(null) // 설정 필요 시 설정
-                .categoryId(1L)
-                .viewCount(0)
-                .scrapCount(0)
-                .createdAt(new Timestamp(System.currentTimeMillis()))
-                .updatedAt(new Timestamp(System.currentTimeMillis()))
-                .deadline(false)
-                .stack(List.of("Java", "Spring"))
-                .preference("Test Preference")
-                .ageGroup(Post.AgeGroup.s20b)
+        // Create a test member
+        Member member = Member.builder()
+                .loginId("testuser")
+                .password("password")
+                .email("testuser@example.com")
+                .name("Test User")
+                .birth("1990-01-01")
+                .gender("M")
                 .build();
+        Member savedMember = memberRepository.save(member);
+        userId = savedMember.getUserId();
 
-        Mockito.when(postRepository.save(any(Post.class))).thenReturn(post);
-    }
-
-    @Test
-    public void testCreatePost() {
-        PostRequestDto postRequestDto = new PostRequestDto();
+        // Setup the post request DTO
+        postRequestDto = new PostRequestDto();
         postRequestDto.setTitle("Test Title");
         postRequestDto.setContent("Test Content");
         postRequestDto.setPeopleNum(5);
 
-        RecruitPeriod recruitPeriod = new RecruitPeriod();
+        PostRequestDto.RecruitPeriod recruitPeriod = new PostRequestDto.RecruitPeriod();
         recruitPeriod.setStartDate(Timestamp.valueOf("2024-07-01 00:00:00"));
         recruitPeriod.setEndDate(Timestamp.valueOf("2024-07-31 23:59:59"));
         postRequestDto.setRecruitPeriod(recruitPeriod);
 
-        ProjectInfo projectInfo = new ProjectInfo();
-        projectInfo.setProjectPeriodStart(Timestamp.valueOf("2024-08-01 00:00:00"));
-        projectInfo.setProjectPeriodEnd(Timestamp.valueOf("2024-10-31 23:59:59"));
-        projectInfo.setAgeGroup(Post.AgeGroup.s20b);
+        postRequestDto.setPreference("관련 경력 3년 이상, Git 사용 경험");
+
+        PostRequestDto.ProjectInfo projectInfo = new PostRequestDto.ProjectInfo();
+        projectInfo.setProjectPeriod(Post.projectPeriod.threeMonths);
+        projectInfo.setAgeGroup(Post.AgeGroup.s20c);
         postRequestDto.setProjectInfo(projectInfo);
 
+        postRequestDto.setStack(List.of("Java", "React"));
         postRequestDto.setDifficulty(Post.Difficulty.basic);
         postRequestDto.setOnOff(true);
-//        postRequestDto.setRegionId(null); // 설정 필요 시 설정
-//        postRequestDto.setCategoryId(1L);
-        postRequestDto.setStack(List.of("Java", "Spring"));
-        postRequestDto.setPreference("Test Preference");
+        postRequestDto.setRegionId(1L);
+        postRequestDto.setCategoryId(1L);
+    }
 
-        PostResponseDto postResponseDto = postService.createPost(postRequestDto);
+    @Test
+    public void testCreatePost() {
+        PostResponseDto responseDto = postService.createPost(postRequestDto);
 
-        assertThat(postResponseDto).isNotNull();
-        assertThat(postResponseDto.getTitle()).isEqualTo("Test Title");
-        assertThat(postResponseDto.getContent()).isEqualTo("Test Content");
-        assertThat(postResponseDto.getPeopleNum()).isEqualTo(5);
-        assertThat(postResponseDto.getRecruitPeriod().getStartDate()).isEqualTo(Timestamp.valueOf("2024-07-01 00:00:00"));
-        assertThat(postResponseDto.getRecruitPeriod().getEndDate()).isEqualTo(Timestamp.valueOf("2024-07-31 23:59:59"));
-        assertThat(postResponseDto.getProjectInfo().getProjectPeriodStart()).isEqualTo(Timestamp.valueOf("2024-08-01 00:00:00"));
-        assertThat(postResponseDto.getProjectInfo().getProjectPeriodEnd()).isEqualTo(Timestamp.valueOf("2024-10-31 23:59:59"));
-        assertThat(postResponseDto.getDifficulty()).isEqualTo(Post.Difficulty.basic);
-        assertThat(postResponseDto.getOnOff()).isTrue();
-        assertThat(postResponseDto.getCategoryId()).isEqualTo(1L);
-        assertThat(postResponseDto.getStack()).containsExactly("Java", "Spring");
-        assertThat(postResponseDto.getPreference()).isEqualTo("Test Preference");
-        assertThat(postResponseDto.getAgeGroup()).isEqualTo(Post.AgeGroup.s20b);
+        assertThat(responseDto).isNotNull();
+        assertThat(responseDto.getTitle()).isEqualTo("Test Title");
+        assertThat(responseDto.getContent()).isEqualTo("Test Content");
+        assertThat(responseDto.getPeopleNum()).isEqualTo(5);
+    }
+
+    @Test
+    public void testDeletePost() {
+        PostResponseDto responseDto = postService.createPost(postRequestDto);
+        boolean isDeleted = postService.deletePost(userId, responseDto.getPostId());
+
+        assertThat(isDeleted).isTrue();
+    }
+
+    @Test
+    public void testGetPostById() {
+        PostResponseDto createdPost = postService.createPost(postRequestDto);
+        PostResponseDto fetchedPost = postService.getPostById(createdPost.getPostId());
+
+        assertThat(fetchedPost).isNotNull();
+        assertThat(fetchedPost.getTitle()).isEqualTo("Test Title");
+        assertThat(fetchedPost.getContent()).isEqualTo("Test Content");
+        assertThat(fetchedPost.getPeopleNum()).isEqualTo(5);
+    }
+
+    @Test
+    public void testClosePost() {
+        PostResponseDto createdPost = postService.createPost(postRequestDto);
+        boolean isClosed = postService.closePost(createdPost.getPostId());
+
+        assertThat(isClosed).isTrue();
+        PostResponseDto fetchedPost = postService.getPostById(createdPost.getPostId());
+        assertThat(fetchedPost.getDeadline()).isTrue();
     }
 }

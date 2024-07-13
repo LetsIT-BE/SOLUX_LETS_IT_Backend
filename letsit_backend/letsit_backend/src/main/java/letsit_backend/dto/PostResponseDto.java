@@ -22,6 +22,7 @@ public class PostResponseDto {
     private List<String> stack;
     private Post.Difficulty difficulty;
     private Boolean onOff;
+    private Boolean deadline;
     private Long categoryId;
     private Post.AgeGroup ageGroup;
     private Timestamp createdAt;
