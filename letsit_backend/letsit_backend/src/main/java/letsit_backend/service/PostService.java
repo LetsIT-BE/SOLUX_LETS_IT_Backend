@@ -133,6 +133,12 @@ public class PostService {
         return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
     }
 
+    // 조회순으로 게시글 조회
+    public List<PostResponseDto> getAllPostsOrderByViewCount() {
+        List<Post> posts = postRepository.findAllByOrderByViewCountDesc();
+        return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
+    }
+
     private PostResponseDto convertToResponseDto(Post post) {
         PostResponseDto responseDto = new PostResponseDto();
         responseDto.setPostId(post.getPostId());
