@@ -15,7 +15,7 @@ public class PostResponseDto {
     private Long postId;
     private String title;
     private String content;
-    private int peopleNum;
+    private Post.PeopleNum peopleNum;
     private RecruitPeriod recruitPeriod;
     private String preference;
     private ProjectInfo projectInfo;

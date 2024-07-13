@@ -28,9 +28,19 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private int peopleNum;
-
+    @Enumerated(EnumType.STRING)
+    private PeopleNum peopleNum;
+    public enum PeopleNum {
+        TWO,
+        THREE,
+        FOUR,
+        FIVE,
+        SIX,
+        SEVEN,
+        EIGHT,
+        NINE,
+        TEN;
+    }
     @Column(nullable = false)
     private Timestamp recruitPeriodStart;
 

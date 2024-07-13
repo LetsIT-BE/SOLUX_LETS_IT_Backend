@@ -14,7 +14,7 @@ import java.util.List;
 public class PostRequestDto {
     private String title;
     private String content;
-    private int peopleNum;
+    private Post.PeopleNum peopleNum;
     private RecruitPeriod recruitPeriod;
     private String preference;
     private ProjectInfo projectInfo;
