@@ -8,6 +8,7 @@ import letsit_backend.model.Post;
 import letsit_backend.repository.CommentRepository;
 import letsit_backend.repository.MemberRepository;
 import letsit_backend.repository.PostRepository;
+import letsit_backend.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final ProfileRepository profileRepository;
 
     public CommentResponseDto upload(Long postId, CommentRequestDto request) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
@@ -26,7 +28,7 @@ public class CommentService {
 
         Comment comment = request.toEntity(post, member);
         Comment savedComment = commentRepository.save(comment);
-        return new CommentResponseDto(savedComment);
+        return new CommentResponseDto(savedComment, profileRepository);
     }
 
     public CommentResponseDto updateComment(Long postId, Long commentId, Long userId, CommentRequestDto request) {
@@ -38,7 +40,7 @@ public class CommentService {
         comment.update(request.getComContent());
 
         Comment updatedComment = commentRepository.save(comment);
-        return new CommentResponseDto(updatedComment);
+        return new CommentResponseDto(updatedComment, profileRepository);
     }
 
     public void delete(Long postId, Long commentId, Long userId) {
