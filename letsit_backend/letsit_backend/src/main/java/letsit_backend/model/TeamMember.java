@@ -24,11 +24,16 @@ public class TeamMember {
     //private Long profileId;
 
     @Enumerated(EnumType.STRING)
-    private Role teamLeader;
+    private Role teamMemberRole;
     public enum Role {
         Team_Leader,
         Team_Member;
     }
 
 
+    public TeamMember(TeamPost teamId, Member userId, Role teamMemberRole) {
+        this.teamId = teamId;
+        this.userId = userId;
+        this.teamMemberRole = teamMemberRole;
+    }
 }
