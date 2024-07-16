@@ -131,11 +131,11 @@ public class TeamService {
     public void changeTeamLeader(Long teamId, Long userId) {
         // 팀장이 될 팀원의 teamMember 찾기
         TeamPost teamPost = teamPostRepository.findById(teamId)
-                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
+                .orElseThrow(()-> new IllegalIdentifierException("팀을 찾을수없음."));
         Member member = memberRepository.findById(userId)
-                .orElseThrow(()-> new IllegalIdentifierException("user is not found"));
+                .orElseThrow(()-> new IllegalIdentifierException("유저를 찾을수없음."));
         TeamMember changeLeader = teamMemberRepository.findByTeamIdAndUserId(teamPost, member)
-                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
+                .orElseThrow(()-> new IllegalIdentifierException("팀멤버를 찾을수없음."));
 
         changeLeader.setTeamMemberRole(TeamMember.Role.Team_Leader);
         teamMemberRepository.save(changeLeader);

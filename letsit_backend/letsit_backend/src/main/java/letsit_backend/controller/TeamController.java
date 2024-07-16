@@ -56,6 +56,16 @@ public class TeamController {
         return Response.success("회의인증->프로젝트정보수정버튼(프로젝트관리)", null);
     }
 
+
+    @PatchMapping("/{teamId}/{userId}")
+    public Response<?> teamLeaderChange(@PathVariable Long teamId,
+                                        @PathVariable Long userId) {
+
+
+        teamService.changeTeamLeader(teamId,userId);
+        return Response.success("팀정보수정->팀장위임", null);
+    }
+
     @PostMapping("/evaluation/{teamId}/{userId}")
     public Response<?> evaluation(@PathVariable Long teamId,
                                   @PathVariable Long userId,
