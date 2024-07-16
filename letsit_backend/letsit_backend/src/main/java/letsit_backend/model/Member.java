@@ -49,16 +49,8 @@ public class Member {
         this.role = role;
     }
 
-    public Member update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
 
-        return this;
-    }
 
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
 
 
 

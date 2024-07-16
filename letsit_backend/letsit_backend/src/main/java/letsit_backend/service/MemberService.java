@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepository MemberRepository;
 
     public MemberResponseDto signUp(MemberSignupRequestDto requestDto) {
-        return MemberResponseDto.fromEntity(memberRepository.save(requestDto.toEntity()));
+        return MemberResponseDto.fromEntity(MemberRepository.save(requestDto.toEntity()));
     }
 }
