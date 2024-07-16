@@ -26,7 +26,7 @@ public class TeamMember {
     @Enumerated(EnumType.STRING)
     private Role teamLeader;
     public enum Role {
-        Team_Leader,
+        temMemberRole,
         Team_Member;
     }
 

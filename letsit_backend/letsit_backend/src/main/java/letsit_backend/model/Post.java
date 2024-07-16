@@ -109,6 +109,10 @@ public class Post {
         s30 // 30대
     }
 
+    @OneToMany(mappedBy = "postId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("commentId asc")
+    private List<Comment> comments;
+
     public void setDeadline(Boolean deadline) {
         this.deadline = deadline;
     }
