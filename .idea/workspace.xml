@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="구인 게시판 목록 기본 세팅(2차)-스크랩순으로 list-지역, 카테고리 제외">
+    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="구인 게시판 목록 기본 세팅(2차)-조회순으로 list-지역, 카테고리 제외">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +100,7 @@
     </configuration>
     <configuration name="LetsitBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="letsit_backend.letsit_backend.main" />
+      <module name="letsit_backend.letsit_backend.main~1" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="letsit_backend.LetsitBackendApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -136,7 +134,9 @@
       <workItem from="1720805419396" duration="4805000" />
       <workItem from="1720816978385" duration="5587000" />
       <workItem from="1720851928242" duration="3558000" />
-      <workItem from="1720855913951" duration="40000" />
+      <workItem from="1720855913951" duration="101000" />
+      <workItem from="1721061296370" duration="2941000" />
+      <workItem from="1721112194529" duration="1770000" />
     </task>
     <task id="LOCAL-00001" summary="구인 게시판 기본 세팅(4차)-기본 타입 다시 세팅-지역, 카테고리 제외">
       <option name="closed" value="true" />
@@ -194,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720855615745</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="구인 게시판 목록 기본 세팅(2차)-조회순으로 list-지역, 카테고리 제외">
+      <option name="closed" value="true" />
+      <created>1720855999847</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1720855999847</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,6 +217,7 @@
     <MESSAGE value="구인 게시판 기본 세팅(8차)-PeopleNum 엔티티타입 수정-지역, 카테고리 제외" />
     <MESSAGE value="구인 게시판 목록 기본 세팅(1차)-최신순으로 list-지역, 카테고리 제외" />
     <MESSAGE value="구인 게시판 목록 기본 세팅(2차)-스크랩순으로 list-지역, 카테고리 제외" />
-    <option name="LAST_COMMIT_MESSAGE" value="구인 게시판 목록 기본 세팅(2차)-스크랩순으로 list-지역, 카테고리 제외" />
+    <MESSAGE value="구인 게시판 목록 기본 세팅(2차)-조회순으로 list-지역, 카테고리 제외" />
+    <option name="LAST_COMMIT_MESSAGE" value="구인 게시판 목록 기본 세팅(2차)-조회순으로 list-지역, 카테고리 제외" />
   </component>
 </project>

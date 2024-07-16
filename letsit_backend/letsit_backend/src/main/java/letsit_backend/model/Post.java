@@ -37,9 +37,7 @@ public class Post {
         FIVE,
         SIX,
         SEVEN,
-        EIGHT,
-        NINE,
-        TEN;
+        EIGHT
     }
     @Column(nullable = false)
     private Timestamp recruitPeriodStart;
