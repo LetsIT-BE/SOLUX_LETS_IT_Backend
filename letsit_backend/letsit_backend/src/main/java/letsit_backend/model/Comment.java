@@ -4,19 +4,22 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class Coment {
+@EntityListeners(AuditingEntityListener.class)
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comentId;
+    private Long commentId;
 
     @ManyToOne
     @JoinColumn(name = "POST_ID")
@@ -29,11 +32,13 @@ public class Coment {
     @Column(nullable = false)
     private String comContent;
 
-    @CreationTimestamp
+    @CreatedDate
     private Timestamp comCreateDate;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     private Timestamp comUpdateDate;
 
-
+    public void update(String comment) {
+        this.comContent = comment;
+    }
 }
