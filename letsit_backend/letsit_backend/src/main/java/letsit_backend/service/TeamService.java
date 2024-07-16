@@ -126,6 +126,26 @@ public class TeamService {
 
     }
 
+    // TODO 팀장변경기능 미완성상태
+    @Transactional
+    public void changeTeamLeader(Long teamId, Long userId) {
+        // 팀장이 될 팀원의 teamMember 찾기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(()-> new IllegalIdentifierException("user is not found"));
+        TeamMember changeLeader = teamMemberRepository.findByTeamIdAndUserId(teamPost, member)
+                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
+
+        changeLeader.setTeamMemberRole(TeamMember.Role.Team_Leader);
+        teamMemberRepository.save(changeLeader);
+
+        // 팀장의 역할을 팀원으로변경
+        // TODO 팀장(로그인유저)의 member객체받아오기
+        // TODO 팀장의 직책 -> 팀원으로 변경
+        // TODO 업데이트해서 정보수정기능으로 접근 lock하기
+    }
+
     // 프로젝트종료버튼
     @Transactional
     public void projectComplete(Long teamId) {
