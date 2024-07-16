@@ -36,7 +36,7 @@ public class TeamEvaluation {
     @Column(nullable = false)
     private int promise;
 
-    private int total;
+    private double total;
 
 
 }
