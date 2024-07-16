@@ -15,7 +15,7 @@ public class PostRequestDto {
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;
-    private RecruitPeriod recruitPeriod;
+    private RecruitDueDate recruitDueDate;
     private String preference;
     private ProjectInfo projectInfo;
     private List<String> stack;
@@ -28,7 +28,7 @@ public class PostRequestDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class RecruitPeriod {
+    public static class RecruitDueDate {
         private Timestamp startDate;
         private Timestamp endDate;
     }

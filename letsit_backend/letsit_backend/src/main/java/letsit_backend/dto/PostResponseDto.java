@@ -16,7 +16,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;
-    private RecruitPeriod recruitPeriod;
+    private recruitDueDate recruitDueDate;
     private String preference;
     private ProjectInfo projectInfo;
     private List<String> stack;
@@ -33,11 +33,11 @@ public class PostResponseDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class RecruitPeriod {
+    public static class recruitDueDate {
         private Timestamp startDate;
         private Timestamp endDate;
 
-        public RecruitPeriod(Timestamp startDate, Timestamp endDate) {
+        public recruitDueDate(Timestamp startDate, Timestamp endDate) {
             this.startDate = startDate;
             this.endDate = endDate;
         }

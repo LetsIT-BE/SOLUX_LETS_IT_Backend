@@ -58,7 +58,7 @@ public class Post {
         twoMonths,
         threeMonths,
         fourMonths,
-        fiveMonths
+        THREE, fiveMonths
     }
 
     @Enumerated(EnumType.STRING)
@@ -67,7 +67,7 @@ public class Post {
         beginner,
         basic,
         mid,
-        advanced
+        BASIC, advanced
     }
 
 
