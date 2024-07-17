@@ -23,11 +23,11 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "POST_ID")
-    private Post postId;
+    private Post fk_postId;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Member userId;
+    private Member fk_userId;
 
     @Column(nullable = false)
     private String comContent;

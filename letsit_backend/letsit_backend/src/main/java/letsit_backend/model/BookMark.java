@@ -15,11 +15,11 @@ public class BookMark {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Member userId;
+    private Member fk_userId;
 
     @ManyToOne
     @JoinColumn(name = "POST_ID")
-    private Post postId;
+    private Post fk_postId;
 
 
 }

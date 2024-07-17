@@ -39,7 +39,7 @@ public class ApplyService {
         Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(""));
         // 이미 지원했는지 찾아보고
         boolean alreadyApplied = post.getApplicants().stream()
-                .anyMatch(apply -> apply.getUserId().getUserId().equals(request.getUserId()));
+                .anyMatch(apply -> apply.getFk_userId().getUserId().equals(request.getUserId()));
 
         if (alreadyApplied) {
             throw new IllegalArgumentException("이미 지원한 게시글입니다.");
@@ -71,7 +71,7 @@ public class ApplyService {
         log.info("Applicants for post Id : {}", postId);
         return applies.stream()
                 .map(apply-> {
-                    Member member = apply.getUserId();
+                    Member member = apply.getFk_userId();
                     Profile profile = profileRepository.findByUserId(member);
                     return ApplicantProfileDto.fromEntity(profile);
                 })

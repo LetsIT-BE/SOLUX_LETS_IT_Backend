@@ -22,8 +22,8 @@ public class ApplyRequestDto {
 
     public Apply toEntity(Post post, Member member) {
         return Apply.builder()
-                .postId(post)
-                .userId(member)
+                .fk_postId(post)
+                .fk_userId(member)
                 .preferStack(preferStack)
                 .desiredField(desiredField)
                 .applyContent(applyContent)

@@ -19,8 +19,8 @@ public class CommentRequestDto {
 
     public Comment toEntity(Post post, Member member) {
         return Comment.builder()
-                .postId(post)
-                .userId(member)
+                .fk_postId(post)
+                .fk_userId(member)
                 .comContent(comContent)
                 .build();
     }

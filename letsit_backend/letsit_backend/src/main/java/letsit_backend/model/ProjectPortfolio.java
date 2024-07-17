@@ -19,7 +19,7 @@ public class ProjectPortfolio {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Member userId;
+    private Member fk_userId;
 
     @Column(nullable = false)
     private String prtTitle;
