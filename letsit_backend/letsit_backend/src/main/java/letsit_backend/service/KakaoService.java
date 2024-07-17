@@ -14,6 +14,7 @@ import letsit_backend.model.Role;
 import letsit_backend.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,12 @@ public class KakaoService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Value("${kakao.client.id}")
+    private String clientId;
+
+    @Value("${kakao.redirect.uri}")
+    private String redirectUri;
+
     //컨트롤러의 kakaoservice.getkakaoaccesstoken(code)처리
     @Transactional
     public KakaoTokenDto getKakaoToken(String code) {
@@ -42,15 +49,18 @@ public class KakaoService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+
+
         //http response body 객체 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         //git ignore 해야
-        params.add("client_id", "e3e058c59a1767029763d4d598a23ba6");
-        params.add("redirect_uri", "http://localhost:8080/login/oauth2/callback/kakao");
+        params.add("client_id", clientId);
+        params.add("redirect_uri", redirectUri);
+
+
         //프론트에서 인가 코드 요청시 받은 인가 코드 값
         params.add("code", code);
-        //params.add("client_secret", "0003a8e29eb211a6c4e9ffa967052dd1");
 
         //http 헤더 바디 합치기 위해 http entity 객체 생성
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
