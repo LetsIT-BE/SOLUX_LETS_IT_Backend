@@ -2,6 +2,7 @@ package letsit_backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -36,11 +37,8 @@ public class Post {
     @Column(nullable = false)
     private int totalPersonnel;
 
-    private int getCurrentPersonnel() {
-        return (int) this.applicants.stream()
-                .filter(apply -> Boolean.TRUE.equals(apply.getConfirm()))
-                .count();
-    }
+    @ColumnDefault("0")
+    private int currentPersonnel;
 
     // TODO 기간어떻게받을지...
     private LocalDate recruitPeriod;
@@ -86,10 +84,7 @@ public class Post {
         return this.recruitPeriod.isBefore(LocalDate.now()) || this.deadline;
     }
 
-    // 지원자 목록
-    @OneToMany(mappedBy = "postId")
-    @OrderBy("applyCreatDate ASC")
-    private List<Apply> applicants = new ArrayList<>();
+
 
     /*
     모집자 관점) 신청자 승인 가능 여부
@@ -109,8 +104,9 @@ public class Post {
      */
 
     public void approval(Apply apply) {
-        if (!isClosed() && this.totalPersonnel > this.getCurrentPersonnel()) {
+        if (!isClosed() && this.totalPersonnel > this.currentPersonnel) {
         apply.approved();
+        currentPersonnel++;
         }
     }
     public void reject(Apply apply) {

@@ -37,8 +37,9 @@ public class ApplyService {
     public ApplyResponseDto create(Long postId, Long userId, ApplyRequestDto request) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException(""));
         Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(""));
+        List<Apply> applies = applyRepository.findByPostId(post);
         // 이미 지원했는지 찾아보고
-        boolean alreadyApplied = post.getApplicants().stream()
+        boolean alreadyApplied = applies.stream()
                 .anyMatch(apply -> apply.getUserId().getUserId().equals(request.getUserId()));
 
         if (alreadyApplied) {
