@@ -1,7 +1,11 @@
 package letsit_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 
@@ -10,6 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor // TODO 해당문법의 쓰임확인하기
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Apply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +28,26 @@ public class Apply {
     @JoinColumn(name = "USER_ID")
     private Member userId;
 
-    // 포지션
+    @NotEmpty
+    private String preferStack;
+
+    @NotEmpty
+    private String desiredField;
+
     @Column(nullable = false)
     private String applyContent;
 
     @Column(nullable = false)
+    @CreatedDate
     private Timestamp applyCreatDate;
 
     private Boolean confirm;
 
+
+    public void approved() {
+        this.confirm = true;
+    }
+    public void refused() {
+        this.confirm = false;
+    }
 }
