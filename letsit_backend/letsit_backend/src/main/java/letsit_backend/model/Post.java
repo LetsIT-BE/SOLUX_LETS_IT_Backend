@@ -114,8 +114,4 @@ public class Post {
             apply.refused();
         }
     }
-
-    @OneToMany(mappedBy = "postId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @OrderBy("commentId asc")
-    private List<Comment> comments;
 }
