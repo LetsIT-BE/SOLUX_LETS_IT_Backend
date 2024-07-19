@@ -49,10 +49,10 @@ public class PostResponseDto {
     @NoArgsConstructor
     public static class ProjectInfo {
         private String regionId;
-        private Post.projectPeriod projectPeriod;
+        private Post.ProjectPeriod projectPeriod;
         private Post.AgeGroup ageGroup;
 
-        public ProjectInfo(String regionId, Post.projectPeriod projectPeriod, Post.AgeGroup ageGroup) {
+        public ProjectInfo(String regionId, Post.ProjectPeriod projectPeriod, Post.AgeGroup ageGroup) {
             this.regionId = regionId;
             this.projectPeriod = projectPeriod;
             this.ageGroup = ageGroup;

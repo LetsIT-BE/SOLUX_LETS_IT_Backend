@@ -10,7 +10,7 @@ import java.util.List;
 
 @Builder
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Post {
@@ -52,13 +52,13 @@ public class Post {
 //    private Timestamp projectPeriodEnd;
 
     @Enumerated(EnumType.STRING)
-    private projectPeriod projectPeriod;
-    public enum projectPeriod {
+    private ProjectPeriod projectPeriod;
+    public enum ProjectPeriod {
         oneMonth,
         twoMonths,
         threeMonths,
         fourMonths,
-        THREE, fiveMonths
+        fiveMonths
     }
 
     @Enumerated(EnumType.STRING)
@@ -67,7 +67,7 @@ public class Post {
         beginner,
         basic,
         mid,
-        BASIC, advanced
+        advanced
     }
 
 
@@ -109,9 +109,9 @@ public class Post {
         s30 // 30대
     }
 
-    @OneToMany(mappedBy = "postId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @OrderBy("commentId asc")
-    private List<Comment> comments;
+//    @OneToMany(mappedBy = "postId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+//    @OrderBy("commentId asc")
+//    private List<Comment> comments;
 
     public void setDeadline(Boolean deadline) {
         this.deadline = deadline;
