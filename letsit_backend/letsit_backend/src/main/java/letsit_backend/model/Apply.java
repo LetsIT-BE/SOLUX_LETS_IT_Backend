@@ -37,9 +37,12 @@ public class Apply {
     @Column(nullable = false)
     private String applyContent;
 
+    @NotEmpty
+    private String contact;
+
     @Column(nullable = false)
     @CreatedDate
-    private Timestamp applyCreatDate;
+    private Timestamp applyCreateDate;
 
     private Boolean confirm;
 
@@ -51,4 +54,5 @@ public class Apply {
     public void refused() {
         this.confirm = false;
     }
+    public boolean isNullYet() {return this.confirm == null;}
 }

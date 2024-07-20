@@ -71,10 +71,11 @@ public class ApplyService {
 
         log.info("Applicants for post Id : {}", postId);
         return applies.stream()
+                .filter(Apply::isNullYet)
                 .map(apply-> {
                     Member member = apply.getUserId();
                     Profile profile = profileRepository.findByUserId(member);
-                    return ApplicantProfileDto.fromEntity(profile);
+                    return ApplicantProfileDto.fromEntity(profile, apply);
                 })
                 .collect(Collectors.toList());
     }
@@ -88,7 +89,7 @@ public class ApplyService {
                 .map(apply -> {
                     Member member = apply.getUserId();
                     Profile profile = profileRepository.findByUserId(member);
-                    return ApplicantProfileDto.fromEntity(profile);
+                    return ApplicantProfileDto.fromEntity(profile, apply);
                 })
                 .collect(Collectors.toList());
     }
