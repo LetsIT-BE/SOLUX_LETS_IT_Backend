@@ -40,8 +40,15 @@ public class ApplyController {
     }
 
     @GetMapping(value = "/{postId}/list")
-    public List<ApplicantProfileDto> getApplicantList(@PathVariable Long postId) {
-        return applyService.getApplicantProfiles(postId);
+    public Response<List<ApplicantProfileDto>> getApplicantList(@PathVariable Long postId) {
+        List<ApplicantProfileDto> applicant = applyService.getApplicantProfiles(postId);
+        return Response.success("지원자 리스트", applicant);
+    }
+
+    @GetMapping(value = "/{postId}/approvedlist")
+    public Response<List<ApplicantProfileDto>> getApprovedApplicantList(@PathVariable Long postId) {
+        List<ApplicantProfileDto> approved =  applyService.getApprovedApplicantProfiles(postId);
+        return Response.success("승인된 지원자 리스트", approved);
     }
 
 
