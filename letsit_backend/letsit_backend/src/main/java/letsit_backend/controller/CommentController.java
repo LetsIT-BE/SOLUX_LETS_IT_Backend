@@ -1,8 +1,7 @@
 package letsit_backend.controller;
 
-import letsit_backend.dto.CommentRequestDto;
-import letsit_backend.dto.CommentResponseDto;
-import letsit_backend.model.Comment;
+import letsit_backend.dto.comment.CommentRequestDto;
+import letsit_backend.dto.comment.CommentResponseDto;
 import letsit_backend.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
