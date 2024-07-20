@@ -78,6 +78,21 @@ public class ApplyService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<ApplicantProfileDto> getApprovedApplicantProfiles(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+        List<Apply> applies = applyRepository.findByPostId(post);
+        return applies.stream()
+                .filter(Apply::isApproved)
+                .map(apply -> {
+                    Member member = apply.getUserId();
+                    Profile profile = profileRepository.findByUserId(member);
+                    return ApplicantProfileDto.fromEntity(profile);
+                })
+                .collect(Collectors.toList());
+    }
+
     // 특정 지원자 승인 로직
     @Transactional
     public void approveApplicant(Long postId, Long applyId) {

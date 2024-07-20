@@ -47,6 +47,7 @@ public class Apply {
     public void approved() {
         this.confirm = true;
     }
+    public boolean isApproved() {return Boolean.TRUE.equals(this.confirm);}
     public void refused() {
         this.confirm = false;
     }
