@@ -1,8 +1,8 @@
 package letsit_backend.controller;
 
-import letsit_backend.dto.ApplicantProfileDto;
-import letsit_backend.dto.ApplyRequestDto;
-import letsit_backend.dto.ApplyResponseDto;
+import letsit_backend.dto.apply.ApplicantProfileDto;
+import letsit_backend.dto.apply.ApplyRequestDto;
+import letsit_backend.dto.apply.ApplyResponseDto;
 import letsit_backend.dto.Response;
 import letsit_backend.service.ApplyService;
 import lombok.RequiredArgsConstructor;

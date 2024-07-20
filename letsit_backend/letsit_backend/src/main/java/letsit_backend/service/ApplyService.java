@@ -2,9 +2,9 @@ package letsit_backend.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import letsit_backend.dto.ApplicantProfileDto;
-import letsit_backend.dto.ApplyRequestDto;
-import letsit_backend.dto.ApplyResponseDto;
+import letsit_backend.dto.apply.ApplicantProfileDto;
+import letsit_backend.dto.apply.ApplyRequestDto;
+import letsit_backend.dto.apply.ApplyResponseDto;
 import letsit_backend.model.Apply;
 import letsit_backend.model.Member;
 import letsit_backend.model.Post;
