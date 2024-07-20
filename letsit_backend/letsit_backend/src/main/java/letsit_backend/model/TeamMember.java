@@ -15,11 +15,11 @@ public class TeamMember {
 
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
-    private TeamPost fk_teamId;
+    private TeamPost teamId;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Member fk_userId;
+    private Member userId;
 
     //private Long profileId;
 
@@ -32,8 +32,8 @@ public class TeamMember {
 
 
     public TeamMember(TeamPost teamId, Member userId, Role teamMemberRole) {
-        this.fk_teamId = teamId;
-        this.fk_userId = userId;
+        this.teamId = teamId;
+        this.userId = userId;
         this.teamMemberRole = teamMemberRole;
     }
 

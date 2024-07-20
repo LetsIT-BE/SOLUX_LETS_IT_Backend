@@ -71,14 +71,14 @@ public class TeamService {
         for (Apply applie : applies) {
             if (applie.getConfirm()) {                // 지원서 승인된사람불러옴.
                 // 팀원목록 저장
-                Member member = applie.getFk_userId();   // member객체소환
+                Member member = applie.getUserId();   // member객체소환
                 TeamMember teamMember = new TeamMember(teamPost, member, TeamMember.Role.Team_Member);
                 teamMemberRepository.save(teamMember);
             }
         }
 
         // 팀장 저장
-        Member postUserId = post.getFk_userId();
+        Member postUserId = post.getUserId();
         TeamMember teamLeader = new TeamMember(teamPost, postUserId, TeamMember.Role.Team_Leader);
         teamMemberRepository.save(teamLeader);
 
@@ -93,7 +93,7 @@ public class TeamService {
         // TODO 팀멤버리스트 없을시 예외처리 필요
         List<Map<String, TeamMember.Role>> teamInfoList = new ArrayList<>();
         for (TeamMember teamMember : teamMemberList) {
-            teamInfoList.add(Map.of(teamMember.getFk_userId().getName(), teamMember.getTeamMemberRole()));
+            teamInfoList.add(Map.of(teamMember.getUserId().getName(), teamMember.getTeamMemberRole()));
         }
 
         TeamInfoResponseDto teamInfoResponseDto =
@@ -172,8 +172,8 @@ public class TeamService {
         // TODO findbyUserID로 profile찾기
 
         TeamEvaluation teamEvaluation = TeamEvaluation.builder()
-                .fk_teamId(teamMember.getFk_teamId())
-                .fk_userId(teamMember.getFk_userId())
+                .teamId(teamMember.getTeamId())
+                .userId(teamMember.getUserId())
                 //.profileId(찾은거입력하기)
                 .kindness(evaluationRequestDto.getKindness())
                 .promise(evaluationRequestDto.getPromise())

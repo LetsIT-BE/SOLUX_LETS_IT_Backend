@@ -22,11 +22,11 @@ public class Apply {
 
     @ManyToOne // 다대일
     @JoinColumn(name = "POST_ID")
-    private Post fk_postId;
+    private Post postId;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Member fk_userId;
+    private Member userId;
 
     @NotEmpty
     private String preferStack;

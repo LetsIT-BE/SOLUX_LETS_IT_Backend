@@ -17,7 +17,7 @@ public class CommentResponseDto {
     private Timestamp comUpdateDate;
 
     public CommentResponseDto(Comment comment, ProfileRepository profile) {
-        this.nickname = profile.findByUserId(comment.getFk_userId()).getNickname();
+        this.nickname = profile.findByUserId(comment.getUserId()).getNickname();
         this.comContent = comment.getComContent();
         this.comCreateDate = comment.getComCreateDate();
         this.comUpdateDate = comment.getComUpdateDate();

@@ -15,7 +15,7 @@ public class ApplyResponseDto {
     private String applyContent;
     private Timestamp applyCreatDate;
     public ApplyResponseDto(Apply apply) {
-        this.userId = apply.getFk_userId().getUserId();
+        this.userId = apply.getUserId().getUserId();
         this.preferStack = apply.getPreferStack();
         this.desiredField = apply.getDesiredField();
         this.applyContent = apply.getApplyContent();

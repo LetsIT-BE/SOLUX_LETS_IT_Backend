@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public interface ApplyRepository extends JpaRepository<Apply, Long> {
-    List<Apply> findByPostId(Post post);
+    List<Apply> findByPostId(Post postId);
     List<Apply> findByUserId(Member member);
-    List<Apply> findAllByPostId(Post post);
+    List<Apply> findAllByPostId(Post postId);
 }

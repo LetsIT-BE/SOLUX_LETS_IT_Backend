@@ -15,11 +15,11 @@ public class TeamEvaluation {
 
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
-    private TeamPost fk_teamId;
+    private TeamPost teamId;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Member fk_userId; //평가받는자
+    private Member userId; //평가받는자
 
     //TODO 프로필과 일대다연결?
     private Long profileId;

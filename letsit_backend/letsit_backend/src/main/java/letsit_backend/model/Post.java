@@ -26,7 +26,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private Member fk_userId;
+    private Member userId;
 
     @Column(nullable = false)
     private String title;

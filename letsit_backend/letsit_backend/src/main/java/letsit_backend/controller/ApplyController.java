@@ -60,4 +60,9 @@ public class ApplyController {
         //log.info("Application approved successfully for Apply ID: {}", applyId);
         return ResponseEntity.status(HttpStatus.OK).body("지원서가 거절되었습니다.");
     }
+
+    @GetMapping("hello")
+    public String hello() {
+        return "hello";
+    }
 }

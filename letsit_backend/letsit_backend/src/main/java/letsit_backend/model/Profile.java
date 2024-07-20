@@ -15,7 +15,7 @@ public class Profile {
 
     @OneToOne
     @JoinColumn(name = "USER_ID")
-    private Member fk_userId;
+    private Member userId;
 
     @Enumerated(EnumType.STRING)
     private Manner_tier mannerTier;

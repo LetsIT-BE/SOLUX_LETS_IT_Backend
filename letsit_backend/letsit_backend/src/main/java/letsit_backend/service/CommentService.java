@@ -34,7 +34,7 @@ public class CommentService {
     public CommentResponseDto updateComment(Long postId, Long commentId, Long userId, CommentRequestDto request) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
-        if (!comment.getFk_userId().getUserId().equals(userId)) {
+        if (!comment.getUserId().getUserId().equals(userId)) {
             throw new IllegalArgumentException("댓글을 수정할 권한이 없습니다.");
         }
         comment.update(request.getComContent());

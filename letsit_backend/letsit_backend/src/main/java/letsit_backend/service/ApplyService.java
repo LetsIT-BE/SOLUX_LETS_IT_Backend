@@ -40,7 +40,7 @@ public class ApplyService {
         List<Apply> applies = applyRepository.findByPostId(post);
         // 이미 지원했는지 찾아보고
         boolean alreadyApplied = applies.stream()
-                .anyMatch(apply -> apply.getFk_userId().getUserId().equals(request.getUserId()));
+                .anyMatch(apply -> apply.getUserId().getUserId().equals(request.getUserId()));
 
         if (alreadyApplied) {
             throw new IllegalArgumentException("이미 지원한 게시글입니다.");
