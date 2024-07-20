@@ -27,9 +27,9 @@ public class Profile {
         F
     }
 
-    private int mannerGrade;
+    private int mannerScore;
 
-    private String name;
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     private Age age;
@@ -39,11 +39,11 @@ public class Profile {
         over30,
     }
 
-    private String profile_url;
+    private String profileUrl;
 
-    private String profile_picture;
+    private String profileImage;
 
     private String bio;
 
-    private String self_intro;
+    private String selfIntro;
 }
