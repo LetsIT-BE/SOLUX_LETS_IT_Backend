@@ -1,13 +1,17 @@
 package letsit_backend.service;
 
+import ch.qos.logback.core.spi.ErrorCodes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
+//import letsit_backend.dao.MemberDao;
 import letsit_backend.dto.KakaoTokenDto;
 import letsit_backend.dto.KakaoMemberDto;
 import letsit_backend.dto.LoginResponseDto;
+import letsit_backend.jwt.CustomException;
+import letsit_backend.jwt.JwtProvider;
 import letsit_backend.model.KakaoProfile;
 import letsit_backend.model.Member;
 import letsit_backend.model.Role;
@@ -32,8 +36,17 @@ import java.util.Optional;
 @Service
 public class KakaoService {
 
-    @Autowired
+
+    //private final MemberDao memberDao;
+    private final JwtProvider jwtProvider;
     private MemberRepository memberRepository;
+
+    @Autowired
+    public KakaoService( JwtProvider jwtProvider, MemberRepository memberRepository) {
+        //this.memberDao = memberDao;
+        this.jwtProvider = jwtProvider;
+        this.memberRepository = memberRepository;
+    }
 
     @Value("${kakao.client.id}")
     private String clientId;
@@ -89,7 +102,8 @@ public class KakaoService {
         try {
             kakaoTokenDto = objectMapper.readValue(kakaoTokenResponse.getBody(), KakaoTokenDto.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error("Error parsing Kakao token response", e);
+            //e.printStackTrace();
         }
         return kakaoTokenDto;
 
@@ -197,7 +211,7 @@ public class KakaoService {
 
     public KakaoProfile findProfile(String kakaoToken) {
         log.info("Fetching Kakao profile with token: {}", kakaoToken);
-        System.out.println("kakaoToken = " + kakaoToken);
+        //System.out.println("kakaoToken = " + kakaoToken);
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -216,7 +230,7 @@ public class KakaoService {
                 String.class
         );
         log.info("Kakao profile response: {}", accountInfoResponse.getBody());
-        System.out.println("accountInfoResponse = " + accountInfoResponse);
+        //System.out.println("accountInfoResponse = " + accountInfoResponse);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -224,25 +238,38 @@ public class KakaoService {
 
         KakaoProfile kakaoProfile = null;
         try {
-            log.info("Parsing Kakao profile response");
+            //log.info("Parsing Kakao profile response");
 
             kakaoProfile = objectMapper.readValue(accountInfoResponse.getBody(), KakaoProfile.class);
-            log.info("Parsed Kakao profile: {}", kakaoProfile);
+            //log.info("Parsed Kakao profile: {}", kakaoProfile);
 
         } catch (JsonProcessingException e) {
             log.error("Error parsing Kakao profile response", e);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
+        return kakaoProfile;
+        /*
         if (kakaoProfile == null) {
             log.error("Kakao profile is null");
         } else if (kakaoProfile.getKakao_account() == null) {
             log.error("Kakao account is null");
         }
-
-        return kakaoProfile;
-
+        */
 
 
+        //return kakaoProfile;
+
+
+
+
+    }
+
+
+    public String getMemberByLogin(Member member) throws CustomException {
+
+        Member loginMember = memberRepository.findByKakaoId(member.getKakaoId())
+                .orElseThrow(()-> new CustomException("Invalid login information"));
+        return jwtProvider.createToken(loginMember);
 
     }
 
