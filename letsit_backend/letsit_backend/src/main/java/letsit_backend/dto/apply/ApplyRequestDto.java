@@ -1,4 +1,4 @@
-package letsit_backend.dto;
+package letsit_backend.dto.apply;
 
 import letsit_backend.model.Apply;
 import letsit_backend.model.Member;

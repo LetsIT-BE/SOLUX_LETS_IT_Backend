@@ -1,4 +1,4 @@
-package letsit_backend.dto;
+package letsit_backend.dto.comment;
 
 import letsit_backend.model.Comment;
 import letsit_backend.model.Member;

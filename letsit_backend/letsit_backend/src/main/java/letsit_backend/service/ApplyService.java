@@ -2,9 +2,9 @@ package letsit_backend.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import letsit_backend.dto.ApplicantProfileDto;
-import letsit_backend.dto.ApplyRequestDto;
-import letsit_backend.dto.ApplyResponseDto;
+import letsit_backend.dto.apply.ApplicantProfileDto;
+import letsit_backend.dto.apply.ApplyRequestDto;
+import letsit_backend.dto.apply.ApplyResponseDto;
 import letsit_backend.model.Apply;
 import letsit_backend.model.Member;
 import letsit_backend.model.Post;
@@ -41,10 +41,10 @@ public class ApplyService {
         // 이미 지원했는지 찾아보고
         boolean alreadyApplied = applies.stream()
                 .anyMatch(apply -> apply.getUserId().getUserId().equals(request.getUserId()));
-
         if (alreadyApplied) {
             throw new IllegalArgumentException("이미 지원한 게시글입니다.");
         }
+
         Apply apply = request.toEntity(post, member);
         Apply submittedApply = applyRepository.save(apply);
 
