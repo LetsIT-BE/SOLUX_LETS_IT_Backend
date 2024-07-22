@@ -12,10 +12,8 @@ import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -91,16 +89,22 @@ public class TeamService {
 
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByTeamId(teamPost);
         // TODO 팀멤버리스트 없을시 예외처리 필요
-        List<Map<String, TeamMember.Role>> teamInfoList = new ArrayList<>();
-        for (TeamMember teamMember : teamMemberList) {
-            teamInfoList.add(Map.of(teamMember.getUserId().getName(), teamMember.getTeamMemberRole()));
-        }
+        List<Map<String, String>> teamInfoList = teamMemberList.stream()
+                .map(teamMember -> {
+                    Map<String, String> memberInfo = new HashMap<>();
+                    memberInfo.put("userId", teamMember.getUserId().toString());
+                    memberInfo.put("userName", teamMember.getUserId().getName());
+                    memberInfo.put("position", teamMember.getTeamMemberRole().toString());
+                    return memberInfo;
+                })
+                .collect(Collectors.toList());
 
-        TeamInfoResponseDto teamInfoResponseDto =
-                new TeamInfoResponseDto(teamPost.getPrjTitle(),
+        TeamInfoResponseDto teamInfoResponseDto = new TeamInfoResponseDto(
+                                        teamPost.getPrjTitle(),
                                         teamPost.getNotionLink(),
                                         teamPost.getGithubLink(),
-                                        teamInfoList);
+                                        teamInfoList
+        );
 
         return teamInfoResponseDto;
 
