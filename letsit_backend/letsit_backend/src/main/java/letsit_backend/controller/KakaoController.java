@@ -53,9 +53,12 @@ public class KakaoController {
         // 인가 코드를 사용하여 카카오 액세스 토큰 얻기
         KakaoTokenDto kakaoTokenDto = kakaoService.getKakaoToken(code);
         String kakaoToken = kakaoTokenDto.getAccess_token();
+        log.info("received kakao access token {}", kakaoToken);
+
 
         // 카카오 액세스 토큰을 사용하여 사용자 정보 가져오기
         LoginResponseDto loginResponse = kakaoService.kakaoLogin(kakaoToken).getBody();
+        log.info("received login response: {}", loginResponse);
 
         // JWT 토큰 생성
         String jwtToken = null;
@@ -82,8 +85,11 @@ public class KakaoController {
         responseBody.put("user", loginResponse.getMember());
         responseBody.put("token", jwtToken);
 
+
+        log.info("Returning response to frontend: {}", responseBody);
+        //return "redirect:/login/oauth2/callback/kakao";
         return ResponseEntity.ok(responseBody);
-        //response.sendRedirect("/home?token=" + jwtToken);
+        //response.sendRedirect("/?token=" + jwtToken);
         //}
     }
 
