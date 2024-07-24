@@ -58,7 +58,7 @@ public class SecurityConfig {
 
                 .logout(logout ->
                         logout
-                                .logoutSuccessUrl("/login?logout")
+                                .logoutSuccessUrl("/")
                                 .permitAll()
                 );
                 //.csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 보호 비활성화
