@@ -1,5 +1,6 @@
 package letsit_backend.service;
 
+import letsit_backend.dto.OngoingProjectDto;
 import letsit_backend.dto.ProjectDto;
 import letsit_backend.model.Member;
 import letsit_backend.model.Post;
@@ -31,6 +32,16 @@ public class ProjectService {
         List<Post> posts = postRepository.findByUserId(user);
         return posts.stream()
                 .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<OngoingProjectDto> getOngoingProjectsByUserId(Long userId) {
+        Member user = memberRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
+        String status = "진행중"; // 진행 중인 프로젝트 상태
+        List<Post> posts = postRepository.findByUserId(user);
+        return posts.stream()
+                .map(post -> new OngoingProjectDto(post.getTitle()))
                 .collect(Collectors.toList());
     }
 
