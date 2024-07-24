@@ -13,6 +13,7 @@ import letsit_backend.model.Member;
 import letsit_backend.repository.MemberRepository;
 import letsit_backend.service.KakaoService;
 import lombok.extern.slf4j.Slf4j;
+//import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -26,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -46,6 +48,22 @@ public class KakaoController {
     @Autowired
     private JwtProvider jwtProvider;
 
+
+    @GetMapping(value = "/user/info")
+    public ResponseEntity<?> ask(Authentication authentication) {
+        if (authentication == null) {
+            log.info("Authentication object is null.");
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        // 로그인정보 받아오기
+        String loginId = authentication.getName();
+        log.info("Logged in user: " + loginId);
+        return ResponseEntity.ok("Logged in user: " + loginId);
+    }
+
+
+
+
     @GetMapping("/login/oauth2/callback/kakao")
     public ResponseEntity<Map<String, Object>> KakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
         log.info("received auth code {}", code);
@@ -53,9 +71,12 @@ public class KakaoController {
         // 인가 코드를 사용하여 카카오 액세스 토큰 얻기
         KakaoTokenDto kakaoTokenDto = kakaoService.getKakaoToken(code);
         String kakaoToken = kakaoTokenDto.getAccess_token();
+        log.info("received kakao access token {}", kakaoToken);
+
 
         // 카카오 액세스 토큰을 사용하여 사용자 정보 가져오기
         LoginResponseDto loginResponse = kakaoService.kakaoLogin(kakaoToken).getBody();
+        log.info("received login response: {}", loginResponse);
 
         // JWT 토큰 생성
         String jwtToken = null;
@@ -82,8 +103,11 @@ public class KakaoController {
         responseBody.put("user", loginResponse.getMember());
         responseBody.put("token", jwtToken);
 
+
+        log.info("Returning response to frontend: {}", responseBody);
+        //return "redirect:/login/oauth2/callback/kakao";
         return ResponseEntity.ok(responseBody);
-        //response.sendRedirect("/home?token=" + jwtToken);
+        //response.sendRedirect("/?token=" + jwtToken);
         //}
     }
 

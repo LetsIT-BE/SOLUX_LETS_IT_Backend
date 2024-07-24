@@ -25,6 +25,8 @@ repositories {
 
 dependencies {
 	//웹
+	implementation 'org.springframework.boot:spring-boot-starter'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//JPA
@@ -33,13 +35,17 @@ dependencies {
 	//OAuth2.0
 	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	//jwt
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.2'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.12.2'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.2'
+	dependencies {
+		implementation 'io.jsonwebtoken:jjwt-api:0.12.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.2'
+	}
+
+
 	//시큐리티
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
-	//implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	//testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	testImplementation 'org.springframework.security:spring-security-test'
 	//롬복
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
@@ -51,6 +57,7 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	runtimeOnly 'com.h2database:h2'
+	//providedCompile 'jakarta.servlet:jakarta.servlet-api:4.0.4'
 }
 
 tasks.named('test') {
