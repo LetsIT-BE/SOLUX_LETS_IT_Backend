@@ -20,13 +20,13 @@ public class ProjectController {
     }
 
     @GetMapping("/{userId}/organizinglist")
-    public ResponseEntity<List<ProjectDto>> getOrganizingList(@PathVariable Long userId) {
+    public ResponseEntity<List<ProjectDto>> getOrganizingList(@PathVariable("userId") Long userId) {
         List<ProjectDto> projects = projectService.getProjectsByUserId(userId);
         return ResponseEntity.ok(projects);
     }
 
     @GetMapping("/{userId}/ongoinglist")
-    public ResponseEntity<List<OngoingProjectDto>> getOngoingList(@PathVariable Long userId) {
+    public ResponseEntity<List<OngoingProjectDto>> getOngoingList(@PathVariable("userId") Long userId) {
         List<OngoingProjectDto> projects = projectService.getOngoingProjectsByUserId(userId);
         return ResponseEntity.ok(projects);
     }
