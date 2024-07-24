@@ -2,6 +2,7 @@ package letsit_backend.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
+import letsit_backend.service.KakaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,9 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JwtProvider jwtProvider;
 
+    //@Autowired
+    //private KakaoService kakaoService;
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -35,6 +39,20 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
+            /*
+            try {
+                if (jwtProvider.validToken(token)) {
+                    kakaoService.authentiacateMember(token);
+                }
+            } catch (Exception e) {
+                logger.error("토큰 인증에 실패", e);
+            }
+        } else {
+            logger.warn("bearer string을 찾을 수 없습니다. header가 무시됩니다.");
+        }
+
+             */
+
             try {
                 username = jwtProvider.getSubject(token);
             } catch (IllegalArgumentException e) {
@@ -48,6 +66,9 @@ public class JwtFilter extends OncePerRequestFilter {
             logger.warn("Couldn't find bearer string, header will be ignored");
         }
 
+
+
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtProvider.validToken(token)) {
@@ -58,6 +79,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
+
+
 
         chain.doFilter(request, response);
     }

@@ -1,4 +1,3 @@
-
 package letsit_backend.jwt;
 
 import io.jsonwebtoken.*;
@@ -29,12 +28,13 @@ import java.util.stream.Collectors;
 @Component
 public class JwtProvider {
 
-    /*
-    private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
+    //private static final long EXPIRATION_TIME = 1000 *60 *60L;
+    //private static final String BEARER_TYPE = "Bearer";
+    //private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
+    //private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
+
+    /*
     private final Key key;
 
     //application-secret-key에 jwt.secret 가려놓기
@@ -48,15 +48,22 @@ public class JwtProvider {
     @Value("${spring.jwt.secret}")
     private String secretKey;
 
+    private static final String AUTHORITIES_KEY = "auth";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60L;
 
     public String createToken(Member member) {
         Date now = new Date();
 
+        //사용자 권한을 가져와서 문자열로 변환
+        String authorities = member.getRole().name();
+
+        //claims 생성 및 사용자 정보 추가
         //Claims claims = Jwts.claims();
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", member.getUserId());
+        claims.put(AUTHORITIES_KEY, authorities);
 
+        /*
         String token = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject("accessToken")
@@ -66,19 +73,21 @@ public class JwtProvider {
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
                 .compact();
 
-        log.info("Generated JWT Token: {}", token); // JWT 토큰 로그 출력
-        return token;
+         */
 
-        /*return Jwts.builder()
+        //log.info("Generated JWT Token: {}", token); // JWT 토큰 로그 출력
+        //return token;
+
+        return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
-                .setSubject("accessToken")
+                .setSubject(member.getName())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + EXPIRATION_TIME))
                 .addClaims(claims)
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
                 .compact();
 
-         */
+
     }
     public String getSubject(String token) throws CustomException {
         try {
@@ -198,4 +207,3 @@ public class JwtProvider {
 
      */
 }
-

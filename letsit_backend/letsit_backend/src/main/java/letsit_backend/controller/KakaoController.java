@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -90,6 +91,7 @@ public class KakaoController {
                     .password("")
                     .authorities(Collections.emptyList())
                     .build();
+            //security config 랑...
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -110,6 +112,30 @@ public class KakaoController {
         //response.sendRedirect("/?token=" + jwtToken);
         //}
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(Authentication authentication) {
+        if (authentication == null) {
+            log.info("No user is currently logged in.");
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
+        // Get the access token from the authentication object or user details
+        String accessToken = kakaoService.getAccessToken(authentication.getName());
+
+        // Call Kakao logout API
+        boolean isLoggedOutFromKakao = kakaoService.kakaoLogout(accessToken);
+
+        if (isLoggedOutFromKakao) {
+            // Invalidate the session on the server side
+            SecurityContextHolder.clearContext();
+            return ResponseEntity.ok("Logout successful");
+        } else {
+            return ResponseEntity.status(500).body("Logout failed");
+        }
+    }
+
+
 
 
     /*
