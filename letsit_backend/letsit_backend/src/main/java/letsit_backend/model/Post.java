@@ -74,8 +74,16 @@ public class Post {
 
     private Boolean onOff;
 
-    // TODO 지역엔티티랑 매핑
-    private Long regionId;
+//    // TODO 지역엔티티랑 매핑
+//    private Long regionId;
+
+    @ManyToOne
+    @JoinColumn(name = "region_id")
+    private Area region;
+
+    @ManyToOne
+    @JoinColumn(name = "sub_region_id")
+    private Area subRegion;
 
     // TODO 분야엔티티랑 매핑
     private Long categoryId;

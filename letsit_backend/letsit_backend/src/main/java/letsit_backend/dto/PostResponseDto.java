@@ -25,12 +25,14 @@ public class PostResponseDto {
     private Boolean deadline;
     private Long categoryId;
     private Post.AgeGroup ageGroup;
+    private String region;
+    private String subRegion;
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private int viewCount;
     private int scrapCount;
 
-    public PostResponseDto(Long postId, String title, String content, Post.PeopleNum peopleNum, Timestamp recruitDueDate, String preference, ProjectInfo projectInfo, List<String> stack, Post.Difficulty difficulty, Boolean onOff, Boolean deadline, Long categoryId, Post.AgeGroup ageGroup, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount) {
+    public PostResponseDto(Long postId, String title, String content, Post.PeopleNum peopleNum, Timestamp recruitDueDate, String preference, ProjectInfo projectInfo, List<String> stack, Post.Difficulty difficulty, Boolean onOff, Boolean deadline, Long categoryId, Post.AgeGroup ageGroup, String region, String subRegion, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount) {
         this.postId = postId;
         this.title = title;
         this.content = content;
@@ -44,6 +46,8 @@ public class PostResponseDto {
         this.deadline = deadline;
         this.categoryId = categoryId;
         this.ageGroup = ageGroup;
+        this.region = region;
+        this.subRegion = subRegion;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.viewCount = viewCount;
@@ -69,11 +73,13 @@ public class PostResponseDto {
     @NoArgsConstructor
     public static class ProjectInfo {
         private String regionId;
+        private String subRegionId;
         private Post.ProjectPeriod projectPeriod;
         private Post.AgeGroup ageGroup;
 
-        public ProjectInfo(String regionId, Post.ProjectPeriod projectPeriod, Post.AgeGroup ageGroup) {
+        public ProjectInfo(String regionId, String subRegionId, Post.ProjectPeriod projectPeriod, Post.AgeGroup ageGroup) {
             this.regionId = regionId;
+            this.subRegionId = subRegionId;
             this.projectPeriod = projectPeriod;
             this.ageGroup = ageGroup;
         }

@@ -20,4 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByViewCountDesc();
 
     List<Post> findAll();
+
+//    List<Post> findAllByOrderByCreatedAtDesc();
 }

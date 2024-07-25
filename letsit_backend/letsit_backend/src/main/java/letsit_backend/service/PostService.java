@@ -2,7 +2,9 @@ package letsit_backend.service;
 
 import letsit_backend.dto.PostRequestDto;
 import letsit_backend.dto.PostResponseDto;
+import letsit_backend.model.Area;
 import letsit_backend.model.Post;
+import letsit_backend.repository.AreaRepository;
 import letsit_backend.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final AreaRepository areaRepository;
 
 //    public PostResponseDto createPost(PostRequestDto requestDto) {
 //        Post post = Post.builder()
@@ -62,6 +65,11 @@ public class PostService {
 //    }
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
+        Area region = areaRepository.findById(requestDto.getRegionId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid region ID"));
+
+        Area subRegion = areaRepository.findById(requestDto.getSubRegionId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid sub-region ID"));
         Post post = Post.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
@@ -70,7 +78,8 @@ public class PostService {
                 .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
                 .difficulty(requestDto.getDifficulty())
                 .onOff(requestDto.getOnOff())
-                .regionId(requestDto.getRegionId())
+                .region(region)
+                .subRegion(subRegion)
                 .categoryId(requestDto.getCategoryId())
                 .viewCount(0)
                 .scrapCount(0)
@@ -90,7 +99,8 @@ public class PostService {
 //        );
 
         PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-                savedPost.getRegionId().toString(),
+                savedPost.getRegion().getName(),
+                savedPost.getSubRegion().getName(),
                 savedPost.getProjectPeriod(),
                 savedPost.getAgeGroup()
         );
@@ -109,6 +119,8 @@ public class PostService {
                 savedPost.getDeadline(),
                 savedPost.getCategoryId(),
                 savedPost.getAgeGroup(),
+                savedPost.getRegion().getName(),
+                savedPost.getSubRegion().getName(),
                 savedPost.getCreatedAt(),
                 savedPost.getUpdatedAt(),
                 savedPost.getViewCount(),
@@ -151,15 +163,26 @@ public class PostService {
     public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid postId"));
+        Area region = areaRepository.findById(postRequestDto.getRegionId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid region ID"));
 
+        Area subRegion = areaRepository.findById(postRequestDto.getSubRegionId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid sub-region ID"));
+
+
+        post.setTitle(postRequestDto.getTitle());
+        post.setContent(postRequestDto.getContent());
         post.setPeopleNum(postRequestDto.getPeopleNum());
         post.setRecruitDueDate(postRequestDto.getRecruitDueDate());
         post.setPreference(postRequestDto.getPreference());
-        post.setRegionId(postRequestDto.getRegionId());
+        post.setRegion(region);
+        post.setSubRegion(subRegion);
         post.setProjectPeriod(postRequestDto.getProjectInfo().getProjectPeriod());
         post.setAgeGroup(postRequestDto.getProjectInfo().getAgeGroup());
         post.setStack(postRequestDto.getStack());
-        post.setContent(postRequestDto.getContent());
+        post.setDifficulty(postRequestDto.getDifficulty());
+        post.setOnOff(postRequestDto.getOnOff());
+        post.setCategoryId(postRequestDto.getCategoryId());
         post.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
         Post updatedPost = postRepository.save(post);
@@ -170,7 +193,8 @@ public class PostService {
 //        );
 
         PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-                updatedPost.getRegionId().toString(),
+                updatedPost.getRegion().getName(),
+                updatedPost.getSubRegion().getName(),
                 updatedPost.getProjectPeriod(),
                 updatedPost.getAgeGroup()
         );
@@ -189,6 +213,8 @@ public class PostService {
                 updatedPost.getDeadline(),
                 updatedPost.getCategoryId(),
                 updatedPost.getAgeGroup(),
+                updatedPost.getRegion().getName(),
+                updatedPost.getSubRegion().getName(),
                 updatedPost.getCreatedAt(),
                 updatedPost.getUpdatedAt(),
                 updatedPost.getViewCount(),
@@ -217,28 +243,64 @@ public class PostService {
         return false;
     }
 
+//    public PostResponseDto getPostById(Long postId) {
+//        Optional<Post> optionalPost = postRepository.findById(postId);
+//        if (optionalPost.isPresent()) {
+//            Post post = optionalPost.get();
+//            PostResponseDto responseDto = new PostResponseDto();
+//            responseDto.setPostId(post.getPostId());
+//            responseDto.setTitle(post.getTitle());
+//            responseDto.setContent(post.getContent());
+//            responseDto.setPeopleNum(post.getPeopleNum());
+//            responseDto.setRecruitDueDate(post.getRecruitDueDate());
+//            responseDto.setPreference(post.getPreference());
+//            responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId().toString(), post.getProjectPeriod(), post.getAgeGroup()));
+//            responseDto.setStack(post.getStack());
+//            responseDto.setDifficulty(post.getDifficulty());
+//            responseDto.setOnOff(post.getOnOff());
+//            responseDto.setCategoryId(post.getCategoryId());
+//            responseDto.setAgeGroup(post.getAgeGroup());
+//            responseDto.setCreatedAt(post.getCreatedAt());
+//            responseDto.setUpdatedAt(post.getUpdatedAt());
+//            responseDto.setViewCount(post.getViewCount());
+//            responseDto.setScrapCount(post.getScrapCount());
+//            return responseDto;
+//        } else {
+//            throw new IllegalArgumentException("Invalid post ID");
+//        }
+//    }
+
     public PostResponseDto getPostById(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
-            PostResponseDto responseDto = new PostResponseDto();
-            responseDto.setPostId(post.getPostId());
-            responseDto.setTitle(post.getTitle());
-            responseDto.setContent(post.getContent());
-            responseDto.setPeopleNum(post.getPeopleNum());
-            responseDto.setRecruitDueDate(post.getRecruitDueDate());
-            responseDto.setPreference(post.getPreference());
-            responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId().toString(), post.getProjectPeriod(), post.getAgeGroup()));
-            responseDto.setStack(post.getStack());
-            responseDto.setDifficulty(post.getDifficulty());
-            responseDto.setOnOff(post.getOnOff());
-            responseDto.setCategoryId(post.getCategoryId());
-            responseDto.setAgeGroup(post.getAgeGroup());
-            responseDto.setCreatedAt(post.getCreatedAt());
-            responseDto.setUpdatedAt(post.getUpdatedAt());
-            responseDto.setViewCount(post.getViewCount());
-            responseDto.setScrapCount(post.getScrapCount());
-            return responseDto;
+            PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+                    post.getRegion().getName(),
+                    post.getSubRegion().getName(),
+                    post.getProjectPeriod(),
+                    post.getAgeGroup()
+            );
+            return new PostResponseDto(
+                    post.getPostId(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getPeopleNum(),
+                    post.getRecruitDueDate(),
+                    post.getPreference(),
+                    projectInfo,
+                    post.getStack(),
+                    post.getDifficulty(),
+                    post.getOnOff(),
+                    post.getDeadline(),
+                    post.getCategoryId(),
+                    post.getAgeGroup(),
+                    post.getRegion().getName(),
+                    post.getSubRegion().getName(),
+                    post.getCreatedAt(),
+                    post.getUpdatedAt(),
+                    post.getViewCount(),
+                    post.getScrapCount()
+            );
         } else {
             throw new IllegalArgumentException("Invalid post ID");
         }
@@ -283,24 +345,55 @@ public class PostService {
 //        return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
 //    }
 
+//    private PostResponseDto convertToResponseDto(Post post) {
+//        PostResponseDto responseDto = new PostResponseDto();
+//        responseDto.setPostId(post.getPostId());
+//        responseDto.setTitle(post.getTitle());
+//        responseDto.setContent(post.getContent());
+//        responseDto.setPeopleNum(post.getPeopleNum());
+//        responseDto.setRecruitDueDate(post.getRecruitDueDate());
+//        responseDto.setPreference(post.getPreference());
+//        responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId() != null ? post.getRegionId().toString() : null, post.getProjectPeriod(), post.getAgeGroup()));
+//        responseDto.setStack(post.getStack());
+//        responseDto.setDifficulty(post.getDifficulty());
+//        responseDto.setOnOff(post.getOnOff());
+//        responseDto.setCategoryId(post.getCategoryId());
+//        responseDto.setAgeGroup(post.getAgeGroup());
+//        responseDto.setCreatedAt(post.getCreatedAt());
+//        responseDto.setUpdatedAt(post.getUpdatedAt());
+//        responseDto.setViewCount(post.getViewCount());
+//        responseDto.setScrapCount(post.getScrapCount());
+//        return responseDto;
+//    }
+
     private PostResponseDto convertToResponseDto(Post post) {
-        PostResponseDto responseDto = new PostResponseDto();
-        responseDto.setPostId(post.getPostId());
-        responseDto.setTitle(post.getTitle());
-        responseDto.setContent(post.getContent());
-        responseDto.setPeopleNum(post.getPeopleNum());
-        responseDto.setRecruitDueDate(post.getRecruitDueDate());
-        responseDto.setPreference(post.getPreference());
-        responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId() != null ? post.getRegionId().toString() : null, post.getProjectPeriod(), post.getAgeGroup()));
-        responseDto.setStack(post.getStack());
-        responseDto.setDifficulty(post.getDifficulty());
-        responseDto.setOnOff(post.getOnOff());
-        responseDto.setCategoryId(post.getCategoryId());
-        responseDto.setAgeGroup(post.getAgeGroup());
-        responseDto.setCreatedAt(post.getCreatedAt());
-        responseDto.setUpdatedAt(post.getUpdatedAt());
-        responseDto.setViewCount(post.getViewCount());
-        responseDto.setScrapCount(post.getScrapCount());
-        return responseDto;
+        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+                post.getRegion().getName(),
+                post.getSubRegion().getName(),
+                post.getProjectPeriod(),
+                post.getAgeGroup()
+        );
+
+        return new PostResponseDto(
+                post.getPostId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getPeopleNum(),
+                post.getRecruitDueDate(),
+                post.getPreference(),
+                projectInfo,
+                post.getStack(),
+                post.getDifficulty(),
+                post.getOnOff(),
+                post.getDeadline(),
+                post.getCategoryId(),
+                post.getAgeGroup(),
+                post.getRegion().getName(),
+                post.getSubRegion().getName(),
+                post.getCreatedAt(),
+                post.getUpdatedAt(),
+                post.getViewCount(),
+                post.getScrapCount()
+        );
     }
 }

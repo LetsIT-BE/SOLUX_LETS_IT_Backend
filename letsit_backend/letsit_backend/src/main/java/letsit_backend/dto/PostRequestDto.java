@@ -22,6 +22,7 @@ public class PostRequestDto {
     private Post.Difficulty difficulty;
     private Boolean onOff;
     private Long regionId;
+    private Long subRegionId;
     private Long categoryId;
 
 //    @Getter
