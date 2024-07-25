@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="Feat: recruitDueDate 변경 및 추가">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +151,7 @@
       <workItem from="1721805643667" duration="3060000" />
       <workItem from="1721829899218" duration="23000" />
       <workItem from="1721835078841" duration="5254000" />
-      <workItem from="1721880603892" duration="8435000" />
+      <workItem from="1721880603892" duration="8736000" />
     </task>
     <task id="LOCAL-00001" summary="구인 게시판 기본 세팅(4차)-기본 타입 다시 세팅-지역, 카테고리 제외">
       <option name="closed" value="true" />
@@ -282,7 +281,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721886224011</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Feat: recruitDueDate 변경 및 추가">
+      <option name="closed" value="true" />
+      <created>1721890541828</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1721890541828</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

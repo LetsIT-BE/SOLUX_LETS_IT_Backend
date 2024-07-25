@@ -66,7 +66,7 @@ public class PostService {
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .peopleNum(requestDto.getPeopleNum())
-                .recruitPeriodStart(requestDto.getRecruitDueDate())
+                .recruitDueDate(requestDto.getRecruitDueDate())
                 .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
                 .difficulty(requestDto.getDifficulty())
                 .onOff(requestDto.getOnOff())
@@ -100,7 +100,7 @@ public class PostService {
                 savedPost.getTitle(),
                 savedPost.getContent(),
                 savedPost.getPeopleNum(),
-                savedPost.getRecruitPeriodStart(),
+                savedPost.getRecruitDueDate(),
                 savedPost.getPreference(),
                 projectInfo,
                 savedPost.getStack(),
@@ -153,7 +153,7 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid postId"));
 
         post.setPeopleNum(postRequestDto.getPeopleNum());
-        post.setRecruitPeriodStart(postRequestDto.getRecruitDueDate());
+        post.setRecruitDueDate(postRequestDto.getRecruitDueDate());
         post.setPreference(postRequestDto.getPreference());
         post.setRegionId(postRequestDto.getRegionId());
         post.setProjectPeriod(postRequestDto.getProjectInfo().getProjectPeriod());
@@ -180,7 +180,7 @@ public class PostService {
                 updatedPost.getTitle(),
                 updatedPost.getContent(),
                 updatedPost.getPeopleNum(),
-                updatedPost.getRecruitPeriodStart(),
+                updatedPost.getRecruitDueDate(),
                 updatedPost.getPreference(),
                 projectInfo,
                 updatedPost.getStack(),
@@ -226,7 +226,7 @@ public class PostService {
             responseDto.setTitle(post.getTitle());
             responseDto.setContent(post.getContent());
             responseDto.setPeopleNum(post.getPeopleNum());
-            responseDto.setRecruitDueDate(post.getRecruitPeriodStart());
+            responseDto.setRecruitDueDate(post.getRecruitDueDate());
             responseDto.setPreference(post.getPreference());
             responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId().toString(), post.getProjectPeriod(), post.getAgeGroup()));
             responseDto.setStack(post.getStack());
@@ -289,7 +289,7 @@ public class PostService {
         responseDto.setTitle(post.getTitle());
         responseDto.setContent(post.getContent());
         responseDto.setPeopleNum(post.getPeopleNum());
-        responseDto.setRecruitDueDate(post.getRecruitPeriodStart());
+        responseDto.setRecruitDueDate(post.getRecruitDueDate());
         responseDto.setPreference(post.getPreference());
         responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId() != null ? post.getRegionId().toString() : null, post.getProjectPeriod(), post.getAgeGroup()));
         responseDto.setStack(post.getStack());
