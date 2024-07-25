@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="Feat: h2 POST 테이블 생성">
+    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="Fix: delete와 프로젝트 상세조회 postman 테스트 통과">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,28 +57,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build letsit_backend.executor": "Run",
-    "Gradle.PostServiceTest.testCreatePost.executor": "Run",
-    "Gradle.letsit_backend 빌드.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.LetsitBackendApplication.executor": "Run",
-    "git-widget-placeholder": "feature/posts",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "F:/Project/solux_projects",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build letsit_backend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PostServiceTest.testCreatePost.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.letsit_backend 빌드.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.LetsitBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/posts&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Project/solux_projects&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Spring Boot.LetsitBackendApplication">
     <configuration name="PostServiceTest.testCreatePost" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -148,7 +153,8 @@
       <workItem from="1721456169111" duration="594000" />
       <workItem from="1721805643667" duration="3060000" />
       <workItem from="1721829899218" duration="23000" />
-      <workItem from="1721835078841" duration="1441000" />
+      <workItem from="1721835078841" duration="5254000" />
+      <workItem from="1721880603892" duration="3374000" />
     </task>
     <task id="LOCAL-00001" summary="구인 게시판 기본 세팅(4차)-기본 타입 다시 세팅-지역, 카테고리 제외">
       <option name="closed" value="true" />
@@ -246,7 +252,23 @@
       <option name="project" value="LOCAL" />
       <updated>1721406944166</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fix: upload postman 테스트 통과">
+      <option name="closed" value="true" />
+      <created>1721836575135</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1721836575135</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Fix: delete와 프로젝트 상세조회 postman 테스트 통과">
+      <option name="closed" value="true" />
+      <created>1721839394511</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1721839394511</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,6 +288,8 @@
     <MESSAGE value="구인 게시판 기본 세팅-엔티티 수정-지역, 카테고리 제외" />
     <MESSAGE value="구인 게시판 기본 세팅-엔티티 수정(2)-지역, 카테고리 제외" />
     <MESSAGE value="Feat: h2 POST 테이블 생성" />
-    <option name="LAST_COMMIT_MESSAGE" value="Feat: h2 POST 테이블 생성" />
+    <MESSAGE value="Fix: upload postman 테스트 통과" />
+    <MESSAGE value="Fix: delete와 프로젝트 상세조회 postman 테스트 통과" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix: delete와 프로젝트 상세조회 postman 테스트 통과" />
   </component>
 </project>

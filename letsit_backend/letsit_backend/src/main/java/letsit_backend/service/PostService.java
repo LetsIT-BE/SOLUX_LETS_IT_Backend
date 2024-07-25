@@ -18,6 +18,49 @@ public class PostService {
 
     private final PostRepository postRepository;
 
+//    public PostResponseDto createPost(PostRequestDto requestDto) {
+//        Post post = Post.builder()
+//                .title(requestDto.getTitle())
+//                .content(requestDto.getContent())
+//                .peopleNum(requestDto.getPeopleNum())
+//                .recruitPeriodStart(requestDto.getRecruitDueDate().getStartDate())
+//                .recruitPeriodEnd(requestDto.getRecruitDueDate().getEndDate())
+//                .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
+//                .difficulty(requestDto.getDifficulty())
+//                .onOff(requestDto.getOnOff())
+//                .regionId(requestDto.getRegionId()) // 추가
+//                .categoryId(requestDto.getCategoryId())
+//                .viewCount(0)
+//                .scrapCount(0)
+//                .createdAt(new Timestamp(System.currentTimeMillis()))
+//                .updatedAt(new Timestamp(System.currentTimeMillis()))
+//                .deadline(false)
+//                .stack(requestDto.getStack())
+//                .preference(requestDto.getPreference())
+//                .ageGroup(requestDto.getProjectInfo().getAgeGroup())
+//                .build();
+//
+//        Post savedPost = postRepository.save(post);
+//
+//        PostResponseDto responseDto = new PostResponseDto();
+//        responseDto.setPostId(savedPost.getPostId());
+//        responseDto.setTitle(savedPost.getTitle());
+//        responseDto.setContent(savedPost.getContent());
+//        responseDto.setPeopleNum(savedPost.getPeopleNum());
+//        responseDto.setRecruitDueDate(new PostResponseDto.RecruitDueDate(savedPost.getRecruitPeriodStart(), savedPost.getRecruitPeriodEnd()));
+//        responseDto.setPreference(savedPost.getPreference());
+//        responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(savedPost.getRegionId().toString(), savedPost.getProjectPeriod(), savedPost.getAgeGroup()));
+//        responseDto.setStack(savedPost.getStack());
+//        responseDto.setDifficulty(savedPost.getDifficulty());
+//        responseDto.setOnOff(savedPost.getOnOff());
+//        responseDto.setCategoryId(savedPost.getCategoryId());
+//        responseDto.setAgeGroup(savedPost.getAgeGroup());
+//        responseDto.setCreatedAt(savedPost.getCreatedAt());
+//        responseDto.setUpdatedAt(savedPost.getUpdatedAt());
+//
+//        return responseDto;
+//    }
+
     public PostResponseDto createPost(PostRequestDto requestDto) {
         Post post = Post.builder()
                 .title(requestDto.getTitle())
@@ -28,7 +71,7 @@ public class PostService {
                 .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
                 .difficulty(requestDto.getDifficulty())
                 .onOff(requestDto.getOnOff())
-                .regionId(requestDto.getRegionId()) // 추가
+                .regionId(requestDto.getRegionId())
                 .categoryId(requestDto.getCategoryId())
                 .viewCount(0)
                 .scrapCount(0)
@@ -42,23 +85,117 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
 
-        PostResponseDto responseDto = new PostResponseDto();
-        responseDto.setPostId(savedPost.getPostId());
-        responseDto.setTitle(savedPost.getTitle());
-        responseDto.setContent(savedPost.getContent());
-        responseDto.setPeopleNum(savedPost.getPeopleNum());
-        responseDto.setRecruitDueDate(new PostResponseDto.recruitDueDate(savedPost.getRecruitPeriodStart(), savedPost.getRecruitPeriodEnd()));
-        responseDto.setPreference(savedPost.getPreference());
-        responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(savedPost.getRegionId().toString(), savedPost.getProjectPeriod(), savedPost.getAgeGroup()));
-        responseDto.setStack(savedPost.getStack());
-        responseDto.setDifficulty(savedPost.getDifficulty());
-        responseDto.setOnOff(savedPost.getOnOff());
-        responseDto.setCategoryId(savedPost.getCategoryId());
-        responseDto.setAgeGroup(savedPost.getAgeGroup());
-        responseDto.setCreatedAt(savedPost.getCreatedAt());
-        responseDto.setUpdatedAt(savedPost.getUpdatedAt());
+        PostResponseDto.RecruitDueDate recruitDueDate = new PostResponseDto.RecruitDueDate(
+                savedPost.getRecruitPeriodStart(),
+                savedPost.getRecruitPeriodEnd()
+        );
 
-        return responseDto;
+        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+                savedPost.getRegionId().toString(),
+                savedPost.getProjectPeriod(),
+                savedPost.getAgeGroup()
+        );
+
+        return new PostResponseDto(
+                savedPost.getPostId(),
+                savedPost.getTitle(),
+                savedPost.getContent(),
+                savedPost.getPeopleNum(),
+                recruitDueDate,
+                savedPost.getPreference(),
+                projectInfo,
+                savedPost.getStack(),
+                savedPost.getDifficulty(),
+                savedPost.getOnOff(),
+                savedPost.getDeadline(),
+                savedPost.getCategoryId(),
+                savedPost.getAgeGroup(),
+                savedPost.getCreatedAt(),
+                savedPost.getUpdatedAt(),
+                savedPost.getViewCount(),
+                savedPost.getScrapCount()
+        );
+    }
+
+//    public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
+//        Post post = postRepository.findById(postId)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid postId"));
+//
+//        post.setPeopleNum(postRequestDto.getPeopleNum());
+//        post.setRecruitPeriodStart(postRequestDto.getRecruitDueDate().getStartDate());
+//        post.setRecruitPeriodEnd(postRequestDto.getRecruitDueDate().getEndDate());
+//        post.setPreference(postRequestDto.getPreference());
+////        post.setRegionId(postRequestDto.getProjectInfo().getRegionId());
+//        post.setProjectPeriod(postRequestDto.getProjectInfo().getProjectPeriod());
+//        post.setAgeGroup(postRequestDto.getProjectInfo().getAgeGroup());
+//        post.setStack(postRequestDto.getStack());
+//        post.setContent(postRequestDto.getContent());
+//        post.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+//
+//        Post updatedPost = postRepository.save(post);
+//
+//        return new PostResponseDto(
+//                updatedPost.getPostId(),
+//                updatedPost.getPeopleNum(),
+//                new PostResponseDto.RecruitDueDate(updatedPost.getRecruitPeriodStart(), updatedPost.getRecruitPeriodEnd()),
+//                updatedPost.getPreference(),
+//                updatedPost.getRegionId(),
+//                updatedPost.getProjectPeriod(),
+//                updatedPost.getAgeGroup(),
+//                updatedPost.getStack(),
+//                updatedPost.getContent(),
+//                updatedPost.getCreatedAt(),
+//                updatedPost.getUpdatedAt()
+//        );
+//    }
+
+    public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid postId"));
+
+        post.setPeopleNum(postRequestDto.getPeopleNum());
+        post.setRecruitPeriodStart(postRequestDto.getRecruitDueDate().getStartDate());
+        post.setRecruitPeriodEnd(postRequestDto.getRecruitDueDate().getEndDate());
+        post.setPreference(postRequestDto.getPreference());
+        post.setRegionId(postRequestDto.getRegionId());
+        post.setProjectPeriod(postRequestDto.getProjectInfo().getProjectPeriod());
+        post.setAgeGroup(postRequestDto.getProjectInfo().getAgeGroup());
+        post.setStack(postRequestDto.getStack());
+        post.setContent(postRequestDto.getContent());
+        post.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        Post updatedPost = postRepository.save(post);
+
+        PostResponseDto.RecruitDueDate recruitDueDate = new PostResponseDto.RecruitDueDate(
+                updatedPost.getRecruitPeriodStart(),
+                updatedPost.getRecruitPeriodEnd()
+        );
+
+        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+                updatedPost.getRegionId().toString(),
+                updatedPost.getProjectPeriod(),
+                updatedPost.getAgeGroup()
+        );
+
+        return new PostResponseDto(
+                updatedPost.getPostId(),
+                updatedPost.getTitle(),
+                updatedPost.getContent(),
+                updatedPost.getPeopleNum(),
+                recruitDueDate,
+                updatedPost.getPreference(),
+                projectInfo,
+                updatedPost.getStack(),
+                updatedPost.getDifficulty(),
+                updatedPost.getOnOff(),
+                updatedPost.getDeadline(),
+                updatedPost.getCategoryId(),
+                updatedPost.getAgeGroup(),
+                updatedPost.getCreatedAt(),
+                updatedPost.getUpdatedAt(),
+                updatedPost.getViewCount(),
+                updatedPost.getScrapCount()
+        );
     }
 
 //    public boolean deletePost(Long postId) {
@@ -91,7 +228,7 @@ public class PostService {
             responseDto.setTitle(post.getTitle());
             responseDto.setContent(post.getContent());
             responseDto.setPeopleNum(post.getPeopleNum());
-            responseDto.setRecruitDueDate(new PostResponseDto.recruitDueDate(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
+            responseDto.setRecruitDueDate(new PostResponseDto.RecruitDueDate(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
             responseDto.setPreference(post.getPreference());
             responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId().toString(), post.getProjectPeriod(), post.getAgeGroup()));
             responseDto.setStack(post.getStack());
@@ -108,6 +245,14 @@ public class PostService {
             throw new IllegalArgumentException("Invalid post ID");
         }
     }
+
+    public List<PostResponseDto> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(this::convertToResponseDto)
+                .collect(Collectors.toList());
+    }
+
 
     public boolean closePost(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
@@ -145,7 +290,7 @@ public class PostService {
         responseDto.setTitle(post.getTitle());
         responseDto.setContent(post.getContent());
         responseDto.setPeopleNum(post.getPeopleNum());
-        responseDto.setRecruitDueDate(new PostResponseDto.recruitDueDate(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
+        responseDto.setRecruitDueDate(new PostResponseDto.RecruitDueDate(post.getRecruitPeriodStart(), post.getRecruitPeriodEnd()));
         responseDto.setPreference(post.getPreference());
         responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId() != null ? post.getRegionId().toString() : null, post.getProjectPeriod(), post.getAgeGroup()));
         responseDto.setStack(post.getStack());

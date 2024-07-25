@@ -25,6 +25,8 @@ public class PostRequestDto {
     private Long categoryId;
 
 
+
+
     @Getter
     @Setter
     @NoArgsConstructor
@@ -40,4 +42,6 @@ public class PostRequestDto {
         private Post.ProjectPeriod projectPeriod;
         private Post.AgeGroup ageGroup;
     }
+
+
 }

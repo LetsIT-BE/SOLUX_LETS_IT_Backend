@@ -26,6 +26,17 @@ public class PostController {
         return Response.success("구인 글이 성공적으로 등록되었습니다.", responseDto);
     }
 
+    // 게시글 수정
+    @PutMapping("/{postId}/update")
+    public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
+        try {
+            PostResponseDto updatedPost = postService.updatePost(postId, postRequestDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response<>(true, "구인 글이 성공적으로 수정되었습니다.", updatedPost));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(false, "유효성 검사 오류", e.getMessage()));
+        }
+    }
+
     @DeleteMapping("/{userId}/delete/{postId}")
     public ResponseEntity<Response<Void>> deletePost(@PathVariable Long userId, @PathVariable Long postId) {
         boolean isDeleted = postService.deletePost(userId, postId);
@@ -61,6 +72,17 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(false, "Invalid region parameter"));
         }
     }
+
+//    @GetMapping("/list")
+//    public ResponseEntity<?> getAllPosts() {
+//        try {
+//            List<PostResponseDto> posts = postService.getAllPosts();
+//            return ResponseEntity.ok(posts);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Bad Request", "message", "Invalid sort parameter"));
+//        }
+//    }
+
 
     @PostMapping("/{postId}/close")
     @ResponseStatus(HttpStatus.OK)

@@ -16,7 +16,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;
-    private recruitDueDate recruitDueDate;
+    private RecruitDueDate recruitDueDate;
     private String preference;
     private ProjectInfo projectInfo;
     private List<String> stack;
@@ -30,14 +30,34 @@ public class PostResponseDto {
     private int viewCount;
     private int scrapCount;
 
+    public PostResponseDto(Long postId, String title, String content, Post.PeopleNum peopleNum, RecruitDueDate recruitDueDate, String preference, ProjectInfo projectInfo, List<String> stack, Post.Difficulty difficulty, Boolean onOff, Boolean deadline, Long categoryId, Post.AgeGroup ageGroup, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount) {
+        this.postId = postId;
+        this.title = title;
+        this.content = content;
+        this.peopleNum = peopleNum;
+        this.recruitDueDate = recruitDueDate;
+        this.preference = preference;
+        this.projectInfo = projectInfo;
+        this.stack = stack;
+        this.difficulty = difficulty;
+        this.onOff = onOff;
+        this.deadline = deadline;
+        this.categoryId = categoryId;
+        this.ageGroup = ageGroup;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.viewCount = viewCount;
+        this.scrapCount = scrapCount;
+    }
+
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class recruitDueDate {
+    public static class RecruitDueDate {
         private Timestamp startDate;
         private Timestamp endDate;
 
-        public recruitDueDate(Timestamp startDate, Timestamp endDate) {
+        public RecruitDueDate(Timestamp startDate, Timestamp endDate) {
             this.startDate = startDate;
             this.endDate = endDate;
         }
