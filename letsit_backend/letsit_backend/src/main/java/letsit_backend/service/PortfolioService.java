@@ -1,5 +1,7 @@
 package letsit_backend.service;
 
+
+import letsit_backend.dto.portfolio.DailyPortfolioListDto;
 import letsit_backend.dto.portfolio.DailyPortfolioRequestDto;
 import letsit_backend.dto.portfolio.DailyPortfolioResponseDto;
 import letsit_backend.model.Member;
@@ -32,23 +34,25 @@ public class PortfolioService {
         return new DailyPortfolioResponseDto(prt);
     }
 
-    public List<DailyPortfolioResponseDto> getPrtList(Long teamId, Long userId) {
+
+    public List<DailyPortfolioListDto> getPrtList(Long teamId, Long userId) {
         TeamPost team = teamPostRepository.findById(teamId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 프로젝트입니다."));
         Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(""));
         List<ProjectPortfolio> prt = portfolioRepository.findAllByTeamIdAndUserId(team, member);
 
         return prt.stream()
                 .sorted((p1, p2) -> p2.getPrtId().compareTo(p1.getPrtId()))
-                .map(p -> new DailyPortfolioResponseDto(
+                .map(p -> new DailyPortfolioListDto(
                         p.getPrtId(),
+                        p.getTeamId().getTeamId(),
                         p.getPrtTitle(),
-                        p.getPrtCreateDate(),
-                        p.getPrtUpdateDate(),
-                        "",  // workDescription
-                        "",  // issues
-                        "",  // solutions
-                        ""   // feedback
+                        p.getPrtCreateDate()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public DailyPortfolioResponseDto read(Long prtId) {
+        ProjectPortfolio prt = portfolioRepository.findById(prtId).orElseThrow(() -> new IllegalArgumentException("신청서가 존재하지 않습니다."));;
+        return new DailyPortfolioResponseDto(prt);
     }
 }

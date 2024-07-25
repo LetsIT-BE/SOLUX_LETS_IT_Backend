@@ -1,6 +1,7 @@
 package letsit_backend.controller;
 
 import letsit_backend.dto.Response;
+import letsit_backend.dto.portfolio.DailyPortfolioListDto;
 import letsit_backend.dto.portfolio.DailyPortfolioRequestDto;
 import letsit_backend.dto.portfolio.DailyPortfolioResponseDto;
 import letsit_backend.service.PortfolioService;
@@ -23,8 +24,14 @@ public class PortfolioController {
     }
 
     @GetMapping(value = "/{teamId}/list/{userId}")
-    public Response<List<DailyPortfolioResponseDto>> getPrtList(@PathVariable Long teamId, @PathVariable Long userId) {
-        List<DailyPortfolioResponseDto> prtList = portfolioService.getPrtList(teamId, userId);
+    public Response<List<DailyPortfolioListDto>> getPrtList(@PathVariable Long teamId, @PathVariable Long userId) {
+        List<DailyPortfolioListDto> prtList = portfolioService.getPrtList(teamId, userId);
         return Response.success("포트폴리오 리스트", prtList);
+    }
+
+    @GetMapping(value = "/{teamId}/list/{userId}/{prtId}")
+    public Response<DailyPortfolioResponseDto> getPrt(@PathVariable Long prtId) {
+        DailyPortfolioResponseDto prt = portfolioService.read(prtId);
+        return Response.success("포트폴리오 상세조회", prt);
     }
 }
