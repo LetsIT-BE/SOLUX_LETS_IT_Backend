@@ -23,3 +23,5 @@ public class CommentResponseDto {
         this.comUpdateDate = comment.getComUpdateDate();
     }
 }
+
+

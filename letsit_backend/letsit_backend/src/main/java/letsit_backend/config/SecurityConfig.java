@@ -17,7 +17,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/", "/home", "/login/**", "/static/**", "/index.html", "/assets/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error").permitAll() // 정적 파일 및 특정 경로 허용
+                                .requestMatchers("/", "/home", "/login/**", "/static/**", "/index.html", "/assets/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error", "/profile/**").permitAll() // 정적 파일 및 특정 경로 허용
                                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 /*
