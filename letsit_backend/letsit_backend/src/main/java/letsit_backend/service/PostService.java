@@ -3,8 +3,10 @@ package letsit_backend.service;
 import letsit_backend.dto.PostRequestDto;
 import letsit_backend.dto.PostResponseDto;
 import letsit_backend.model.Area;
+import letsit_backend.model.Member;
 import letsit_backend.model.Post;
 import letsit_backend.repository.AreaRepository;
+import letsit_backend.repository.MemberRepository;
 import letsit_backend.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final AreaRepository areaRepository;
+    private final MemberRepository memberRepository;
 
 //    public PostResponseDto createPost(PostRequestDto requestDto) {
 //        Post post = Post.builder()
@@ -65,11 +68,14 @@ public class PostService {
 //    }
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
+        Member user = memberRepository.findById(requestDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Area region = areaRepository.findById(requestDto.getRegionId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid region ID"));
 
         Area subRegion = areaRepository.findById(requestDto.getSubRegionId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid sub-region ID"));
+
         Post post = Post.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
@@ -163,6 +169,8 @@ public class PostService {
     public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid postId"));
+        Member user = memberRepository.findById(postRequestDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Area region = areaRepository.findById(postRequestDto.getRegionId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid region ID"));
 

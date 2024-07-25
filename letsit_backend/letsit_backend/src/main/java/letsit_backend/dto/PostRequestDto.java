@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PostRequestDto {
+    private Long userId;
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;

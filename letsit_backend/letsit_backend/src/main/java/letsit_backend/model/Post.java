@@ -74,7 +74,7 @@ public class Post {
 
     private Boolean onOff;
 
-//    // TODO 지역엔티티랑 매핑
+    // TODO 지역엔티티랑 매핑
 //    private Long regionId;
 
     @ManyToOne
@@ -102,6 +102,8 @@ public class Post {
     private Boolean deadline;
 
     @ElementCollection
+    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "stack")
     private List<String> stack;
 
     private String preference;
