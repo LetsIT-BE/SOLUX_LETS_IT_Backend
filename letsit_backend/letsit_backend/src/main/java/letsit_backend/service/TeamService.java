@@ -1,14 +1,12 @@
 package letsit_backend.service;
 
-import letsit_backend.dto.team.TeamCreateDto;
-import letsit_backend.dto.team.TeamEvaluationRequestDto;
-import letsit_backend.dto.team.TeamInfoResponseDto;
-import letsit_backend.dto.team.TeamUpdateRequestDto;
+import letsit_backend.dto.team.*;
 import letsit_backend.model.*;
 import letsit_backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,6 +93,9 @@ public class TeamService {
                     memberInfo.put("userId", teamMember.getUserId().toString());
                     memberInfo.put("userName", teamMember.getUserId().getName());
                     memberInfo.put("position", teamMember.getTeamMemberRole().toString());
+                    // TODO 프로필사진까지 같이 로드하기
+                    // TODO 프로필 null인지 유무 체크필요
+                    // memberInfo.put("profileUrl","teamMember.getUserId().getProfile.getURL()
                     return memberInfo;
                 })
                 .collect(Collectors.toList());
@@ -192,4 +193,48 @@ public class TeamService {
 
         // TODO teamMember의 iscomplete 객체 추가하고 true로 변경(기본false)
     }
+
+    // 회의인증
+
+//    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+//
+//    public boolean meetingCertification(Long teamId, TeamMeetingCertificationRequestDto requestDto) {
+//        // 팀정보
+//        TeamPost team = teamPostRepository.findById(teamId)
+//                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
+//
+//        // 팀멤버목록
+//        List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamId(team);
+//
+//        // 회의불참인원
+//        // TODO 불참인원 Long타입말고 username으로 받아오기?
+//        List<Long> absentMemberIds = requestDto.getNonPartivipants();
+//
+//        // 불참인원빼기
+//        List<TeamMember> attendingMembers = teamMembers.stream()
+//                .filter(member-> !absentMemberIds.contains(member.getUserId()))
+//                .collect(Collectors.toList());
+//
+//        // 회의인증
+//        String imagePath = requestDto.getProofImages();
+//
+//        CascadeClassifier faceDetector = new CascadeClassifier("resources/haarcascades/haarcascade_frontalface_default.xml");
+//        Mat image = Imgcodecs.imread(imagePath);
+//        MatOfRect faceDetections = new MatOfRect();
+//        faceDetector.detectMultiScale(image, faceDetections);
+//
+//        return faceDetections.toArray().length == attendingMembers.size();
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -2,10 +2,7 @@ package letsit_backend.controller;
 
 import jakarta.validation.Valid;
 import letsit_backend.dto.Response;
-import letsit_backend.dto.team.TeamCreateDto;
-import letsit_backend.dto.team.TeamEvaluationRequestDto;
-import letsit_backend.dto.team.TeamInfoResponseDto;
-import letsit_backend.dto.team.TeamUpdateRequestDto;
+import letsit_backend.dto.team.*;
 import letsit_backend.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +27,7 @@ public class TeamController {
         // TODO testcode미작성
         Long teamPostId = teamService.creatTeam(postId, teamCreateDto);
         teamService.creatTeamMember(teamPostId); // 팀멤버 목록 보여주는기능은 따로 넘기기.
-        return Response.success("팀게시판 생성 + 팀원등록 완료", null);
+        return Response.success("팀게시판 생성 + 팀원등록 완료", teamPostId);
     }
 
     @GetMapping("/{teamId}/main")
@@ -91,14 +88,15 @@ public class TeamController {
 
     // ---- 필수x ----
 
-    // TODO 팀장만
-    @PostMapping("/{teamId}/validation")
-    public Response<?> validation(@PathVariable Long teamId) {
-
+    // TODO 팀장만 (개발시작!)
+    @GetMapping("/{teamId}/meeting")
+    public Response<?> meetingCertification(@PathVariable Long teamId,
+                                            @RequestBody TeamMeetingCertificationRequestDto requestDto) {
 
         // TODO 이미지정보, 불참팀원 받아옴
         // TODO OpenCv랑 연결 -> 인증완료시 true반환
 
+        //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
         return Response.success("프로젝트관리->회의인증버튼", null);
     }
 
