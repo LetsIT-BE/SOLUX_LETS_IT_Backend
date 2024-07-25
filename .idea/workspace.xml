@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="Fix: delete와 프로젝트 상세조회 postman 테스트 통과">
+    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="Fix: 게시글 수정 기능">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +106,7 @@
     </configuration>
     <configuration name="LetsitBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="letsit_backend.letsit_backend.main" />
+      <module name="letsit_backend.letsit_backend.main~1" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="letsit_backend.LetsitBackendApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -154,7 +154,7 @@
       <workItem from="1721805643667" duration="3060000" />
       <workItem from="1721829899218" duration="23000" />
       <workItem from="1721835078841" duration="5254000" />
-      <workItem from="1721880603892" duration="3374000" />
+      <workItem from="1721880603892" duration="5225000" />
     </task>
     <task id="LOCAL-00001" summary="구인 게시판 기본 세팅(4차)-기본 타입 다시 세팅-지역, 카테고리 제외">
       <option name="closed" value="true" />
@@ -268,7 +268,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721839394511</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Fix: 게시글 수정 기능">
+      <option name="closed" value="true" />
+      <created>1721884240437</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1721884240437</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -290,6 +298,7 @@
     <MESSAGE value="Feat: h2 POST 테이블 생성" />
     <MESSAGE value="Fix: upload postman 테스트 통과" />
     <MESSAGE value="Fix: delete와 프로젝트 상세조회 postman 테스트 통과" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix: delete와 프로젝트 상세조회 postman 테스트 통과" />
+    <MESSAGE value="Fix: 게시글 수정 기능" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix: 게시글 수정 기능" />
   </component>
 </project>

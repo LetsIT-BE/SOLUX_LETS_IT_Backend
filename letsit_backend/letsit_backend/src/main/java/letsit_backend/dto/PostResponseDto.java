@@ -16,7 +16,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;
-    private RecruitDueDate recruitDueDate;
+    private Timestamp recruitDueDate;
     private String preference;
     private ProjectInfo projectInfo;
     private List<String> stack;
@@ -30,7 +30,7 @@ public class PostResponseDto {
     private int viewCount;
     private int scrapCount;
 
-    public PostResponseDto(Long postId, String title, String content, Post.PeopleNum peopleNum, RecruitDueDate recruitDueDate, String preference, ProjectInfo projectInfo, List<String> stack, Post.Difficulty difficulty, Boolean onOff, Boolean deadline, Long categoryId, Post.AgeGroup ageGroup, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount) {
+    public PostResponseDto(Long postId, String title, String content, Post.PeopleNum peopleNum, Timestamp recruitDueDate, String preference, ProjectInfo projectInfo, List<String> stack, Post.Difficulty difficulty, Boolean onOff, Boolean deadline, Long categoryId, Post.AgeGroup ageGroup, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount) {
         this.postId = postId;
         this.title = title;
         this.content = content;
@@ -50,19 +50,19 @@ public class PostResponseDto {
         this.scrapCount = scrapCount;
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class RecruitDueDate {
-        private Timestamp startDate;
-        private Timestamp endDate;
-
-        public RecruitDueDate(Timestamp startDate, Timestamp endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-    }
+//    @Getter
+//    @Setter
+//    @NoArgsConstructor
+//    public static class RecruitDueDate {
+//        private Timestamp startDate;
+//        private Timestamp endDate;
+//
+//        public RecruitDueDate(Timestamp startDate, Timestamp endDate) {
+//            this.startDate = startDate;
+//            this.endDate = endDate;
+//        }
+//
+//    }
 
     @Getter
     @Setter

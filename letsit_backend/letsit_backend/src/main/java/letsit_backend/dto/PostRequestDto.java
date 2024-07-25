@@ -15,7 +15,7 @@ public class PostRequestDto {
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;
-    private RecruitDueDate recruitDueDate;
+    private Timestamp recruitDueDate;
     private String preference;
     private ProjectInfo projectInfo;
     private List<String> stack;
@@ -24,16 +24,13 @@ public class PostRequestDto {
     private Long regionId;
     private Long categoryId;
 
-
-
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class RecruitDueDate {
-        private Timestamp startDate;
-        private Timestamp endDate;
-    }
+//    @Getter
+//    @Setter
+//    @NoArgsConstructor
+//    public static class RecruitDueDate {
+//        private Timestamp startDate;
+//        private Timestamp endDate;
+//    }
 
     @Getter
     @Setter
