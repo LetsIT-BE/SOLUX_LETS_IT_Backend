@@ -40,11 +40,11 @@ public class Post {
         SEVEN,
         EIGHT
     }
+//    @Column(nullable = false)
+//    private Timestamp recruitPeriodStart;
+//
     @Column(nullable = false)
-    private Timestamp recruitPeriodStart;
-
-    @Column(nullable = false)
-    private Timestamp recruitPeriodEnd;
+    private Timestamp recruitDueDate;
 
 //    @Column(nullable = false)
 //    private Timestamp projectPeriodStart;
