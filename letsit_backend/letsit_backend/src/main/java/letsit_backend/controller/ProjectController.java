@@ -36,4 +36,10 @@ public class ProjectController {
         List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(userId);
         return ResponseEntity.ok(ongoingProjects);
     }
+
+    @GetMapping("/{userId}/completedlist")
+    public ResponseEntity<List<OngoingProjectDto>> getCompletedList(@PathVariable("userId") Long userId) {
+        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(userId);
+        return ResponseEntity.ok(ongoingProjects);
+    }
 }
