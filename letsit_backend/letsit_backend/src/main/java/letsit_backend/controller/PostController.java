@@ -20,8 +20,13 @@ public class PostController {
     private final PostService postService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("upload")
-    public Response<PostResponseDto> createPost(@Valid @RequestBody PostRequestDto requestDto) {
+    @PostMapping("/{userId}/upload")
+//    public Response<PostResponseDto> createPost(@Valid @RequestBody PostRequestDto requestDto) {
+//        PostResponseDto responseDto = postService.createPost(requestDto);
+//        return Response.success("구인 글이 성공적으로 등록되었습니다.", responseDto);
+//    }
+    public Response<PostResponseDto> createPost(@PathVariable Long userId, @Valid @RequestBody PostRequestDto requestDto) {
+        requestDto.setUserId(userId);  // URL에서 전달된 userId를 requestDto에 설정
         PostResponseDto responseDto = postService.createPost(requestDto);
         return Response.success("구인 글이 성공적으로 등록되었습니다.", responseDto);
     }

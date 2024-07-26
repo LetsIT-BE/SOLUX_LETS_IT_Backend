@@ -18,13 +18,15 @@ public class PostRequestDto {
     private Post.PeopleNum peopleNum;
     private Timestamp recruitDueDate;
     private String preference;
-    private ProjectInfo projectInfo;
+//    private ProjectInfo projectInfo;
     private List<String> stack;
     private Post.Difficulty difficulty;
-    private Boolean onOff;
+    private Post.OnOff onOff;
     private Long regionId;
     private Long subRegionId;
-    private Long categoryId;
+    private List<String> categoryId;
+    private Post.ProjectPeriod projectPeriod;
+    private Post.AgeGroup ageGroup;
 
 //    @Getter
 //    @Setter
@@ -34,13 +36,13 @@ public class PostRequestDto {
 //        private Timestamp endDate;
 //    }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class ProjectInfo {
-        private Post.ProjectPeriod projectPeriod;
-        private Post.AgeGroup ageGroup;
-    }
+//    @Getter
+//    @Setter
+//    @NoArgsConstructor
+//    public static class ProjectInfo {
+//        private Post.ProjectPeriod projectPeriod;
+//        private Post.AgeGroup ageGroup;
+//    }
 
 
 }

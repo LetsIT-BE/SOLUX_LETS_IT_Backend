@@ -68,6 +68,7 @@ public class PostService {
 //    }
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
+
         Member user = memberRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Area region = areaRepository.findById(requestDto.getRegionId())
@@ -77,11 +78,12 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid sub-region ID"));
 
         Post post = Post.builder()
+                .userId(user)
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .peopleNum(requestDto.getPeopleNum())
                 .recruitDueDate(requestDto.getRecruitDueDate())
-                .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
+                .projectPeriod(requestDto.getProjectPeriod())
                 .difficulty(requestDto.getDifficulty())
                 .onOff(requestDto.getOnOff())
                 .region(region)
@@ -94,7 +96,7 @@ public class PostService {
                 .deadline(false)
                 .stack(requestDto.getStack())
                 .preference(requestDto.getPreference())
-                .ageGroup(requestDto.getProjectInfo().getAgeGroup())
+                .ageGroup(requestDto.getAgeGroup())
                 .build();
 
         Post savedPost = postRepository.save(post);
@@ -104,21 +106,22 @@ public class PostService {
 //                savedPost.getRecruitPeriodEnd()
 //        );
 
-        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-                savedPost.getRegion().getName(),
-                savedPost.getSubRegion().getName(),
-                savedPost.getProjectPeriod(),
-                savedPost.getAgeGroup()
-        );
+//        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+//                savedPost.getRegion().getName(),
+//                savedPost.getSubRegion().getName(),
+//                savedPost.getProjectPeriod(),
+//                savedPost.getAgeGroup()
+//        );
 
         return new PostResponseDto(
+                user.getUserId(),
                 savedPost.getPostId(),
                 savedPost.getTitle(),
                 savedPost.getContent(),
                 savedPost.getPeopleNum(),
                 savedPost.getRecruitDueDate(),
                 savedPost.getPreference(),
-                projectInfo,
+//                projectInfo,
                 savedPost.getStack(),
                 savedPost.getDifficulty(),
                 savedPost.getOnOff(),
@@ -130,7 +133,8 @@ public class PostService {
                 savedPost.getCreatedAt(),
                 savedPost.getUpdatedAt(),
                 savedPost.getViewCount(),
-                savedPost.getScrapCount()
+                savedPost.getScrapCount(),
+                savedPost.getProjectPeriod()
         );
     }
 
@@ -185,8 +189,8 @@ public class PostService {
         post.setPreference(postRequestDto.getPreference());
         post.setRegion(region);
         post.setSubRegion(subRegion);
-        post.setProjectPeriod(postRequestDto.getProjectInfo().getProjectPeriod());
-        post.setAgeGroup(postRequestDto.getProjectInfo().getAgeGroup());
+        post.setProjectPeriod(postRequestDto.getProjectPeriod());
+        post.setAgeGroup(postRequestDto.getAgeGroup());
         post.setStack(postRequestDto.getStack());
         post.setDifficulty(postRequestDto.getDifficulty());
         post.setOnOff(postRequestDto.getOnOff());
@@ -200,21 +204,22 @@ public class PostService {
 //                updatedPost.getRecruitPeriodEnd()
 //        );
 
-        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-                updatedPost.getRegion().getName(),
-                updatedPost.getSubRegion().getName(),
-                updatedPost.getProjectPeriod(),
-                updatedPost.getAgeGroup()
-        );
+//        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+//                updatedPost.getRegion().getName(),
+//                updatedPost.getSubRegion().getName(),
+//                updatedPost.getProjectPeriod(),
+//                updatedPost.getAgeGroup()
+//        );
 
         return new PostResponseDto(
+                user.getUserId(),
                 updatedPost.getPostId(),
                 updatedPost.getTitle(),
                 updatedPost.getContent(),
                 updatedPost.getPeopleNum(),
                 updatedPost.getRecruitDueDate(),
                 updatedPost.getPreference(),
-                projectInfo,
+//                projectInfo,
                 updatedPost.getStack(),
                 updatedPost.getDifficulty(),
                 updatedPost.getOnOff(),
@@ -226,7 +231,8 @@ public class PostService {
                 updatedPost.getCreatedAt(),
                 updatedPost.getUpdatedAt(),
                 updatedPost.getViewCount(),
-                updatedPost.getScrapCount()
+                updatedPost.getScrapCount(),
+                updatedPost.getProjectPeriod()
         );
     }
 
@@ -282,20 +288,21 @@ public class PostService {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
-            PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-                    post.getRegion().getName(),
-                    post.getSubRegion().getName(),
-                    post.getProjectPeriod(),
-                    post.getAgeGroup()
-            );
+//            PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+//                    post.getRegion().getName(),
+//                    post.getSubRegion().getName(),
+//                    post.getProjectPeriod(),
+//                    post.getAgeGroup()
+//            );
             return new PostResponseDto(
+                    post.getUserId().getUserId(),
                     post.getPostId(),
                     post.getTitle(),
                     post.getContent(),
                     post.getPeopleNum(),
                     post.getRecruitDueDate(),
                     post.getPreference(),
-                    projectInfo,
+//                    projectInfo,
                     post.getStack(),
                     post.getDifficulty(),
                     post.getOnOff(),
@@ -307,7 +314,8 @@ public class PostService {
                     post.getCreatedAt(),
                     post.getUpdatedAt(),
                     post.getViewCount(),
-                    post.getScrapCount()
+                    post.getScrapCount(),
+                    post.getProjectPeriod()
             );
         } else {
             throw new IllegalArgumentException("Invalid post ID");
@@ -375,21 +383,22 @@ public class PostService {
 //    }
 
     private PostResponseDto convertToResponseDto(Post post) {
-        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-                post.getRegion().getName(),
-                post.getSubRegion().getName(),
-                post.getProjectPeriod(),
-                post.getAgeGroup()
-        );
+//        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
+//                post.getRegion().getName(),
+//                post.getSubRegion().getName(),
+//                post.getProjectPeriod(),
+//                post.getAgeGroup()
+//        );
 
         return new PostResponseDto(
+                post.getUserId().getUserId(),
                 post.getPostId(),
                 post.getTitle(),
                 post.getContent(),
                 post.getPeopleNum(),
                 post.getRecruitDueDate(),
                 post.getPreference(),
-                projectInfo,
+//                projectInfo,
                 post.getStack(),
                 post.getDifficulty(),
                 post.getOnOff(),
@@ -401,7 +410,8 @@ public class PostService {
                 post.getCreatedAt(),
                 post.getUpdatedAt(),
                 post.getViewCount(),
-                post.getScrapCount()
+                post.getScrapCount(),
+                post.getProjectPeriod()
         );
     }
 }
