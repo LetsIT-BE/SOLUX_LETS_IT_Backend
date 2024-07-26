@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByUserId(Member userId);
+    List<Post> findByUserIdAndDeadlineFalse(Member userId);
 //    List<Post> findByUserIdAndStatus(Member userId, String status);
 }

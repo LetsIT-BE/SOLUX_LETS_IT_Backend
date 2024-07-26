@@ -15,8 +15,14 @@ import java.sql.Timestamp;
 @Entity
 public class TeamPost {
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teamId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id") // 추가된 부분
+    private Member user;
+
 
     @OneToOne
     @JoinColumn(name = "POST_ID")

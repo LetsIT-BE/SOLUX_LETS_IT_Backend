@@ -25,9 +25,15 @@ public class ProjectController {
         return ResponseEntity.ok(projects);
     }
 
+    @GetMapping("/{userId}/appliedlist")
+    public ResponseEntity<List<ProjectDto>> getAppliedList(@PathVariable("userId") Long userId) {
+        List<ProjectDto> projects = projectService.getProjectsByUserId(userId);
+        return ResponseEntity.ok(projects);
+    }
+
     @GetMapping("/{userId}/ongoinglist")
     public ResponseEntity<List<OngoingProjectDto>> getOngoingList(@PathVariable("userId") Long userId) {
-        List<OngoingProjectDto> projects = projectService.getOngoingProjectsByUserId(userId);
-        return ResponseEntity.ok(projects);
+        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(userId);
+        return ResponseEntity.ok(ongoingProjects);
     }
 }
