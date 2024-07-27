@@ -21,12 +21,6 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-//    @GetMapping("/{userId}/organizinglist")
-//    public ResponseEntity<List<ProjectDto>> getOrganizingList(@PathVariable("userId") Long userId) {
-//        List<ProjectDto> projects = projectService.getProjectsByUserId(userId);
-//        return ResponseEntity.ok(projects);
-//    }
-
     @GetMapping("/{userId}/organizinglist")
     public ResponseEntity<Map<String, List<ProjectDto>>> getOrganizingList(@PathVariable("userId") Long userId) {
         List<ProjectDto> projects = projectService.getProjectsByUserId(userId);
@@ -35,25 +29,13 @@ public class ProjectController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/{userId}/appliedlist")
-//    public ResponseEntity<List<ProjectDto>> getAppliedList(@PathVariable("userId") Long userId) {
-//        List<ProjectDto> projects = projectService.getProjectsByUserId(userId);
-//        return ResponseEntity.ok(projects);
-//    }
-
     @GetMapping("/{userId}/appliedlist")
     public ResponseEntity<Map<String, List<ProjectDto>>> getAppliedList(@PathVariable("userId") Long userId) {
-        List<ProjectDto> projects = projectService.getProjectsByUserId(userId);
+        List<ProjectDto> projects = projectService.getAppliedProjectsByUserId(userId);
         Map<String, List<ProjectDto>> response = new HashMap<>();
         response.put("projects", projects);
         return ResponseEntity.ok(response);
     }
-
-//    @GetMapping("/{userId}/ongoinglist")
-//    public ResponseEntity<List<OngoingProjectDto>> getOngoingList(@PathVariable("userId") Long userId) {
-//        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(userId);
-//        return ResponseEntity.ok(ongoingProjects);
-//    }
 
     @GetMapping("/{userId}/ongoinglist")
     public ResponseEntity<Map<String, List<OngoingProjectDto>>> getOngoingList(@PathVariable("userId") Long userId) {
@@ -62,12 +44,6 @@ public class ProjectController {
         response.put("projects", ongoingProjects);
         return ResponseEntity.ok(response);
     }
-
-//    @GetMapping("/{userId}/completedlist")
-//    public ResponseEntity<List<OngoingProjectDto>> getCompletedList(@PathVariable("userId") Long userId) {
-//        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(userId);
-//        return ResponseEntity.ok(ongoingProjects);
-//    }
 
     @GetMapping("/{userId}/completedlist")
     public ResponseEntity<Map<String, List<OngoingProjectDto>>> getCompletedList(@PathVariable("userId") Long userId) {

@@ -2,9 +2,11 @@ package letsit_backend.service;
 
 import letsit_backend.dto.OngoingProjectDto;
 import letsit_backend.dto.ProjectDto;
+import letsit_backend.model.Apply;
 import letsit_backend.model.Member;
 import letsit_backend.model.Post;
 import letsit_backend.model.TeamPost;
+import letsit_backend.repository.ApplyRepository;
 import letsit_backend.repository.MemberRepository;
 import letsit_backend.repository.PostRepository;
 //import letsit_backend.repository.ProjectRepository;
@@ -20,13 +22,15 @@ public class ProjectService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final TeamPostRepository teamPostRepository;
+    private final ApplyRepository applyRepository;
 //    private final RegionService regionService;
 
     @Autowired
-    public ProjectService(PostRepository postRepository, MemberRepository memberRepository, TeamPostRepository teamPostRepository) {
+    public ProjectService(PostRepository postRepository, MemberRepository memberRepository, TeamPostRepository teamPostRepository, ApplyRepository applyRepository) {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
         this.teamPostRepository = teamPostRepository;
+        this.applyRepository = applyRepository;
 //        this.regionService = regionService;
     }
 
@@ -36,6 +40,14 @@ public class ProjectService {
         List<Post> posts = postRepository.findByUserId(user);
         return posts.stream()
                 .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+    public List<ProjectDto> getAppliedProjectsByUserId(Long userId) {
+        Member user = memberRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
+        List<Apply> applies = applyRepository.findByUserId(user);
+        return applies.stream()
+                .map(apply -> convertToDto(apply.getPostId()))
                 .collect(Collectors.toList());
     }
 
