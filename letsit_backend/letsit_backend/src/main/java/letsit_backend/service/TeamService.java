@@ -25,6 +25,7 @@ public class TeamService {
     private final ApplyRepository applyRepository;
     private final TeamEvaluationRepository teamEvaluationRepository;
     private final MemberRepository memberRepository;
+    private final ProfileRepository profileRepository;
 
     // TODO 생성자주입, setter사용지향, 빌드주입하기로 수정필요
 
@@ -89,13 +90,16 @@ public class TeamService {
         // TODO 팀멤버리스트 없을시 예외처리 필요
         List<TeamMemberLoadInfoDto> teamInfoList = teamMemberList.stream()
                 .map(teamMember -> {
+                    // 프로필 url가져오기
+                    Profile profile = profileRepository.findByUserId(teamMember.getUserId());
+                    //
                     TeamMemberLoadInfoDto dto = new TeamMemberLoadInfoDto(
                             teamMember.getUserId().getUserId(),
                             teamMember.getUserId().getName(),
-                            teamMember.getTeamMemberRole().toString());
-                            // TODO 프로필사진까지 같이 로드하기
+                            teamMember.getTeamMemberRole().toString(),
+                            // 프로필사진까지 같이 로드하기
                             // TODO 프로필 null인지 유무 체크필요
-                            // teamMember.getUserId().getprofileUrl();
+                            profile.getProfile_image_url());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -134,21 +138,32 @@ public class TeamService {
     // TODO 팀장변경기능 미완성상태
     @Transactional
     public void changeTeamLeader(Long teamId, Long userId) {
-        // 팀장이 될 팀원의 teamMember 찾기
-        TeamPost teamPost = teamPostRepository.findById(teamId)
-                .orElseThrow(()-> new IllegalIdentifierException("팀을 찾을수없음."));
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(()-> new IllegalIdentifierException("유저를 찾을수없음."));
-        TeamMember changeLeader = teamMemberRepository.findByTeamIdAndUserId(teamPost, member)
-                .orElseThrow(()-> new IllegalIdentifierException("팀멤버를 찾을수없음."));
 
-        changeLeader.setTeamMemberRole(TeamMember.Role.Team_Leader);
-        teamMemberRepository.save(changeLeader);
-
-        // 팀장의 역할을 팀원으로변경
         // TODO 팀장(로그인유저)의 member객체받아오기
         // TODO 팀장의 직책 -> 팀원으로 변경
         // TODO 업데이트해서 정보수정기능으로 접근 lock하기
+        // team정보 불러오기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀을 찾을수없음."));
+
+        // 팀장 찾아서 일반멤버로 교체
+        TeamMember LeaderChangeToMember =
+                teamMemberRepository.findTeamMemberByTeamIdAndTeamMemberRole(teamPost, TeamMember.Role.Team_Leader)
+                        .orElseThrow(()-> new IllegalIdentifierException("팀장정보를 찾을수없음."));
+
+        LeaderChangeToMember.setTeamMemberRole(TeamMember.Role.Team_Member);
+        teamMemberRepository.save(LeaderChangeToMember);
+
+        // 팀원 찾아서 팀장으로 교체
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(()-> new IllegalIdentifierException("유저를 찾을수없음."));
+
+        TeamMember MemberChangeToLeader = teamMemberRepository.findByTeamIdAndUserId(teamPost, member)
+                .orElseThrow(()-> new IllegalIdentifierException("팀멤버를 찾을수없음."));
+
+        MemberChangeToLeader.setTeamMemberRole(TeamMember.Role.Team_Leader);
+        teamMemberRepository.save(MemberChangeToLeader);
+
     }
 
     // 프로젝트종료버튼
@@ -191,7 +206,7 @@ public class TeamService {
                 .build();
         teamEvaluationRepository.save(teamEvaluation);
 
-        // TODO teamMember의 iscomplete 객체 추가하고 true로 변경(기본false)
+        // TODO teamMember의 iscomplete 객체 추가하고 true로 변경(기본false) -> 완료된사용자받아오기
     }
 
     // 회의인증
