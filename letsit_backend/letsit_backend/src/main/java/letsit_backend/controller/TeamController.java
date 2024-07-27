@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/team")
@@ -54,6 +57,7 @@ public class TeamController {
     }
 
 
+    // TODO api명시적으로 변경하기
     @PatchMapping("/{teamId}/{userId}")
     public Response<?> teamLeaderChange(@PathVariable Long teamId,
                                         @PathVariable Long userId) {
@@ -63,18 +67,27 @@ public class TeamController {
         return Response.success("팀정보수정->팀장위임", null);
     }
 
-    @PostMapping("/evaluation/{teamId}/{userId}")
+    @PostMapping("/evaluation/{teamId}/{evaluator}/{evaluatee}")
     public Response<?> evaluation(@PathVariable Long teamId,
-                                  @PathVariable Long userId,
+                                  @PathVariable Long evaluator,
+                                  @PathVariable Long evaluatee,
                                   @RequestBody TeamEvaluationRequestDto teamEvaluationRequestDto) {
 
         // TODO 팀원평가랑 팀원신고기능에서 팀원목록 리스트업은 어떻게 처리하는지??->팀원로드기능따로구현?
         // TODO 팀멤버인지 검증(authentication객체 == teamMember and teamMember == teamId)
 
         // 팀원평가결과 종합해서 프로필에 보여주는 로직도필요함.
-        teamService.teamEvaluation(teamId, userId, teamEvaluationRequestDto);
+        teamService.teamEvaluation(teamId, evaluator, evaluatee, teamEvaluationRequestDto);
         return Response.success("팀원평가", null);
     }
+
+    @GetMapping("/evaluation/info/{teamId}/{userId}")
+    public Response<List<Map<String, Long>>> myEvaluationList(@PathVariable Long teamId,
+                                                              @PathVariable Long userId) {
+
+        return Response.success("팀원평가->평가한사람목록불러오기", teamService.myEvaluationList(teamId,userId));
+    }
+
 
     // TODO 팀장만(팀장의 userId를 받아와서 검증필요)
     @PatchMapping("/{teamId}/complete")
