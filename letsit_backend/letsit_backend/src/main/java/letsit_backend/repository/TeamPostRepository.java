@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface TeamPostRepository extends JpaRepository<TeamPost, Long> {
     Optional<TeamPost> findByPostId(Post post);
     List<TeamPost> findByUser_UserIdAndIsCompleteFalse(Long userId);
+    List<TeamPost> findByUser_UserIdAndIsCompleteTrue(Long userId);
 }

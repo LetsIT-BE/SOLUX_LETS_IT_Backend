@@ -48,6 +48,15 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
+    public List<OngoingProjectDto> getCompletedProjectsByUserId(Long userId) {
+        Member user = memberRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
+        List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteTrue(userId);
+        return teamPosts.stream()
+                .map(this::convertToOngoingProjectDto)
+                .collect(Collectors.toList());
+    }
+
 
     private OngoingProjectDto convertToOngoingProjectDto(TeamPost teamPost) {
         return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle());

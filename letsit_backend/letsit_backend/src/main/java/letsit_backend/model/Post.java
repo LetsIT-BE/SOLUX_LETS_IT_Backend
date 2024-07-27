@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.antlr.v4.runtime.misc.Utils.count;
@@ -44,7 +45,7 @@ public class Post {
 
     // TODO 기간어떻게받을지...
     @Column(nullable = false)
-    private Timestamp recruitDueDate;
+    private LocalDate recruitDueDate;
 
     @Enumerated(EnumType.STRING)
     private ProjectPeriod projectPeriod;
@@ -151,7 +152,16 @@ public class Post {
     private Area subRegion;
 
     // TODO 지역엔티티랑 매핑
-    private Long categoryId;
+//    private Long categoryId;
+    @Column(name = "category_id")
+    private String categoryId;
+    public void setCategoryId(List<String> categoryId) {
+        this.categoryId = String.join(",", categoryId);
+    }
+
+    public List<String> getCategoryId() {
+        return Arrays.asList(categoryId.split(","));
+    }
 
     private int viewCount;
 
@@ -166,16 +176,26 @@ public class Post {
     @Column(nullable = false)
     private Boolean deadline;
 
-    @ElementCollection
-    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
+//    @ElementCollection
+//    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
+//    @Column(name = "stack")
+//    private List<String> stack;
+
     @Column(name = "stack")
-    private List<String> stack;
+    private String stack;
+    public void setStack(List<String> stack) {
+        this.stack = String.join(",", stack);
+    }
+
+    public List<String> getStack() {
+        return Arrays.asList(stack.split(","));
+    }
 
 
     // 마감여부 확인(기한 지났으면 + 마감true이면)
-//    private boolean isClosed() {
-//        return this.recruitPeriod.isBefore(LocalDate.now()) || this.deadline;
-//    }
+    private boolean isClosed() {
+        return this.recruitDueDate.isBefore(LocalDate.now()) || this.deadline;
+    }
 
 
 
@@ -196,15 +216,15 @@ public class Post {
     }
      */
 
-//    public void approval(Apply apply) {
-//        if (!isClosed() && this.totalPersonnel > this.currentPersonnel) {
-//        apply.approved();
-//        currentPersonnel++;
-//        }
-//    }
-//    public void reject(Apply apply) {
-//        if (!isClosed()) {
-//            apply.refused();
-//        }
-//    }
+    public void approval(Apply apply) {
+        if (!isClosed() && this.totalPersonnel > this.currentPersonnel) {
+        apply.approved();
+        currentPersonnel++;
+        }
+    }
+    public void reject(Apply apply) {
+        if (!isClosed()) {
+            apply.refused();
+        }
+    }
 }
