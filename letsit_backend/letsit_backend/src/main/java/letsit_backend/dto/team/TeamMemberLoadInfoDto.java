@@ -9,4 +9,5 @@ public class TeamMemberLoadInfoDto {
     private Long userId;
     private String userName;
     private String position;
+    private String profile_image_url;
 }
