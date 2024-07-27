@@ -6,11 +6,9 @@ import letsit_backend.model.Apply;
 import letsit_backend.model.Member;
 import letsit_backend.model.Post;
 import letsit_backend.model.TeamPost;
-import letsit_backend.repository.ApplyRepository;
-import letsit_backend.repository.MemberRepository;
-import letsit_backend.repository.PostRepository;
+import letsit_backend.model.Profile;
+import letsit_backend.repository.*;
 //import letsit_backend.repository.ProjectRepository;
-import letsit_backend.repository.TeamPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +21,18 @@ public class ProjectService {
     private final MemberRepository memberRepository;
     private final TeamPostRepository teamPostRepository;
     private final ApplyRepository applyRepository;
-//    private final RegionService regionService;
+    private final TeamMemberRepository teamMemberRepository;
+    private final ProfileRepository profileRepository;
+
 
     @Autowired
-    public ProjectService(PostRepository postRepository, MemberRepository memberRepository, TeamPostRepository teamPostRepository, ApplyRepository applyRepository) {
+    public ProjectService(PostRepository postRepository, MemberRepository memberRepository, TeamPostRepository teamPostRepository, ApplyRepository applyRepository, TeamMemberRepository teamMemberRepository, ProfileRepository profileRepository) {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
         this.teamPostRepository = teamPostRepository;
         this.applyRepository = applyRepository;
-//        this.regionService = regionService;
+        this.teamMemberRepository = teamMemberRepository;
+        this.profileRepository = profileRepository;
     }
 
     public List<ProjectDto> getProjectsByUserId(Long userId) {
@@ -70,9 +71,19 @@ public class ProjectService {
     }
 
 
+//    private OngoingProjectDto convertToOngoingProjectDto(TeamPost teamPost) {
+//        return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle());
+//    }
     private OngoingProjectDto convertToOngoingProjectDto(TeamPost teamPost) {
-        return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle());
+        List<String> profileImages = teamMemberRepository.findByTeamId_TeamId(teamPost.getTeamId()).stream()
+            .map(teamMember -> {
+                Profile profile = profileRepository.findByUserId(teamMember.getUserId());
+                return profile != null ? profile.getProfileImage() : null;
+            })
+            .collect(Collectors.toList());
+        return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle(), profileImages);
     }
+
 
     private ProjectDto convertToDto(Post post) {
         ProjectDto projectDto = new ProjectDto();
