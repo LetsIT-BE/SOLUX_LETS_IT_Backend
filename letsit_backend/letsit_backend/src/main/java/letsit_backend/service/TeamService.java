@@ -34,6 +34,7 @@ public class TeamService {
     public Long creatTeam(Long postId, TeamCreateDto teamCreateDto) {
 
         // TODO userId 체크
+        // TODO 이미 생성됐는지 검증
 
         // 팀게시판 생성로직
         Post post = postRepository.findById(postId)
@@ -135,7 +136,6 @@ public class TeamService {
 
     }
 
-    // TODO 팀장변경기능 미완성상태
     @Transactional
     public void changeTeamLeader(Long teamId, Long userId) {
 
@@ -169,6 +169,7 @@ public class TeamService {
     // 프로젝트종료버튼
     @Transactional
     public void projectComplete(Long teamId) {
+        // TODO 데이터값 True면 못되돌리도록 error출력
         TeamPost teamPost = teamPostRepository.findById(teamId)
                 .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
         teamPost.projectEnd();
@@ -176,24 +177,36 @@ public class TeamService {
 
     // 팀원평가
     @Transactional
-    public void teamEvaluation(Long teamId, Long userId, TeamEvaluationRequestDto evaluationRequestDto) {
-        // TODO 팀아이디를 통해 팀원정보리스트업
-        // TODO 팀원정보가 authentication과 일치하면 무시
-        // TODO 팀원정보 비일치시 팀원정보리스트 for문돌며 평가진행. -> 일괄평가방식
-
+    public void teamEvaluation(Long teamId, Long evaluator, Long evaluatee, TeamEvaluationRequestDto evaluationRequestDto) {
         // TODO userId가 authentiction과 일치시 종료
+
+        // 팀정보 찾기
         TeamPost teamPost = teamPostRepository.findById(teamId)
-                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(()-> new IllegalIdentifierException("member is not found"));
-        TeamMember teamMember = teamMemberRepository.findByTeamIdAndUserId(teamPost,member)
-                .orElseThrow(()-> new IllegalIdentifierException("teamMember is not found"));
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 평가받는사람 찾기
+        Member member1 = memberRepository.findById(evaluatee)
+                .orElseThrow(()-> new IllegalIdentifierException("유저정보를 찾을수 없습니다."));
+        TeamMember teamMemberEvaluatee = teamMemberRepository.findByTeamIdAndUserId(teamPost,member1)
+                .orElseThrow(()-> new IllegalIdentifierException("평가받는팀원을 찾을수없습니다."));
+
+        // 평가하는사람 찾기
+        Member member2 = memberRepository.findById(evaluator)
+                .orElseThrow(()-> new IllegalIdentifierException("유저정보를 찾을수없습니다."));
+        TeamMember teamMemberEvaluator = teamMemberRepository.findByTeamIdAndUserId(teamPost, member2)
+                .orElseThrow(()-> new IllegalIdentifierException("평가자팀원을 찾을수없습니다."));
+
+        // 평가했는지 유무 검증
+        boolean isComplete = teamEvaluationRepository.existsByTeamIdAndEvaluatorAndEvaluatee(teamPost, member1, member2);
+        if (isComplete) {
+            throw new IllegalArgumentException("이미 평가를 했습니다.");
+        }
 
         // TODO findbyUserID로 profile찾기
-
         TeamEvaluation teamEvaluation = TeamEvaluation.builder()
-                .teamId(teamMember.getTeamId())
-                .userId(teamMember.getUserId())
+                .teamId(teamPost)
+                .evaluatee(teamMemberEvaluatee.getUserId()) // 평가받은사람
+                .evaluator(teamMemberEvaluator.getUserId()) // 평가자
                 //.profileId(찾은거입력하기)
                 .kindness(evaluationRequestDto.getKindness())
                 .promise(evaluationRequestDto.getPromise())
@@ -207,6 +220,31 @@ public class TeamService {
         teamEvaluationRepository.save(teamEvaluation);
 
         // TODO teamMember의 iscomplete 객체 추가하고 true로 변경(기본false) -> 완료된사용자받아오기
+    }
+
+    // 내가 평가한 팀원목록 조회
+    public List<Map<String, Long>> myEvaluationList(Long teamId, Long userId) {
+        // 팀정보찾기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 유저정보찾기
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(()-> new IllegalIdentifierException("유저정보를 찾을수 없습니다."));
+
+        // 평가목록 불러오기
+        List<TeamEvaluation> teamEvaluationList = teamEvaluationRepository.findAllByTeamIdAndEvaluator(teamPost, member);
+
+        List<Map<String, Long>> myEvaluationList = teamEvaluationList.stream()
+                .map(teamEvaluation -> {
+                    Map<String, Long> map = new HashMap<>();
+                    map.put("userId", teamEvaluation.getEvaluatee().getUserId());
+                    return map;
+                })
+                .collect(Collectors.toList());
+
+        return myEvaluationList;
+
     }
 
     // 회의인증
