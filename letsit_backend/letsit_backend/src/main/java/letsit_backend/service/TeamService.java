@@ -197,7 +197,7 @@ public class TeamService {
                 .orElseThrow(()-> new IllegalIdentifierException("평가자팀원을 찾을수없습니다."));
 
         // 평가했는지 유무 검증
-        boolean isComplete = teamEvaluationRepository.existsByTeamIdAndEvaluatorAndEvaluatee(teamPost, member1, member2);
+        boolean isComplete = teamEvaluationRepository.existsByTeamIdAndEvaluatorAndEvaluatee(teamPost, member2, member1);
         if (isComplete) {
             throw new IllegalArgumentException("이미 평가를 했습니다.");
         }

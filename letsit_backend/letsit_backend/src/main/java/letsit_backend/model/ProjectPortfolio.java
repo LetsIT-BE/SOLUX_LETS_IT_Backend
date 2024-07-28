@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 public class ProjectPortfolio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long prtId;
 
     @ManyToOne

@@ -113,7 +113,6 @@ public class TeamController {
         //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
         return Response.success("프로젝트관리->회의인증버튼", null);
     }
-
      */
 
     @PostMapping("/{teamId}/report")
