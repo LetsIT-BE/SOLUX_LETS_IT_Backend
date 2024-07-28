@@ -4,14 +4,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
+
+import static org.antlr.v4.runtime.misc.Utils.count;
 @Builder
 @Getter
 @Setter
@@ -65,17 +70,9 @@ public class Post {
             throw new IllegalArgumentException("Unknown enum value: " + korean);
         }
     }
-//    @Column(nullable = false)
-//    private Timestamp recruitPeriodStart;
-//
     @Column(nullable = false)
-    private LocalDate recruitDueDate;
 
-//    @Column(nullable = false)
-//    private Timestamp projectPeriodStart;
-//
-//    @Column(nullable = false)
-//    private Timestamp projectPeriodEnd;
+    private LocalDate recruitDueDate;
 
     @Enumerated(EnumType.STRING)
     private ProjectPeriod projectPeriod;
@@ -106,6 +103,11 @@ public class Post {
             throw new IllegalArgumentException("Unknown enum value: " + korean);
         }
     }
+
+    //private int totalPersonnel; peopleNum이랑 맞추기
+
+    @ColumnDefault("0")
+    private int currentPersonnel;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
@@ -267,5 +269,40 @@ public class Post {
 
     public void setDeadline(Boolean deadline) {
         this.deadline = deadline;
+
+    // 마감여부 확인(기한 지났으면 + 마감true이면)
+    private boolean isClosed() {
+        return this.recruitPeriod.isBefore(LocalDate.now()) || this.deadline;
+    }
+
+
+
+    /*
+    모집자 관점) 신청자 승인 가능 여부
+    public boolean isApprovable(Apply applicants) {
+        return this.applicants.contains(applicants);
+        // enum peopleNum 이랑 비교하는 로직
+    }
+
+    // 지원자 관점) 지원 가능 여부
+    public boolean isApplyable(Long userId) {
+        return !isClosed(); // && !이미 지원했는가?(isApplied)
+    }
+    public boolean iswithdrawAble(Long userId) {
+        return !isClosed();
+        // && 이미 지원했는가 && 이미수락됐는가
+    }
+     */
+
+    public void approval(Apply apply) {
+        if (!isClosed() && this.totalPersonnel > this.currentPersonnel) {
+        apply.approved();
+        currentPersonnel++;
+        }
+    }
+    public void reject(Apply apply) {
+        if (!isClosed()) {
+            apply.refused();
+        }
     }
 }

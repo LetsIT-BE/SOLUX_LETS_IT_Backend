@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 
@@ -12,6 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +32,14 @@ public class Comment {
     @Column(nullable = false)
     private String comContent;
 
-    @CreationTimestamp
+
+    @CreatedDate
     private Timestamp comCreateDate;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     private Timestamp comUpdateDate;
 
-
+    public void update(String comment) {
+        this.comContent = comment;
+    }
 }

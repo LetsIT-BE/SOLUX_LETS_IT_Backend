@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <annotationProcessing>
+<!--     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
@@ -11,6 +11,11 @@
         <module name="letsit_backend.letsit_backend.main~1" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="21" /> -->
+
+    <bytecodeTargetLevel>
+      <module name="letsit_backend.letsit_backend.main" target="21" />
+      <module name="letsit_backend.letsit_backend.test" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
