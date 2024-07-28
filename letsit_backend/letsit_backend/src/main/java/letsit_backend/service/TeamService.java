@@ -100,7 +100,7 @@ public class TeamService {
                             teamMember.getTeamMemberRole().toString(),
                             // 프로필사진까지 같이 로드하기
                             // TODO 프로필 null인지 유무 체크필요
-                            profile.getProfile_image_url());
+                            profile.getProfileImage());
                     return dto;
                 })
                 .collect(Collectors.toList());
