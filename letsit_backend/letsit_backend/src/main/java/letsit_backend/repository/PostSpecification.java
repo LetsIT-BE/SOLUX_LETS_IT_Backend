@@ -28,4 +28,5 @@ public class PostSpecification {
     // TODO a&b우선, a|b를 후순위로 리스트업하는 검색알고리즘
     // TODO 각검색에 대해 점수를 부여하여 출력
 
+
 }

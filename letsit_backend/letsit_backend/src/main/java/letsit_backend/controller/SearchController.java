@@ -1,9 +1,5 @@
 package letsit_backend.controller;
 
-import jakarta.validation.Valid;
-import letsit_backend.dto.MemberResponseDto;
-import letsit_backend.dto.MemberSignupRequestDto;
-import letsit_backend.dto.Response;
 import letsit_backend.model.Post;
 import letsit_backend.service.SearchService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +30,7 @@ public class SearchController {
         // TODO SearchResponseDto로 필요정보만 절달하도록 설정하기
         return searchService.searchPostsByKewords(keywords);
     }
+
 
 
     // TODO 여러키워드검색과 연결하기
