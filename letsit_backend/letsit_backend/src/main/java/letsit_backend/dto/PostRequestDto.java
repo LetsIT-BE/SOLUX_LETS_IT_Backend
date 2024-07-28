@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,7 @@ public class PostRequestDto {
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;
-    private Timestamp recruitDueDate;
+    private LocalDate recruitDueDate;
     private String preference;
 //    private ProjectInfo projectInfo;
     private List<String> stack;

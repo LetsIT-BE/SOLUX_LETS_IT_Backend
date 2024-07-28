@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -17,7 +18,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private Post.PeopleNum peopleNum;
-    private Timestamp recruitDueDate;
+    private LocalDate recruitDueDate;
     private String preference;
 //    private ProjectInfo projectInfo;
     private List<String> stack;
@@ -34,7 +35,7 @@ public class PostResponseDto {
     private int scrapCount;
     private Post.ProjectPeriod projectPeriod;
 
-    public PostResponseDto(Long userId, Long postId, String title, String content, Post.PeopleNum peopleNum, Timestamp recruitDueDate, String preference/*, ProjectInfo projectInfo*/, List<String> stack, Post.Difficulty difficulty, Post.OnOff onOff, Boolean deadline, List<String> categoryId, Post.AgeGroup ageGroup, String region, String subRegion, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount, Post.ProjectPeriod projectPeriod) {
+    public PostResponseDto(Long userId, Long postId, String title, String content, Post.PeopleNum peopleNum, LocalDate recruitDueDate, String preference/*, ProjectInfo projectInfo*/, List<String> stack, Post.Difficulty difficulty, Post.OnOff onOff, Boolean deadline, List<String> categoryId, Post.AgeGroup ageGroup, String region, String subRegion, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount, Post.ProjectPeriod projectPeriod) {
         this.userId = userId;
         this.postId = postId;
         this.title = title;

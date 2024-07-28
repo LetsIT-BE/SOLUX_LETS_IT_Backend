@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Builder
@@ -67,7 +69,7 @@ public class Post {
 //    private Timestamp recruitPeriodStart;
 //
     @Column(nullable = false)
-    private Timestamp recruitDueDate;
+    private LocalDate recruitDueDate;
 
 //    @Column(nullable = false)
 //    private Timestamp projectPeriodStart;
@@ -182,10 +184,20 @@ public class Post {
     private Area subRegion;
 
     // TODO 분야엔티티랑 매핑
-    @ElementCollection
-    @CollectionTable(name = "post_category", joinColumns = @JoinColumn(name = "post_id"))
+//    @ElementCollection
+//    @CollectionTable(name = "post_category", joinColumns = @JoinColumn(name = "post_id"))
+//    @Column(name = "category_id")
+//    private List<String> categoryId;
+
     @Column(name = "category_id")
-    private List<String> categoryId;
+    private String categoryId;
+    public void setCategoryId(List<String> categoryId) {
+        this.categoryId = String.join(",", categoryId);
+    }
+
+    public List<String> getCategoryId() {
+        return Arrays.asList(categoryId.split(","));
+    }
 
     private int viewCount;
 
@@ -200,10 +212,20 @@ public class Post {
     @Column(nullable = false)
     private Boolean deadline;
 
-    @ElementCollection
-    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
+//    @ElementCollection
+//    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
+//    @Column(name = "stack")
+//    private List<String> stack;
     @Column(name = "stack")
-    private List<String> stack;
+    private String stack;
+    public void setStack(List<String> stack) {
+        this.stack = String.join(",", stack);
+    }
+
+    public List<String> getStack() {
+        return Arrays.asList(stack.split(","));
+    }
+
 
     private String preference;
 

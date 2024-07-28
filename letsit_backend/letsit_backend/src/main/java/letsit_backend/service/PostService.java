@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,49 +25,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final AreaRepository areaRepository;
     private final MemberRepository memberRepository;
-
-//    public PostResponseDto createPost(PostRequestDto requestDto) {
-//        Post post = Post.builder()
-//                .title(requestDto.getTitle())
-//                .content(requestDto.getContent())
-//                .peopleNum(requestDto.getPeopleNum())
-//                .recruitPeriodStart(requestDto.getRecruitDueDate().getStartDate())
-//                .recruitPeriodEnd(requestDto.getRecruitDueDate().getEndDate())
-//                .projectPeriod(requestDto.getProjectInfo().getProjectPeriod())
-//                .difficulty(requestDto.getDifficulty())
-//                .onOff(requestDto.getOnOff())
-//                .regionId(requestDto.getRegionId()) // 추가
-//                .categoryId(requestDto.getCategoryId())
-//                .viewCount(0)
-//                .scrapCount(0)
-//                .createdAt(new Timestamp(System.currentTimeMillis()))
-//                .updatedAt(new Timestamp(System.currentTimeMillis()))
-//                .deadline(false)
-//                .stack(requestDto.getStack())
-//                .preference(requestDto.getPreference())
-//                .ageGroup(requestDto.getProjectInfo().getAgeGroup())
-//                .build();
-//
-//        Post savedPost = postRepository.save(post);
-//
-//        PostResponseDto responseDto = new PostResponseDto();
-//        responseDto.setPostId(savedPost.getPostId());
-//        responseDto.setTitle(savedPost.getTitle());
-//        responseDto.setContent(savedPost.getContent());
-//        responseDto.setPeopleNum(savedPost.getPeopleNum());
-//        responseDto.setRecruitDueDate(new PostResponseDto.RecruitDueDate(savedPost.getRecruitPeriodStart(), savedPost.getRecruitPeriodEnd()));
-//        responseDto.setPreference(savedPost.getPreference());
-//        responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(savedPost.getRegionId().toString(), savedPost.getProjectPeriod(), savedPost.getAgeGroup()));
-//        responseDto.setStack(savedPost.getStack());
-//        responseDto.setDifficulty(savedPost.getDifficulty());
-//        responseDto.setOnOff(savedPost.getOnOff());
-//        responseDto.setCategoryId(savedPost.getCategoryId());
-//        responseDto.setAgeGroup(savedPost.getAgeGroup());
-//        responseDto.setCreatedAt(savedPost.getCreatedAt());
-//        responseDto.setUpdatedAt(savedPost.getUpdatedAt());
-//
-//        return responseDto;
-//    }
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
 
@@ -88,30 +47,18 @@ public class PostService {
                 .onOff(requestDto.getOnOff())
                 .region(region)
                 .subRegion(subRegion)
-                .categoryId(requestDto.getCategoryId())
+                .categoryId(String.join(",", requestDto.getCategoryId()))
                 .viewCount(0)
                 .scrapCount(0)
                 .createdAt(new Timestamp(System.currentTimeMillis()))
                 .updatedAt(new Timestamp(System.currentTimeMillis()))
                 .deadline(false)
-                .stack(requestDto.getStack())
+                .stack(String.join(",", requestDto.getStack()))
                 .preference(requestDto.getPreference())
                 .ageGroup(requestDto.getAgeGroup())
                 .build();
 
         Post savedPost = postRepository.save(post);
-
-//        PostResponseDto.RecruitDueDate recruitDueDate = new PostResponseDto.RecruitDueDate(
-//                savedPost.getRecruitPeriodStart(),
-//                savedPost.getRecruitPeriodEnd()
-//        );
-
-//        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-//                savedPost.getRegion().getName(),
-//                savedPost.getSubRegion().getName(),
-//                savedPost.getProjectPeriod(),
-//                savedPost.getAgeGroup()
-//        );
 
         return new PostResponseDto(
                 user.getUserId(),
@@ -121,7 +68,6 @@ public class PostService {
                 savedPost.getPeopleNum(),
                 savedPost.getRecruitDueDate(),
                 savedPost.getPreference(),
-//                projectInfo,
                 savedPost.getStack(),
                 savedPost.getDifficulty(),
                 savedPost.getOnOff(),
@@ -137,38 +83,6 @@ public class PostService {
                 savedPost.getProjectPeriod()
         );
     }
-
-//    public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
-//        Post post = postRepository.findById(postId)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid postId"));
-//
-//        post.setPeopleNum(postRequestDto.getPeopleNum());
-//        post.setRecruitPeriodStart(postRequestDto.getRecruitDueDate().getStartDate());
-//        post.setRecruitPeriodEnd(postRequestDto.getRecruitDueDate().getEndDate());
-//        post.setPreference(postRequestDto.getPreference());
-////        post.setRegionId(postRequestDto.getProjectInfo().getRegionId());
-//        post.setProjectPeriod(postRequestDto.getProjectInfo().getProjectPeriod());
-//        post.setAgeGroup(postRequestDto.getProjectInfo().getAgeGroup());
-//        post.setStack(postRequestDto.getStack());
-//        post.setContent(postRequestDto.getContent());
-//        post.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-//
-//        Post updatedPost = postRepository.save(post);
-//
-//        return new PostResponseDto(
-//                updatedPost.getPostId(),
-//                updatedPost.getPeopleNum(),
-//                new PostResponseDto.RecruitDueDate(updatedPost.getRecruitPeriodStart(), updatedPost.getRecruitPeriodEnd()),
-//                updatedPost.getPreference(),
-//                updatedPost.getRegionId(),
-//                updatedPost.getProjectPeriod(),
-//                updatedPost.getAgeGroup(),
-//                updatedPost.getStack(),
-//                updatedPost.getContent(),
-//                updatedPost.getCreatedAt(),
-//                updatedPost.getUpdatedAt()
-//        );
-//    }
 
     public PostResponseDto updatePost(Long postId, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(postId)
@@ -199,18 +113,6 @@ public class PostService {
 
         Post updatedPost = postRepository.save(post);
 
-//        PostResponseDto.RecruitDueDate recruitDueDate = new PostResponseDto.RecruitDueDate(
-//                updatedPost.getRecruitPeriodStart(),
-//                updatedPost.getRecruitPeriodEnd()
-//        );
-
-//        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-//                updatedPost.getRegion().getName(),
-//                updatedPost.getSubRegion().getName(),
-//                updatedPost.getProjectPeriod(),
-//                updatedPost.getAgeGroup()
-//        );
-
         return new PostResponseDto(
                 user.getUserId(),
                 updatedPost.getPostId(),
@@ -219,7 +121,6 @@ public class PostService {
                 updatedPost.getPeopleNum(),
                 updatedPost.getRecruitDueDate(),
                 updatedPost.getPreference(),
-//                projectInfo,
                 updatedPost.getStack(),
                 updatedPost.getDifficulty(),
                 updatedPost.getOnOff(),
@@ -236,15 +137,6 @@ public class PostService {
         );
     }
 
-//    public boolean deletePost(Long postId) {
-//        if (postRepository.existsById(postId)) {
-//            postRepository.deleteById(postId);
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
     public boolean deletePost(Long userId, Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
@@ -257,43 +149,11 @@ public class PostService {
         return false;
     }
 
-//    public PostResponseDto getPostById(Long postId) {
-//        Optional<Post> optionalPost = postRepository.findById(postId);
-//        if (optionalPost.isPresent()) {
-//            Post post = optionalPost.get();
-//            PostResponseDto responseDto = new PostResponseDto();
-//            responseDto.setPostId(post.getPostId());
-//            responseDto.setTitle(post.getTitle());
-//            responseDto.setContent(post.getContent());
-//            responseDto.setPeopleNum(post.getPeopleNum());
-//            responseDto.setRecruitDueDate(post.getRecruitDueDate());
-//            responseDto.setPreference(post.getPreference());
-//            responseDto.setProjectInfo(new PostResponseDto.ProjectInfo(post.getRegionId().toString(), post.getProjectPeriod(), post.getAgeGroup()));
-//            responseDto.setStack(post.getStack());
-//            responseDto.setDifficulty(post.getDifficulty());
-//            responseDto.setOnOff(post.getOnOff());
-//            responseDto.setCategoryId(post.getCategoryId());
-//            responseDto.setAgeGroup(post.getAgeGroup());
-//            responseDto.setCreatedAt(post.getCreatedAt());
-//            responseDto.setUpdatedAt(post.getUpdatedAt());
-//            responseDto.setViewCount(post.getViewCount());
-//            responseDto.setScrapCount(post.getScrapCount());
-//            return responseDto;
-//        } else {
-//            throw new IllegalArgumentException("Invalid post ID");
-//        }
-//    }
-
     public PostResponseDto getPostById(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
-//            PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
-//                    post.getRegion().getName(),
-//                    post.getSubRegion().getName(),
-//                    post.getProjectPeriod(),
-//                    post.getAgeGroup()
-//            );
+
             return new PostResponseDto(
                     post.getUserId().getUserId(),
                     post.getPostId(),
@@ -302,7 +162,6 @@ public class PostService {
                     post.getPeopleNum(),
                     post.getRecruitDueDate(),
                     post.getPreference(),
-//                    projectInfo,
                     post.getStack(),
                     post.getDifficulty(),
                     post.getOnOff(),
@@ -322,14 +181,6 @@ public class PostService {
         }
     }
 
-    public List<PostResponseDto> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream()
-                .map(this::convertToResponseDto)
-                .collect(Collectors.toList());
-    }
-
-
     public boolean closePost(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
@@ -342,10 +193,41 @@ public class PostService {
         }
     }
 
-    // 게시글 조회
-    public List<PostResponseDto> getAllPostsOrderByCreatedAt() {
+    // 게시글 조회 (마감되지 않은 것만)
+    public List<PostResponseDto> getAllPostsByDeadlineFalseOrderByCreatedAt() {
+        List<Post> posts = postRepository.findAllByDeadlineFalseOrderByCreatedAtDesc();
+        return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
+    }
+
+    // 기존 메서드 이름을 바꿔서 정의 (모든 게시글 조회)
+    public List<PostResponseDto> getAllPosts() {
         List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
         return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
+    }
+
+    private PostResponseDto convertToResponseDto(Post post) {
+        return new PostResponseDto(
+                post.getUserId().getUserId(),
+                post.getPostId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getPeopleNum(),
+                post.getRecruitDueDate(),
+                post.getPreference(),
+                post.getStack(),
+                post.getDifficulty(),
+                post.getOnOff(),
+                post.getDeadline(),
+                post.getCategoryId(),
+                post.getAgeGroup(),
+                post.getRegion().getName(),
+                post.getSubRegion().getName(),
+                post.getCreatedAt(),
+                post.getUpdatedAt(),
+                post.getViewCount(),
+                post.getScrapCount(),
+                post.getProjectPeriod()
+        );
     }
 
 // 필요없을듯
@@ -382,36 +264,36 @@ public class PostService {
 //        return responseDto;
 //    }
 
-    private PostResponseDto convertToResponseDto(Post post) {
+//    private PostResponseDto convertToResponseDto(Post post) {
 //        PostResponseDto.ProjectInfo projectInfo = new PostResponseDto.ProjectInfo(
 //                post.getRegion().getName(),
 //                post.getSubRegion().getName(),
 //                post.getProjectPeriod(),
 //                post.getAgeGroup()
 //        );
-
-        return new PostResponseDto(
-                post.getUserId().getUserId(),
-                post.getPostId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getPeopleNum(),
-                post.getRecruitDueDate(),
-                post.getPreference(),
-//                projectInfo,
-                post.getStack(),
-                post.getDifficulty(),
-                post.getOnOff(),
-                post.getDeadline(),
-                post.getCategoryId(),
-                post.getAgeGroup(),
-                post.getRegion().getName(),
-                post.getSubRegion().getName(),
-                post.getCreatedAt(),
-                post.getUpdatedAt(),
-                post.getViewCount(),
-                post.getScrapCount(),
-                post.getProjectPeriod()
-        );
-    }
+//
+//        return new PostResponseDto(
+//                post.getUserId().getUserId(),
+//                post.getPostId(),
+//                post.getTitle(),
+//                post.getContent(),
+//                post.getPeopleNum(),
+//                post.getRecruitDueDate(),
+//                post.getPreference(),
+////                projectInfo,
+//                post.getStack(),
+//                post.getDifficulty(),
+//                post.getOnOff(),
+//                post.getDeadline(),
+//                post.getCategoryId(),
+//                post.getAgeGroup(),
+//                post.getRegion().getName(),
+//                post.getSubRegion().getName(),
+//                post.getCreatedAt(),
+//                post.getUpdatedAt(),
+//                post.getViewCount(),
+//                post.getScrapCount(),
+//                post.getProjectPeriod()
+//        );
+//    }
 }

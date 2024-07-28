@@ -21,10 +21,6 @@ public class PostController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{userId}/upload")
-//    public Response<PostResponseDto> createPost(@Valid @RequestBody PostRequestDto requestDto) {
-//        PostResponseDto responseDto = postService.createPost(requestDto);
-//        return Response.success("구인 글이 성공적으로 등록되었습니다.", responseDto);
-//    }
     public Response<PostResponseDto> createPost(@PathVariable Long userId, @Valid @RequestBody PostRequestDto requestDto) {
         requestDto.setUserId(userId);  // URL에서 전달된 userId를 requestDto에 설정
         PostResponseDto responseDto = postService.createPost(requestDto);
@@ -52,22 +48,6 @@ public class PostController {
         }
     }
 
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<Response<Void>> deletePost(@RequestParam Long userId, @RequestParam Long postId) {
-//        boolean isDeleted = postService.deletePost(userId, postId);
-//
-////        if (isDeleted) {
-////            return ResponseEntity.ok(new Response<>(true, "구인 글이 성공적으로 삭제되었습니다.", null));
-////        } else {
-////            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response<>(false, "인증이 필요합니다. 로그인 후 다시 시도해 주세요.", null));
-////        }
-//        if (isDeleted) {
-//            return ResponseEntity.status(HttpStatus.OK).body(Response.success("게시글이 성공적으로 삭제되었습니다.", null));
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Response.fail("인증이 필요합니다. 로그인 후 다시 시도해 주세요."));
-//        }
-//    }
-
     @GetMapping("{postId}")
     public ResponseEntity<?> getPostById(@PathVariable Long postId) {
         try {
@@ -77,17 +57,6 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(false, "Invalid region parameter"));
         }
     }
-
-//    @GetMapping("/list")
-//    public ResponseEntity<?> getAllPosts() {
-//        try {
-//            List<PostResponseDto> posts = postService.getAllPosts();
-//            return ResponseEntity.ok(posts);
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Bad Request", "message", "Invalid sort parameter"));
-//        }
-//    }
-
 
     @PostMapping("/{postId}/close")
     @ResponseStatus(HttpStatus.OK)
@@ -103,7 +72,7 @@ public class PostController {
     // 최신순으로 모든 게시글 조회
     @GetMapping("/list")
     public ResponseEntity<List<PostResponseDto>> getAllPosts() {
-        List<PostResponseDto> posts = postService.getAllPostsOrderByCreatedAt();
+        List<PostResponseDto> posts = postService.getAllPostsByDeadlineFalseOrderByCreatedAt();
         return ResponseEntity.ok(posts);
     }
 
