@@ -4,20 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="Feat: enum 한글 처리 기능 추가">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/letsit_backend.letsit_backend.main.iml" beforeDir="false" />
+    <list default="true" id="78d0485e-0e90-45ad-ae52-23eda3bd5e76" name="변경" comment="Feat: 프로젝트 목록 리스트업 deadline false 추가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/dto/PostResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/model/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/repository/PostRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/java/letsit_backend/service/PostService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/letsit_backend/letsit_backend/src/main/resources/data.sql" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +38,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -188,7 +179,7 @@
       <workItem from="1722060075569" duration="4520000" />
       <workItem from="1722074226731" duration="6916000" />
       <workItem from="1722124893093" duration="2673000" />
-      <workItem from="1722128263320" duration="1256000" />
+      <workItem from="1722128263320" duration="7273000" />
     </task>
     <task id="LOCAL-00001" summary="구인 게시판 기본 세팅(4차)-기본 타입 다시 세팅-지역, 카테고리 제외">
       <option name="closed" value="true" />
@@ -366,7 +357,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721981302533</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Feat: 프로젝트 목록 리스트업 deadline false 추가">
+      <option name="closed" value="true" />
+      <created>1722131148341</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1722131148341</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -394,6 +393,7 @@
     <MESSAGE value="Feat: 지역 삽입" />
     <MESSAGE value="Feat: 스택 삽입" />
     <MESSAGE value="Feat: enum 한글 처리 기능 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="Feat: enum 한글 처리 기능 추가" />
+    <MESSAGE value="Feat: 프로젝트 목록 리스트업 deadline false 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="Feat: 프로젝트 목록 리스트업 deadline false 추가" />
   </component>
 </project>

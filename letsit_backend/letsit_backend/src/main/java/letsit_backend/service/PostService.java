@@ -1,19 +1,19 @@
 package letsit_backend.service;
 
+import letsit_backend.dto.CommentResponseDto;
 import letsit_backend.dto.PostRequestDto;
 import letsit_backend.dto.PostResponseDto;
 import letsit_backend.model.Area;
 import letsit_backend.model.Member;
 import letsit_backend.model.Post;
 import letsit_backend.repository.AreaRepository;
+import letsit_backend.repository.CommentRepository;
 import letsit_backend.repository.MemberRepository;
 import letsit_backend.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final AreaRepository areaRepository;
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
 
@@ -80,7 +81,8 @@ public class PostService {
                 savedPost.getUpdatedAt(),
                 savedPost.getViewCount(),
                 savedPost.getScrapCount(),
-                savedPost.getProjectPeriod()
+                savedPost.getProjectPeriod(),
+                null
         );
     }
 
@@ -133,7 +135,8 @@ public class PostService {
                 updatedPost.getUpdatedAt(),
                 updatedPost.getViewCount(),
                 updatedPost.getScrapCount(),
-                updatedPost.getProjectPeriod()
+                updatedPost.getProjectPeriod(),
+                null
         );
     }
 
@@ -153,6 +156,16 @@ public class PostService {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
+            List<CommentResponseDto> comments = commentRepository.findByPostId(post).stream()
+                    .map(comment -> new CommentResponseDto(
+                            comment.getCommentId(),
+                            comment.getUserId().getUserId(),
+                            comment.getUserId().getName(),
+                            comment.getComContent(),
+                            comment.getComCreateDate(),
+                            comment.getComUpdateDate()
+                    ))
+                    .collect(Collectors.toList());
 
             return new PostResponseDto(
                     post.getUserId().getUserId(),
@@ -174,7 +187,8 @@ public class PostService {
                     post.getUpdatedAt(),
                     post.getViewCount(),
                     post.getScrapCount(),
-                    post.getProjectPeriod()
+                    post.getProjectPeriod(),
+                    comments
             );
         } else {
             throw new IllegalArgumentException("Invalid post ID");
@@ -199,13 +213,18 @@ public class PostService {
         return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
     }
 
-    // 기존 메서드 이름을 바꿔서 정의 (모든 게시글 조회)
-    public List<PostResponseDto> getAllPosts() {
-        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
-        return posts.stream().map(this::convertToResponseDto).collect(Collectors.toList());
-    }
-
     private PostResponseDto convertToResponseDto(Post post) {
+        List<CommentResponseDto> comments = commentRepository.findByPostId(post).stream()
+                .map(comment -> new CommentResponseDto(
+                        comment.getCommentId(),
+                        comment.getUserId().getUserId(),
+                        comment.getUserId().getName(),
+                        comment.getComContent(),
+                        comment.getComCreateDate(),
+                        comment.getComUpdateDate()
+                ))
+                .collect(Collectors.toList());
+
         return new PostResponseDto(
                 post.getUserId().getUserId(),
                 post.getPostId(),
@@ -226,9 +245,11 @@ public class PostService {
                 post.getUpdatedAt(),
                 post.getViewCount(),
                 post.getScrapCount(),
-                post.getProjectPeriod()
+                post.getProjectPeriod(),
+                comments
         );
     }
+
 
 // 필요없을듯
 //    // 스크랩순으로 게시글 조회

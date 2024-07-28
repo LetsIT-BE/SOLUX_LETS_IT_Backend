@@ -20,7 +20,6 @@ public class PostResponseDto {
     private Post.PeopleNum peopleNum;
     private LocalDate recruitDueDate;
     private String preference;
-//    private ProjectInfo projectInfo;
     private List<String> stack;
     private Post.Difficulty difficulty;
     private Post.OnOff onOff;
@@ -34,8 +33,9 @@ public class PostResponseDto {
     private int viewCount;
     private int scrapCount;
     private Post.ProjectPeriod projectPeriod;
+    private List<CommentResponseDto> comments;
 
-    public PostResponseDto(Long userId, Long postId, String title, String content, Post.PeopleNum peopleNum, LocalDate recruitDueDate, String preference/*, ProjectInfo projectInfo*/, List<String> stack, Post.Difficulty difficulty, Post.OnOff onOff, Boolean deadline, List<String> categoryId, Post.AgeGroup ageGroup, String region, String subRegion, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount, Post.ProjectPeriod projectPeriod) {
+    public PostResponseDto(Long userId, Long postId, String title, String content, Post.PeopleNum peopleNum, LocalDate recruitDueDate, String preference, List<String> stack, Post.Difficulty difficulty, Post.OnOff onOff, Boolean deadline, List<String> categoryId, Post.AgeGroup ageGroup, String region, String subRegion, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount, Post.ProjectPeriod projectPeriod, List<CommentResponseDto> comments) {
         this.userId = userId;
         this.postId = postId;
         this.title = title;
@@ -43,7 +43,6 @@ public class PostResponseDto {
         this.peopleNum = peopleNum;
         this.recruitDueDate = recruitDueDate;
         this.preference = preference;
-//        this.projectInfo = projectInfo;
         this.stack = stack;
         this.difficulty = difficulty;
         this.onOff = onOff;
@@ -57,36 +56,8 @@ public class PostResponseDto {
         this.viewCount = viewCount;
         this.scrapCount = scrapCount;
         this.projectPeriod = projectPeriod;
+        this.comments = comments;
+
+
     }
-
-//    @Getter
-//    @Setter
-//    @NoArgsConstructor
-//    public static class RecruitDueDate {
-//        private Timestamp startDate;
-//        private Timestamp endDate;
-//
-//        public RecruitDueDate(Timestamp startDate, Timestamp endDate) {
-//            this.startDate = startDate;
-//            this.endDate = endDate;
-//        }
-//
-//    }
-
-//    @Getter
-//    @Setter
-//    @NoArgsConstructor
-//    public static class ProjectInfo {
-//        private String regionId;
-//        private String subRegionId;
-//        private Post.ProjectPeriod projectPeriod;
-//        private Post.AgeGroup ageGroup;
-//
-//        public ProjectInfo(String regionId, String subRegionId, Post.ProjectPeriod projectPeriod, Post.AgeGroup ageGroup) {
-//            this.regionId = regionId;
-//            this.subRegionId = subRegionId;
-//            this.projectPeriod = projectPeriod;
-//            this.ageGroup = ageGroup;
-//        }
-//    }
 }
