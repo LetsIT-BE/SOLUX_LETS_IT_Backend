@@ -141,27 +141,7 @@ public class KakaoService {
 
         LoginResponseDto loginResponseDto = new LoginResponseDto();
 
-        /*
-        try {
-            Member existOwner = memberRepository.findById(member.getUserId()).orElse(null);
 
-            if (existOwner == null) {
-                log.info("First time login for user ID: {}", member.getUserId());
-                System.out.println("existOwner = " + existOwner);
-                //System.out.println("처음 로그인 하는 회원입니다.");
-                memberRepository.save(member);
-            }
-            loginResponseDto.setLoginSuccess(true);
-            loginResponseDto.setMember(member);
-            //loginResponseDto.setLoginSuccess(true);
-
-            return ResponseEntity.ok().body(loginResponseDto);
-
-        } catch (Exception e) {
-            log.error("Error during Kakao login", e);
-            System.out.println("e = " + e);
-
-         */
         try {
             Optional<Member> existOwner = memberRepository.findByKakaoId(member.getKakaoId());
 
@@ -181,33 +161,8 @@ public class KakaoService {
             loginResponseDto.setLoginSuccess(false);
             return ResponseEntity.badRequest().body(loginResponseDto);
         }
-
-            //loginResponseDto.setLoginSuccess(false);
-            //return ResponseEntity.badRequest().body(loginResponseDto);
-
     }
 
-
-/*
-    @Transactional
-    public Member saveMember(String token) {
-        KakaoProfile profile = findProfile(token);
-
-        Optional<Member> existingMemberOptional = memberRepository.findByEmail(profile.getKakao_Account().getEmail());
-        Member member = new Member();
-
-        if(member == null) {
-            member = Member.builder()
-                    .userId(profile.getId())
-                    .email(profile.getKakao_Account().getEmail())
-                    .picture(profile.getProperties().getProfile_image())
-                    .role(Role.USER)
-                    .build();
-            memberRepository.save(member);
-        }
-        return member;
-    }
-*/
 
     public KakaoProfile findProfile(String kakaoToken) {
         log.info("Fetching Kakao profile with token: {}", kakaoToken);
@@ -248,20 +203,6 @@ public class KakaoService {
             //e.printStackTrace();
         }
         return kakaoProfile;
-        /*
-        if (kakaoProfile == null) {
-            log.error("Kakao profile is null");
-        } else if (kakaoProfile.getKakao_account() == null) {
-            log.error("Kakao account is null");
-        }
-        */
-
-
-        //return kakaoProfile;
-
-
-
-
     }
 
 
