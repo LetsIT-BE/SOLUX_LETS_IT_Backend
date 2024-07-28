@@ -2,6 +2,8 @@ package letsit_backend.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
+import letsit_backend.model.Member;
+import letsit_backend.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Optional;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -24,19 +28,20 @@ public class JwtFilter extends OncePerRequestFilter {
     private JwtProvider jwtProvider;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private MemberRepository memberRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String header = request.getHeader("Authorization");
+        logger.info(header);
         String token = null;
-        String username = null;
+        String kakaoId = null;
 
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
             try {
-                username = jwtProvider.getSubject(token);
+                kakaoId = jwtProvider.getSubject(token);
             } catch (IllegalArgumentException e) {
                 logger.error("An error occurred while fetching the username from the token", e);
             } catch (ExpiredJwtException e) {
@@ -48,15 +53,20 @@ public class JwtFilter extends OncePerRequestFilter {
             logger.warn("Couldn't find bearer string, header will be ignored");
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtProvider.validToken(token)) {
+        if (kakaoId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            Optional<Member> memberOptional = memberRepository.findByKakaoId(Long.parseLong(kakaoId));
+            if (memberOptional.isPresent() && jwtProvider.validToken(token)) {
+                Member member = memberOptional.get();
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                        member, null, Collections.emptyList());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                logger.info("Authenticated user " + username + ", setting security context");
+                logger.info("Authenticated user " + member.getName() + ", setting security context");
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                logger.warn("No member found with kakaoId: " + kakaoId);
             }
+        } else {
+            logger.warn("Invalid JWT token for kakaoId: " + kakaoId);
         }
 
         chain.doFilter(request, response);
