@@ -1,7 +1,9 @@
 package letsit_backend.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import letsit_backend.dto.team.*;
 import letsit_backend.model.*;
+import letsit_backend.model.Calendar;
 import letsit_backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,7 @@ public class TeamService {
     private final TeamEvaluationRepository teamEvaluationRepository;
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
+    private final CalendarRepository calendarRepository;
 
     // TODO 생성자주입, setter사용지향, 빌드주입하기로 수정필요
 
@@ -136,6 +140,7 @@ public class TeamService {
 
     }
 
+    // 팀장위임
     @Transactional
     public void changeTeamLeader(Long teamId, Long userId) {
 
@@ -246,6 +251,72 @@ public class TeamService {
         return myEvaluationList;
 
     }
+
+    // 캘린더 추가
+    @Transactional
+    public void createCalendar(Long teamId, TeamCalendarRequestDto requestDto) {
+
+        // 팀게시판 불러오기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 날짜 변환
+        LocalDate startDate  = LocalDate.parse(requestDto.getStartDate());
+        LocalDate endDate  = LocalDate.parse(requestDto.getEndDate());
+
+        // 객체 생성
+        Calendar calendar = Calendar.builder()
+                .teamId(teamPost)
+                .title(requestDto.getTitle())
+                .description(requestDto.getDescription())
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        // TODO 텍스트 입력 텍스트 반환인데 parseDate할필요가있는지?
+        calendarRepository.save(calendar);
+    }
+
+    // 캘린더 로드하기
+    public List<TeamCalendarResponseDto> roadCalendar(Long teamId) {
+
+        // 팀찾기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 팀일정조회
+        List<Calendar> calendarList = calendarRepository.findAllByTeamId(teamPost);
+
+        // 일정목록 반환데이터 생성
+        List<TeamCalendarResponseDto> teamCalendarResponseDtoList = calendarList.stream()
+                .map(calendar -> TeamCalendarResponseDto.builder()
+                        .calendarId(calendar.getCalendarId())
+                        .title(calendar.getTitle())
+                        .description(calendar.getDescription())
+                        .startDate(calendar.getStartDate().toString())
+                        .endDate(calendar.getEndDate().toString())
+                        .build())
+                .collect(Collectors.toList());
+        return teamCalendarResponseDtoList;
+    }
+
+    // 캘린더 삭제
+    @Transactional
+    public void deleteCalendar(Long calendarId) {
+
+        // 일정삭제
+        // calendarRepository.deleteById(calendarId);
+        Optional<Calendar> calendar = calendarRepository.findById(calendarId);
+        if (calendar.isPresent()) {
+            calendarRepository.deleteById(calendarId);
+        } else {
+            throw new EntityNotFoundException("캘린더 일정을 찾을수없습니다.");
+        }
+
+
+    }
+
+
 
     // 회의인증
 
