@@ -100,18 +100,39 @@ public class TeamController {
 
 
     // ---- 필수x ----
+    @PostMapping("/calendar/{teamId}/create")
+    public Response<?> calendarCreate(@PathVariable Long teamId,
+                                      @RequestBody TeamCalendarRequestDto requestDto) {
 
-    // TODO 팀장만 (개발시작!)
-//    @GetMapping("/{teamId}/meeting")
-//    public Response<?> meetingCertification(@PathVariable Long teamId,
-//                                            @RequestBody TeamMeetingCertificationRequestDto requestDto) {
-//
-//        // TODO 이미지정보, 불참팀원 받아옴
-//        // TODO OpenCv랑 연결 -> 인증완료시 true반환
-//
-//        //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
-//        return Response.success("프로젝트관리->회의인증버튼", null);
-//    }
+        teamService.createCalendar(teamId,requestDto);
+        return Response.success("팀게시판 일정추가", null);
+    }
+
+    @GetMapping("/calendar/{teamId}/info")
+    public Response<?> calendarRoad(@PathVariable Long teamId) {
+
+        return Response.success("팀게시판 일정 로드", teamService.roadCalendar(teamId));
+    }
+
+    @DeleteMapping("/calendar/{calendarId}/delete")
+    public Response<?> calendarDelete(@PathVariable Long calendarId) {
+
+        teamService.deleteCalendar(calendarId);
+        return Response.success("팀게시판 일정삭제", null);
+    }
+
+    // ----- 이후에 ----
+    // TODO 팀장만
+    @GetMapping("/{teamId}/meeting")
+    public Response<?> meetingCertification(@PathVariable Long teamId) {
+
+        // TODO 이미지정보, 불참팀원 받아옴
+        // TODO OpenCv랑 연결 -> 인증완료시 true반환
+
+        //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
+        return Response.success("프로젝트관리->회의인증버튼", null);
+
+    }
 
     @PostMapping("/{teamId}/report")
     public Response<?> userGetout() {
@@ -149,7 +170,6 @@ public class TeamController {
         return Response.success("신고기능", null);
     }
 
-    // TODO 팀원정보보기 -> 프로필담당자
-    // TODO 팀장위임기능 -> 정보수정과 함께?
+
 
 }
