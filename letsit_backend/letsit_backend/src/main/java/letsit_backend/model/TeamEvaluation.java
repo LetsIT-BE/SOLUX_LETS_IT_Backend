@@ -18,8 +18,12 @@ public class TeamEvaluation {
     private TeamPost teamId;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private Member userId; //평가받는자
+    @JoinColumn(name = "evaluatee_id")
+    private Member evaluatee; // 평가받는사람
+
+    @ManyToOne
+    @JoinColumn(name = "evaluator_id")
+    private Member evaluator; // 평가하는사람
 
     //TODO 프로필과 일대다연결?
     private Long profileId;
@@ -36,7 +40,6 @@ public class TeamEvaluation {
     @Column(nullable = false)
     private int promise;
 
-    private int total;
-
+    private double total;
 
 }
