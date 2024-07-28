@@ -41,5 +41,4 @@ public class TeamEvaluation {
     private int promise;
 
     private double total;
-
 }
