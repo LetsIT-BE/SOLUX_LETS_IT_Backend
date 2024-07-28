@@ -54,17 +54,19 @@ public class SecurityConfig {
                                 .permitAll()
                 )
 
-
+                /*
                 .logout(logout ->
                         logout
                                 .logoutSuccessUrl("/")
                                 .permitAll()
                 )
+
+                 */
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 정책을 STATELESS로 설정
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // JwtFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
                 //.csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 보호 비활성화
                 //.formLogin(formLogin -> formLogin.disable()); // 기본 로그인 폼 비활성화
-
+        http.logout(logout -> logout.disable());
         return http.build();
     }
 

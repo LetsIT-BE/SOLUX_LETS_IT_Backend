@@ -1,42 +1,5 @@
 package letsit_backend.service;
 
-/*
-import ch.qos.logback.core.spi.ErrorCodes;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.transaction.Transactional;
-//import letsit_backend.dao.MemberDao;
-import letsit_backend.dto.KakaoTokenDto;
-import letsit_backend.dto.KakaoMemberDto;
-import letsit_backend.dto.LoginResponseDto;
-import letsit_backend.jwt.CustomException;
-import letsit_backend.jwt.JwtProvider;
-import letsit_backend.model.KakaoProfile;
-import letsit_backend.model.Member;
-import letsit_backend.model.Role;
-import letsit_backend.repository.MemberRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.json.JsonParseException;
-import org.springframework.http.*;
-//import org.springframework.security.oauth2.core.OAuth2Token;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import java.util.Optional;
-
- */
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -115,8 +78,8 @@ public class KakaoService {
 
         //카카오로부터 Access token 받아오기
         RestTemplate restTemplate = new RestTemplate();
-        log.info("sending request to kakao: {}",params);
-        System.out.println("restTemplate = " + restTemplate);
+        // log.info("sending request to kakao: {}",params);
+        // System.out.println("restTemplate = " + restTemplate);
         
         ResponseEntity<String> kakaoTokenResponse = restTemplate.exchange(
                 "https://kauth.kakao.com/oauth/token",
@@ -124,8 +87,8 @@ public class KakaoService {
                 kakaoTokenRequest,
                 String.class
         );
-        log.info("kakao token response: {}", kakaoTokenResponse.getBody());
-        System.out.println("kakaoTokenResponse = " + kakaoTokenResponse);
+        // log.info("kakao token response: {}", kakaoTokenResponse.getBody());
+        // System.out.println("kakaoTokenResponse = " + kakaoTokenResponse);
 
         
         //JSON parsing -> kakaoTokenDto
@@ -149,7 +112,7 @@ public class KakaoService {
 
     //컨트롤러의 return authservice.kakaologin(kakaotoken)처
     public ResponseEntity<LoginResponseDto> kakaoLogin(String kakaoToken) {
-        log.info("Received Kakao token: {}", kakaoToken);
+        // log.info("Received Kakao token: {}", kakaoToken);
 
         KakaoProfile kakaoProfile = findProfile(kakaoToken);
 
@@ -163,7 +126,7 @@ public class KakaoService {
 
         String username = String.valueOf(kakaoProfile.getId());
 
-        log.info("username set to : {}", username);
+        // log.info("username set to : {}", username);
 
         Member member = Member.builder()
                 .kakaoId(kakaoProfile.getId())
@@ -173,6 +136,7 @@ public class KakaoService {
                 .gender(kakaoProfile.getKakao_account().getGender())
                 .profile_image_url(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
                 .role(Role.USER)
+                .kakaoAccessToken(kakaoToken)
                 .build();
 
 
@@ -183,10 +147,12 @@ public class KakaoService {
             Optional<Member> existOwner = memberRepository.findByKakaoId(member.getKakaoId());
 
             if (existOwner.isEmpty()) {
-                log.info("First time login for user ID: {}", member.getKakaoId());
+                // log.info("First time login for user ID: {}", member.getKakaoId());
                 memberRepository.save(member);
             } else {
                 member = existOwner.get();
+                member.setKakaoAccessToken(kakaoToken);
+                memberRepository.save(member);
             }
             loginResponseDto.setLoginSuccess(true);
             loginResponseDto.setMember(member);
@@ -202,7 +168,7 @@ public class KakaoService {
 
 
     public KakaoProfile findProfile(String kakaoToken) {
-        log.info("Fetching Kakao profile with token: {}", kakaoToken);
+        // log.info("Fetching Kakao profile with token: {}", kakaoToken);
         //System.out.println("kakaoToken = " + kakaoToken);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -221,7 +187,7 @@ public class KakaoService {
                 accountInfoRequest,
                 String.class
         );
-        log.info("Kakao profile response: {}", accountInfoResponse.getBody());
+        // log.info("Kakao profile response: {}", accountInfoResponse.getBody());
         //System.out.println("accountInfoResponse = " + accountInfoResponse);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -245,7 +211,6 @@ public class KakaoService {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
-
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(
                 "https://kapi.kakao.com/v1/user/logout",
@@ -263,10 +228,13 @@ public class KakaoService {
 
     }
 
-    public String getAccessToken(String username) {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found with username" + username));
-        return member.getKakaoAccessToken();
+    public String getAccessToken(Long kakaoId) {
+        Member member = memberRepository.findByKakaoId(kakaoId)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found with username" + kakaoId));
+        String accessToken = member.getKakaoAccessToken();
+        // log.info("Retrieved access token for kakaoId {}: {}", kakaoId, accessToken);
+
+        return accessToken;
     }
 
 
