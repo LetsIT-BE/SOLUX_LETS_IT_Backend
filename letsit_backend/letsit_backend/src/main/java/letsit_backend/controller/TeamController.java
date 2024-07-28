@@ -102,16 +102,16 @@ public class TeamController {
     // ---- 필수x ----
 
     // TODO 팀장만 (개발시작!)
-    @GetMapping("/{teamId}/meeting")
-    public Response<?> meetingCertification(@PathVariable Long teamId,
-                                            @RequestBody TeamMeetingCertificationRequestDto requestDto) {
-
-        // TODO 이미지정보, 불참팀원 받아옴
-        // TODO OpenCv랑 연결 -> 인증완료시 true반환
-
-        //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
-        return Response.success("프로젝트관리->회의인증버튼", null);
-    }
+//    @GetMapping("/{teamId}/meeting")
+//    public Response<?> meetingCertification(@PathVariable Long teamId,
+//                                            @RequestBody TeamMeetingCertificationRequestDto requestDto) {
+//
+//        // TODO 이미지정보, 불참팀원 받아옴
+//        // TODO OpenCv랑 연결 -> 인증완료시 true반환
+//
+//        //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
+//        return Response.success("프로젝트관리->회의인증버튼", null);
+//    }
 
     @PostMapping("/{teamId}/report")
     public Response<?> userGetout() {
