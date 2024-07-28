@@ -1,5 +1,6 @@
 package letsit_backend.service;
 
+/*
 import ch.qos.logback.core.spi.ErrorCodes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -20,19 +21,53 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JsonParseException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 //import org.springframework.security.oauth2.core.OAuth2Token;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import java.util.Optional;
+
+ */
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.transaction.Transactional;
+import letsit_backend.dto.KakaoTokenDto;
+import letsit_backend.dto.LoginResponseDto;
+import letsit_backend.jwt.CustomException;
+import letsit_backend.jwt.JwtProvider;
+import letsit_backend.model.KakaoProfile;
+import letsit_backend.model.Member;
+import letsit_backend.model.Role;
+import letsit_backend.repository.MemberRepository;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpHeaders;
 
 import java.util.Optional;
 
 @Slf4j
+@Data
 @Service
 public class KakaoService {
 
@@ -115,7 +150,6 @@ public class KakaoService {
     //컨트롤러의 return authservice.kakaologin(kakaotoken)처
     public ResponseEntity<LoginResponseDto> kakaoLogin(String kakaoToken) {
         log.info("Received Kakao token: {}", kakaoToken);
-        System.out.println("kakaoToken = " + kakaoToken);
 
         KakaoProfile kakaoProfile = findProfile(kakaoToken);
 
@@ -127,13 +161,16 @@ public class KakaoService {
             return ResponseEntity.badRequest().build(); // 예시로 bad request 반환
         }
 
+        String username = String.valueOf(kakaoProfile.getId());
 
+        log.info("username set to : {}", username);
 
         Member member = Member.builder()
                 .kakaoId(kakaoProfile.getId())
-                .name(kakaoProfile.kakao_account.getName())
-                .age_range(kakaoProfile.kakao_account.getAge_range())
-                .gender(kakaoProfile.kakao_account.getGender())
+                .username(username)
+                .name(kakaoProfile.getKakao_account().getName())
+                .age_range(kakaoProfile.getKakao_account().getAge_range())
+                .gender(kakaoProfile.getKakao_account().getGender())
                 .profile_image_url(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
                 .role(Role.USER)
                 .build();
@@ -204,6 +241,33 @@ public class KakaoService {
         }
         return kakaoProfile;
     }
+    public boolean kakaoLogout(String accessToken) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "https://kapi.kakao.com/v1/user/logout",
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+        if (response.getStatusCode() == HttpStatus.OK) {
+            log.info("Successfully logged out from Kakao");
+            return true;
+        } else {
+            log.error("Failed to logout from Kakao: " + response.getBody());
+            return false;
+        }
+
+    }
+
+    public String getAccessToken(String username) {
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found with username" + username));
+        return member.getKakaoAccessToken();
+    }
 
 
     public String getMemberByLogin(Member member) throws CustomException {
@@ -213,6 +277,7 @@ public class KakaoService {
         return jwtProvider.createToken(loginMember);
 
     }
+
 
 
 }

@@ -1,4 +1,3 @@
-
 package letsit_backend.jwt;
 
 import io.jsonwebtoken.*;
@@ -32,13 +31,20 @@ public class JwtProvider {
     @Value("${spring.jwt.secret}")
     private String secretKey;
 
+    private static final String AUTHORITIES_KEY = "auth";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60L;
 
     public String createToken(Member member) {
         Date now = new Date();
 
+        //사용자 권한을 가져와서 문자열로 변환
+        String authorities = member.getRole().name();
+
+        //claims 생성 및 사용자 정보 추가
+        //Claims claims = Jwts.claims();
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", member.getUserId());
+        claims.put(AUTHORITIES_KEY, authorities);
 
         String token = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
@@ -61,7 +67,7 @@ public class JwtProvider {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            log.debug("해독된 토큰:: " + claims.getSubject());
+            //log.debug("해독된 토큰:: " + claims.getSubject());
             return claims.getSubject();
         } catch (JwtException e) {
             throw new CustomException("Invalid token", e);
@@ -82,4 +88,3 @@ public class JwtProvider {
     }
 
 }
-

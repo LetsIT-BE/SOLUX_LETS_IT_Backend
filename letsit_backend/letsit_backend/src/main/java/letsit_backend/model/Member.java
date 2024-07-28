@@ -6,6 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
+import java.util.List;
+
 @Builder
 @Getter
 @NoArgsConstructor
@@ -25,6 +31,9 @@ public class Member {
     @Column
     private String name;
 
+    @Column(nullable = false)
+    private String username;
+
     @Column
     private String age_range;
 
@@ -37,6 +46,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     //@NotNull
     private Role role;
+
+    private String kakaoAccessToken;
+
+
 
     @Builder
     public Member(String name, String profile_image_url, Role role, Long kakaoId, String gender, String age_range) {
