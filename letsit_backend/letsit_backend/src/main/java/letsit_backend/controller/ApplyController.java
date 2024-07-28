@@ -44,8 +44,7 @@ public class ApplyController {
     @GetMapping(value = "/{postId}/list")
     public Response<List<ApplicantProfileDto>> getApplicantList(@PathVariable Long postId, @CurrentUser Member member) {
         if (member == null) {
-            log.error("미인증 회원");
-            // TODO 예외 처리.. 해야 하나? jwt 필터 단에서 처리해줄 듯
+            return Response.fail("미인증 회원");
         }
         List<ApplicantProfileDto> applicant = applyService.getApplicantProfiles(postId, member);
         return Response.success("지원자 리스트", applicant);
