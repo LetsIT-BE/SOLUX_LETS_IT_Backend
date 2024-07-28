@@ -25,10 +25,9 @@ public class ProjectService {
         this.regionService = regionService;
     }
 
-    public List<ProjectDto> getProjectsByUserId(Long userId) {
-        Member user = memberRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        List<Post> posts = postRepository.findByUserId(user);
+    public List<ProjectDto> getProjectsByUserId(Member member) {
+        List<Post> posts = postRepository.findByUserId(member);
+
         return posts.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
