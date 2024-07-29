@@ -24,7 +24,7 @@ public class ProfileDto {
      */
     private int mannerScore;
     private String nickname;
-    private Profile.Age age;
+    private String age;
     /*
     public enum Age {
         teens,
