@@ -38,7 +38,7 @@ public class ProjectService {
     public List<ProjectDto> getProjectsByUserId(Long userId) {
         Member user = memberRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        List<Post> posts = postRepository.findByUserId(user);
+        List<Post> posts = postRepository.findByUserIdAndDeadlineFalse(user);
         return posts.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
