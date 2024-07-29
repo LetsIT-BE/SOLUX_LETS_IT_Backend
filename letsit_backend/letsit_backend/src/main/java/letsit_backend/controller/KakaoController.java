@@ -7,11 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import letsit_backend.dto.KakaoMemberDto;
 import letsit_backend.dto.KakaoTokenDto;
 import letsit_backend.dto.LoginResponseDto;
+import letsit_backend.dto.profile.ProfileRequestDto;
 import letsit_backend.jwt.JwtProvider;
 import letsit_backend.model.KakaoProfile;
 import letsit_backend.model.Member;
 import letsit_backend.repository.MemberRepository;
 import letsit_backend.service.KakaoService;
+import letsit_backend.service.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,8 @@ public class KakaoController {
 
     @Autowired
     private JwtProvider jwtProvider;
+    @Autowired
+    private ProfileService profileService;
 
     @GetMapping("/login/oauth2/callback/kakao")
     public ResponseEntity<Map<String, Object>> KakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
@@ -72,6 +76,15 @@ public class KakaoController {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            ProfileRequestDto profileDto = new ProfileRequestDto();
+            profileDto.setUserId(loginResponse.getMember().getUserId());
+            profileDto.setNickname(loginResponse.getMember().getName());
+            profileDto.setAge(loginResponse.getMember().getAgeRange());
+            profileDto.setProfileImageUrl(loginResponse.getMember().getProfileImageUrl());
+            profileDto.setBio("기본 소개");
+            profileDto.setSelfIntro("자기 소개");
+            profileService.createOrUpdateProfile(profileDto);
 
             //response.sendRedirect("/home?token=" + jwtToken);
         } //else {

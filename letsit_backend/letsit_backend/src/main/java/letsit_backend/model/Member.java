@@ -24,13 +24,13 @@ public class Member {
     private String name;
 
     @Column
-    private String age_range;
+    private String ageRange;
 
     @Column
     private String gender;
 
     @Column
-    private String profile_image_url;
+    private String profileImageUrl;
 
     @Enumerated(EnumType.STRING)
     //@NotNull
@@ -40,8 +40,8 @@ public class Member {
     public Member(String name, String profile_image_url, Role role, Long kakaoId, String gender, String age_range) {
         this.name = name;
         this.role = role;
-        this.profile_image_url = profile_image_url;
-        this.age_range = age_range;
+        this.profileImageUrl = profile_image_url;
+        this.ageRange = age_range;
         this.kakaoId = kakaoId;
         this.gender = gender;
 

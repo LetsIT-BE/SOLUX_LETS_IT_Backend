@@ -132,9 +132,9 @@ public class KakaoService {
         Member member = Member.builder()
                 .kakaoId(kakaoProfile.getId())
                 .name(kakaoProfile.kakao_account.getName())
-                .age_range(kakaoProfile.kakao_account.getAge_range())
+                .ageRange(kakaoProfile.kakao_account.getAge_range())
                 .gender(kakaoProfile.kakao_account.getGender())
-                .profile_image_url(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
+                .profileImageUrl(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
                 .role(Role.USER)
                 .build();
 

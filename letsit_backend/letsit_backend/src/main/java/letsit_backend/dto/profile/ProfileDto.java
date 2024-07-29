@@ -34,7 +34,7 @@ public class ProfileDto {
 
      */
     private String sns;
-    private String profile_image_url;
+    private String profileImageUrl;
     @Size(max = 20, message = "Bio must be up to 20 characters long")
     private String bio;
     private String selfIntro;

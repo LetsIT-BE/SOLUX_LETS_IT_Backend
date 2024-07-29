@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Builder
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor //(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
 public class Profile {
@@ -38,16 +38,19 @@ public class Profile {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    private Age age;
+    private String age;
+    /*
     public enum Age {
         teens,
         twenties,
         overThirties
     }
 
+     */
+
     private String sns;
 
-    private String profile_image_url;
+    private String profileImageUrl;
 
     @Column(length = 20)
     @Size(max = 20, message = "Bio must be up to 20 characters long")
