@@ -15,7 +15,12 @@ import java.sql.Timestamp;
 public class ProjectPortfolio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long projectId;
+
+    private Long prtId;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private TeamPost teamId;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -25,7 +30,16 @@ public class ProjectPortfolio {
     private String prtTitle;
 
     @Column(nullable = false)
-    private String prtContents;
+    private String workDescription;
+
+    @Column(nullable = false)
+    private String issues;
+
+    @Column(nullable = false)
+    private String solutions;
+
+    @Column(nullable = false)
+    private String feedback;
 
     @CreationTimestamp
     private Timestamp prtCreateDate;
