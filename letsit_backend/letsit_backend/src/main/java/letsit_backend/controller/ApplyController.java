@@ -1,9 +1,11 @@
 package letsit_backend.controller;
 
+import letsit_backend.CurrentUser;
 import letsit_backend.dto.apply.ApplicantProfileDto;
 import letsit_backend.dto.apply.ApplyRequestDto;
 import letsit_backend.dto.apply.ApplyResponseDto;
 import letsit_backend.dto.Response;
+import letsit_backend.model.Member;
 import letsit_backend.service.ApplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +42,11 @@ public class ApplyController {
     }
 
     @GetMapping(value = "/{postId}/list")
-    public Response<List<ApplicantProfileDto>> getApplicantList(@PathVariable Long postId) {
-        List<ApplicantProfileDto> applicant = applyService.getApplicantProfiles(postId);
+    public Response<List<ApplicantProfileDto>> getApplicantList(@PathVariable Long postId, @CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("미인증 회원");
+        }
+        List<ApplicantProfileDto> applicant = applyService.getApplicantProfiles(postId, member);
         return Response.success("지원자 리스트", applicant);
     }
 
