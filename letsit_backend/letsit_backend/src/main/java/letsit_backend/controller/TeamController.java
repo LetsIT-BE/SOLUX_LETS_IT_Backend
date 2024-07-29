@@ -104,9 +104,7 @@ public class TeamController {
     public Response<?> calendarCreate(@PathVariable Long teamId,
                                       @RequestBody TeamCalendarRequestDto requestDto) {
 
-
-        teamService.createCalendar(teamId,requestDto);
-        return Response.success("팀게시판 일정추가", null);
+        return Response.success("팀게시판 일정추가", teamService.createCalendar(teamId,requestDto));
     }
 
     @GetMapping("/calendar/{teamId}/info")
@@ -127,16 +125,13 @@ public class TeamController {
     @GetMapping("/{teamId}/meeting")
     public Response<?> meetingCertification(@PathVariable Long teamId) {
 
-   
         // TODO 이미지정보, 불참팀원 받아옴
         // TODO OpenCv랑 연결 -> 인증완료시 true반환
 
         //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
         return Response.success("프로젝트관리->회의인증버튼", null);
 
-
     }
-
 
     @PostMapping("/{teamId}/report")
     public Response<?> userGetout() {
