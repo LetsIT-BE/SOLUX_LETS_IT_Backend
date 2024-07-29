@@ -67,7 +67,7 @@ public class JwtProvider {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            //log.debug("해독된 토큰:: " + claims.getSubject());
+            log.debug("해독된 토큰: " + claims.getSubject());
             return claims.getSubject();
         } catch (JwtException e) {
             throw new CustomException("Invalid token", e);

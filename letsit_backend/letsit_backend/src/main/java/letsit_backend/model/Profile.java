@@ -41,7 +41,7 @@ public class Profile {
 
     private String nickname;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     private String age;
     /*
     public enum Age {

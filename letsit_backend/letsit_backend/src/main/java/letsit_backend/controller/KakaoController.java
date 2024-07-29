@@ -113,7 +113,7 @@ public class KakaoController {
             profileService.createOrUpdateProfile(profileDto);
 
             //response.sendRedirect("/home?token=" + jwtToken);
-        } //else {
+        //else {
             //response.sendRedirect("/login?error=invalid_token");
 
 

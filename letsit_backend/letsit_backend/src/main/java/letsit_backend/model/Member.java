@@ -53,10 +53,10 @@ public class Member {
 
 
     @Builder
-    public Member(String name, String profile_image_url, Role role, Long kakaoId, String gender, String age_range, String kakaoAccessToken) {
+    public Member(String name, String ProfileImageUrl, Role role, Long kakaoId, String gender, String age_range, String kakaoAccessToken) {
         this.name = name;
         this.role = role;
-        this.profileImageUrl = profile_image_url;
+        this.profileImageUrl = ProfileImageUrl;
         this.ageRange = age_range;
         this.kakaoId = kakaoId;
         this.gender = gender;

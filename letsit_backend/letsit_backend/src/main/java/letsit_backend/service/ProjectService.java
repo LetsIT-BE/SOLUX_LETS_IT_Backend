@@ -78,7 +78,7 @@ public class ProjectService {
         List<String> profileImages = teamMemberRepository.findByTeamId_TeamId(teamPost.getTeamId()).stream()
             .map(teamMember -> {
                 Profile profile = profileRepository.findByUserId(teamMember.getUserId());
-                return profile != null ? profile.getProfileImage() : null;
+                return profile != null ? profile.getProfileImageUrl() : null;
             })
             .collect(Collectors.toList());
         return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle(), profileImages);
