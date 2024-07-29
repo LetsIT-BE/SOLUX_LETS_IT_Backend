@@ -1,17 +1,18 @@
 package letsit_backend.service;
 
-import letsit_backend.dto.team.TeamCreateDto;
-import letsit_backend.dto.team.TeamEvaluationRequestDto;
-import letsit_backend.dto.team.TeamInfoResponseDto;
-import letsit_backend.dto.team.TeamUpdateRequestDto;
+import jakarta.persistence.EntityNotFoundException;
+import letsit_backend.dto.team.*;
 import letsit_backend.model.*;
+import letsit_backend.model.Calendar;
 import letsit_backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,8 @@ public class TeamService {
     private final ApplyRepository applyRepository;
     private final TeamEvaluationRepository teamEvaluationRepository;
     private final MemberRepository memberRepository;
+    private final ProfileRepository profileRepository;
+    private final CalendarRepository calendarRepository;
 
     // TODO 생성자주입, setter사용지향, 빌드주입하기로 수정필요
 
@@ -35,6 +38,7 @@ public class TeamService {
     public Long creatTeam(Long postId, TeamCreateDto teamCreateDto) {
 
         // TODO userId 체크
+        // TODO 이미 생성됐는지 검증
 
         // 팀게시판 생성로직
         Post post = postRepository.findById(postId)
@@ -89,21 +93,27 @@ public class TeamService {
 
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByTeamId(teamPost);
         // TODO 팀멤버리스트 없을시 예외처리 필요
-        List<Map<String, String>> teamInfoList = teamMemberList.stream()
+        List<TeamMemberLoadInfoDto> teamInfoList = teamMemberList.stream()
                 .map(teamMember -> {
-                    Map<String, String> memberInfo = new HashMap<>();
-                    memberInfo.put("userId", teamMember.getUserId().toString());
-                    memberInfo.put("userName", teamMember.getUserId().getName());
-                    memberInfo.put("position", teamMember.getTeamMemberRole().toString());
-                    return memberInfo;
+                    // 프로필 url가져오기
+                    Profile profile = profileRepository.findByUserId(teamMember.getUserId());
+                    //
+                    TeamMemberLoadInfoDto dto = new TeamMemberLoadInfoDto(
+                            teamMember.getUserId().getUserId(),
+                            teamMember.getUserId().getName(),
+                            teamMember.getTeamMemberRole().toString(),
+                            // 프로필사진까지 같이 로드하기
+                            // TODO 프로필 null인지 유무 체크필요
+                            profile.getProfileImage());
+                    return dto;
                 })
                 .collect(Collectors.toList());
 
         TeamInfoResponseDto teamInfoResponseDto = new TeamInfoResponseDto(
-                                        teamPost.getPrjTitle(),
-                                        teamPost.getNotionLink(),
-                                        teamPost.getGithubLink(),
-                                        teamInfoList
+                teamPost.getPrjTitle(),
+                teamPost.getNotionLink(),
+                teamPost.getGithubLink(),
+                teamInfoList
         );
 
         return teamInfoResponseDto;
@@ -130,29 +140,41 @@ public class TeamService {
 
     }
 
-    // TODO 팀장변경기능 미완성상태
+    // 팀장위임
     @Transactional
     public void changeTeamLeader(Long teamId, Long userId) {
-        // 팀장이 될 팀원의 teamMember 찾기
-        TeamPost teamPost = teamPostRepository.findById(teamId)
-                .orElseThrow(()-> new IllegalIdentifierException("팀을 찾을수없음."));
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(()-> new IllegalIdentifierException("유저를 찾을수없음."));
-        TeamMember changeLeader = teamMemberRepository.findByTeamIdAndUserId(teamPost, member)
-                .orElseThrow(()-> new IllegalIdentifierException("팀멤버를 찾을수없음."));
 
-        changeLeader.setTeamMemberRole(TeamMember.Role.Team_Leader);
-        teamMemberRepository.save(changeLeader);
-
-        // 팀장의 역할을 팀원으로변경
         // TODO 팀장(로그인유저)의 member객체받아오기
         // TODO 팀장의 직책 -> 팀원으로 변경
         // TODO 업데이트해서 정보수정기능으로 접근 lock하기
+        // team정보 불러오기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀을 찾을수없음."));
+
+        // 팀장 찾아서 일반멤버로 교체
+        TeamMember LeaderChangeToMember =
+                teamMemberRepository.findTeamMemberByTeamIdAndTeamMemberRole(teamPost, TeamMember.Role.Team_Leader)
+                        .orElseThrow(()-> new IllegalIdentifierException("팀장정보를 찾을수없음."));
+
+        LeaderChangeToMember.setTeamMemberRole(TeamMember.Role.Team_Member);
+        teamMemberRepository.save(LeaderChangeToMember);
+
+        // 팀원 찾아서 팀장으로 교체
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(()-> new IllegalIdentifierException("유저를 찾을수없음."));
+
+        TeamMember MemberChangeToLeader = teamMemberRepository.findByTeamIdAndUserId(teamPost, member)
+                .orElseThrow(()-> new IllegalIdentifierException("팀멤버를 찾을수없음."));
+
+        MemberChangeToLeader.setTeamMemberRole(TeamMember.Role.Team_Leader);
+        teamMemberRepository.save(MemberChangeToLeader);
+
     }
 
     // 프로젝트종료버튼
     @Transactional
     public void projectComplete(Long teamId) {
+        // TODO 데이터값 True면 못되돌리도록 error출력
         TeamPost teamPost = teamPostRepository.findById(teamId)
                 .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
         teamPost.projectEnd();
@@ -160,24 +182,36 @@ public class TeamService {
 
     // 팀원평가
     @Transactional
-    public void teamEvaluation(Long teamId, Long userId, TeamEvaluationRequestDto evaluationRequestDto) {
-        // TODO 팀아이디를 통해 팀원정보리스트업
-        // TODO 팀원정보가 authentication과 일치하면 무시
-        // TODO 팀원정보 비일치시 팀원정보리스트 for문돌며 평가진행. -> 일괄평가방식
-
+    public void teamEvaluation(Long teamId, Long evaluator, Long evaluatee, TeamEvaluationRequestDto evaluationRequestDto) {
         // TODO userId가 authentiction과 일치시 종료
+
+        // 팀정보 찾기
         TeamPost teamPost = teamPostRepository.findById(teamId)
-                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(()-> new IllegalIdentifierException("member is not found"));
-        TeamMember teamMember = teamMemberRepository.findByTeamIdAndUserId(teamPost,member)
-                .orElseThrow(()-> new IllegalIdentifierException("teamMember is not found"));
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 평가받는사람 찾기
+        Member member1 = memberRepository.findById(evaluatee)
+                .orElseThrow(()-> new IllegalIdentifierException("유저정보를 찾을수 없습니다."));
+        TeamMember teamMemberEvaluatee = teamMemberRepository.findByTeamIdAndUserId(teamPost,member1)
+                .orElseThrow(()-> new IllegalIdentifierException("평가받는팀원을 찾을수없습니다."));
+
+        // 평가하는사람 찾기
+        Member member2 = memberRepository.findById(evaluator)
+                .orElseThrow(()-> new IllegalIdentifierException("유저정보를 찾을수없습니다."));
+        TeamMember teamMemberEvaluator = teamMemberRepository.findByTeamIdAndUserId(teamPost, member2)
+                .orElseThrow(()-> new IllegalIdentifierException("평가자팀원을 찾을수없습니다."));
+
+        // 평가했는지 유무 검증
+        boolean isComplete = teamEvaluationRepository.existsByTeamIdAndEvaluatorAndEvaluatee(teamPost, member2, member1);
+        if (isComplete) {
+            throw new IllegalArgumentException("이미 평가를 했습니다.");
+        }
 
         // TODO findbyUserID로 profile찾기
-
         TeamEvaluation teamEvaluation = TeamEvaluation.builder()
-                .teamId(teamMember.getTeamId())
-                .userId(teamMember.getUserId())
+                .teamId(teamPost)
+                .evaluatee(teamMemberEvaluatee.getUserId()) // 평가받은사람
+                .evaluator(teamMemberEvaluator.getUserId()) // 평가자
                 //.profileId(찾은거입력하기)
                 .kindness(evaluationRequestDto.getKindness())
                 .promise(evaluationRequestDto.getPromise())
@@ -186,10 +220,180 @@ public class TeamService {
                 .total((evaluationRequestDto.getKindness()+
                         evaluationRequestDto.getFrequency()+
                         evaluationRequestDto.getFrequency()+
-                        evaluationRequestDto.getParticipate())/4.0)
+                        evaluationRequestDto.getParticipate())) // TODO 나누기4하지않기????
                 .build();
         teamEvaluationRepository.save(teamEvaluation);
 
-        // TODO teamMember의 iscomplete 객체 추가하고 true로 변경(기본false)
+
+        // 평가받는자 member1의 mannerScore변경
+        profileMannerScoreUpdate(member1);
+        // 프로필 등급변경기능 호출
     }
+
+    // 팀원평가시 -> 프로필 mannerScore 변경
+    private void profileMannerScoreUpdate(Member member) {
+        // 유저의 평가받은 전체목록 조회
+        List<TeamEvaluation> evaluationList = teamEvaluationRepository.findAllByEvaluatee(member);
+
+        // 목록이 비어있지않으면, 변경
+        if (!evaluationList.isEmpty()) {
+            int length = evaluationList.size();             // 총 평가 갯수
+            double total = evaluationList.stream()          // 평가 종합 합산
+                    .mapToDouble(TeamEvaluation::getTotal)
+                    .sum(); // 모든 score 값을 합산합니다.
+            double average = total / length;                // 합산값 평균내기
+
+            // mannserScore값 변경
+            Profile profile = profileRepository.findByUserId(member);
+            profile.mannserScoreUpdate(average);
+
+            // 저장
+            profileRepository.save(profile);
+        }
+    }
+
+    // 내가 평가한 팀원목록 조회
+    public List<Map<String, Long>> myEvaluationList(Long teamId, Long userId) {
+        // 팀정보찾기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 유저정보찾기
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(()-> new IllegalIdentifierException("유저정보를 찾을수 없습니다."));
+
+        // 평가목록 불러오기
+        List<TeamEvaluation> teamEvaluationList = teamEvaluationRepository.findAllByTeamIdAndEvaluator(teamPost, member);
+
+        List<Map<String, Long>> myEvaluationList = teamEvaluationList.stream()
+                .map(teamEvaluation -> {
+                    Map<String, Long> map = new HashMap<>();
+                    map.put("userId", teamEvaluation.getEvaluatee().getUserId());
+                    return map;
+                })
+                .collect(Collectors.toList());
+
+        return myEvaluationList;
+
+    }
+
+    // 캘린더 추가
+    @Transactional
+    public TeamCalendarResponseDto createCalendar(Long teamId, TeamCalendarRequestDto requestDto) {
+
+        // 팀게시판 불러오기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 날짜 변환
+        LocalDate startDate  = LocalDate.parse(requestDto.getStartDate());
+        LocalDate endDate  = LocalDate.parse(requestDto.getEndDate());
+
+        // 객체 생성
+        Calendar calendar = Calendar.builder()
+                .teamId(teamPost)
+                .title(requestDto.getTitle())
+                .description(requestDto.getDescription())
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        // TODO 텍스트 입력 텍스트 반환인데 parseDate할필요가있는지?
+        calendarRepository.save(calendar);
+
+        TeamCalendarResponseDto responseDto = new TeamCalendarResponseDto(
+                calendar.getCalendarId(),
+                calendar.getTitle(),
+                calendar.getDescription(),
+                calendar.getStartDate().toString(),
+                calendar.getEndDate().toString()
+        );
+
+        return responseDto;
+    }
+
+    // 캘린더 로드하기
+    public List<TeamCalendarResponseDto> roadCalendar(Long teamId) {
+
+        // 팀찾기
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("팀정보를 찾을수없습니다."));
+
+        // 팀일정조회
+        List<Calendar> calendarList = calendarRepository.findAllByTeamId(teamPost);
+
+        // 일정목록 반환데이터 생성
+        List<TeamCalendarResponseDto> teamCalendarResponseDtoList = calendarList.stream()
+                .map(calendar -> TeamCalendarResponseDto.builder()
+                        .calendarId(calendar.getCalendarId())
+                        .title(calendar.getTitle())
+                        .description(calendar.getDescription())
+                        .startDate(calendar.getStartDate().toString())
+                        .endDate(calendar.getEndDate().toString())
+                        .build())
+                .collect(Collectors.toList());
+        return teamCalendarResponseDtoList;
+    }
+
+    // 캘린더 삭제
+    @Transactional
+    public void deleteCalendar(Long calendarId) {
+
+        // 일정삭제
+        // calendarRepository.deleteById(calendarId);
+        Optional<Calendar> calendar = calendarRepository.findById(calendarId);
+        if (calendar.isPresent()) {
+            calendarRepository.deleteById(calendarId);
+        } else {
+            throw new EntityNotFoundException("캘린더 일정을 찾을수없습니다.");
+        }
+
+
+    }
+
+
+
+    // 회의인증
+
+//    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+//
+//    public boolean meetingCertification(Long teamId, TeamMeetingCertificationRequestDto requestDto) {
+//        // 팀정보
+//        TeamPost team = teamPostRepository.findById(teamId)
+//                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
+//
+//        // 팀멤버목록
+//        List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamId(team);
+//
+//        // 회의불참인원
+//        // TODO 불참인원 Long타입말고 username으로 받아오기?
+//        List<Long> absentMemberIds = requestDto.getNonPartivipants();
+//
+//        // 불참인원빼기
+//        List<TeamMember> attendingMembers = teamMembers.stream()
+//                .filter(member-> !absentMemberIds.contains(member.getUserId()))
+//                .collect(Collectors.toList());
+//
+//        // 회의인증
+//        String imagePath = requestDto.getProofImages();
+//
+//        CascadeClassifier faceDetector = new CascadeClassifier("resources/haarcascades/haarcascade_frontalface_default.xml");
+//        Mat image = Imgcodecs.imread(imagePath);
+//        MatOfRect faceDetections = new MatOfRect();
+//        faceDetector.detectMultiScale(image, faceDetections);
+//
+//        return faceDetections.toArray().length == attendingMembers.size();
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

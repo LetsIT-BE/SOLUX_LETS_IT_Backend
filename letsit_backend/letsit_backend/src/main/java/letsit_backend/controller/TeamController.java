@@ -2,14 +2,14 @@ package letsit_backend.controller;
 
 import jakarta.validation.Valid;
 import letsit_backend.dto.Response;
-import letsit_backend.dto.team.TeamCreateDto;
-import letsit_backend.dto.team.TeamEvaluationRequestDto;
-import letsit_backend.dto.team.TeamInfoResponseDto;
-import letsit_backend.dto.team.TeamUpdateRequestDto;
+import letsit_backend.dto.team.*;
 import letsit_backend.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +30,7 @@ public class TeamController {
         // TODO testcode미작성
         Long teamPostId = teamService.creatTeam(postId, teamCreateDto);
         teamService.creatTeamMember(teamPostId); // 팀멤버 목록 보여주는기능은 따로 넘기기.
-        return Response.success("팀게시판 생성 + 팀원등록 완료", null);
+        return Response.success("팀게시판 생성 + 팀원등록 완료", teamPostId);
     }
 
     @GetMapping("/{teamId}/main")
@@ -57,6 +57,7 @@ public class TeamController {
     }
 
 
+    // TODO api명시적으로 변경하기
     @PatchMapping("/{teamId}/{userId}")
     public Response<?> teamLeaderChange(@PathVariable Long teamId,
                                         @PathVariable Long userId) {
@@ -66,18 +67,27 @@ public class TeamController {
         return Response.success("팀정보수정->팀장위임", null);
     }
 
-    @PostMapping("/evaluation/{teamId}/{userId}")
+    @PostMapping("/evaluation/{teamId}/{evaluator}/{evaluatee}")
     public Response<?> evaluation(@PathVariable Long teamId,
-                                  @PathVariable Long userId,
+                                  @PathVariable Long evaluator,
+                                  @PathVariable Long evaluatee,
                                   @RequestBody TeamEvaluationRequestDto teamEvaluationRequestDto) {
 
         // TODO 팀원평가랑 팀원신고기능에서 팀원목록 리스트업은 어떻게 처리하는지??->팀원로드기능따로구현?
         // TODO 팀멤버인지 검증(authentication객체 == teamMember and teamMember == teamId)
 
         // 팀원평가결과 종합해서 프로필에 보여주는 로직도필요함.
-        teamService.teamEvaluation(teamId, userId, teamEvaluationRequestDto);
+        teamService.teamEvaluation(teamId, evaluator, evaluatee, teamEvaluationRequestDto);
         return Response.success("팀원평가", null);
     }
+
+    @GetMapping("/evaluation/info/{teamId}/{userId}")
+    public Response<List<Map<String, Long>>> myEvaluationList(@PathVariable Long teamId,
+                                                              @PathVariable Long userId) {
+
+        return Response.success("팀원평가->평가한사람목록불러오기", teamService.myEvaluationList(teamId,userId));
+    }
+
 
     // TODO 팀장만(팀장의 userId를 받아와서 검증필요)
     @PatchMapping("/{teamId}/complete")
@@ -90,16 +100,37 @@ public class TeamController {
 
 
     // ---- 필수x ----
+    @PostMapping("/calendar/{teamId}/create")
+    public Response<?> calendarCreate(@PathVariable Long teamId,
+                                      @RequestBody TeamCalendarRequestDto requestDto) {
 
+        return Response.success("팀게시판 일정추가", teamService.createCalendar(teamId,requestDto));
+    }
+
+    @GetMapping("/calendar/{teamId}/info")
+    public Response<?> calendarRoad(@PathVariable Long teamId) {
+
+        return Response.success("팀게시판 일정 로드", teamService.roadCalendar(teamId));
+    }
+
+    @DeleteMapping("/calendar/{calendarId}/delete")
+    public Response<?> calendarDelete(@PathVariable Long calendarId) {
+
+        teamService.deleteCalendar(calendarId);
+        return Response.success("팀게시판 일정삭제", null);
+    }
+
+    // ----- 이후에 ----
     // TODO 팀장만
-    @PostMapping("/{teamId}/validation")
-    public Response<?> validation(@PathVariable Long teamId) {
-
+    @GetMapping("/{teamId}/meeting")
+    public Response<?> meetingCertification(@PathVariable Long teamId) {
 
         // TODO 이미지정보, 불참팀원 받아옴
         // TODO OpenCv랑 연결 -> 인증완료시 true반환
 
+        //boolean isVerified =  teamService.meetingCertification(teamId, requestDto);
         return Response.success("프로젝트관리->회의인증버튼", null);
+
     }
 
     @PostMapping("/{teamId}/report")
@@ -138,7 +169,6 @@ public class TeamController {
         return Response.success("신고기능", null);
     }
 
-    // TODO 팀원정보보기 -> 프로필담당자
-    // TODO 팀장위임기능 -> 정보수정과 함께?
+
 
 }

@@ -10,13 +10,14 @@ import java.sql.Timestamp;
 @Getter
 @AllArgsConstructor
 public class CommentResponseDto {
-    //private Long userId;
+    private Long commentId;
     private String nickname;
     private String comContent;
     private Timestamp comCreateDate;
     private Timestamp comUpdateDate;
 
     public CommentResponseDto(Comment comment, ProfileRepository profile) {
+        this.commentId = comment.getCommentId();
         this.nickname = profile.findByUserId(comment.getUserId()).getNickname();
         this.comContent = comment.getComContent();
         this.comCreateDate = comment.getComCreateDate();

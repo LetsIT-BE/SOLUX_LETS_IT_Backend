@@ -5,10 +5,12 @@ public class ProjectDto {
     private Long postId;
     private String prtTitle;
     private String regionId;
+    private String subRegionId;
     private String onoff;
-    private List<String> requiredStack;
+    private List<String> stack;
     private String difficulty;
     private Long userId;
+    private String projectPeriod;
 
     // Getters and Setters
 
@@ -36,21 +38,17 @@ public class ProjectDto {
         this.regionId = regionId;
     }
 
-    public String getOnoff() {
-        return onoff;
+    public String getSubRegionId() {
+        return subRegionId;
     }
 
-    public void setOnoff(String onoff) {
-        this.onoff = onoff;
+    public void setSubRegionId(String subRegionId) {
+        this.subRegionId = subRegionId;
     }
 
-    public List<String> getRequiredStack() {
-        return requiredStack;
-    }
 
-    public void setRequiredStack(List<String> requiredStack) {
-        this.requiredStack = requiredStack;
-    }
+
+
 
     public String getDifficulty() {
         return difficulty;
@@ -66,5 +64,29 @@ public class ProjectDto {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getProjectPeriod() {
+        return projectPeriod;
+    }
+
+    public void setProjectPeriod(String projectPeriod) {
+        this.projectPeriod = projectPeriod;
+    }
+
+    public List<String> getStack() {
+        return stack;
+    }
+
+    public void setStack(List<String> stack) {
+        this.stack = stack;
+    }
+
+    public String getOnoff() {
+        return onoff;
+    }
+
+    public void setOnoff(String onoff) {
+        this.onoff = onoff;
     }
 }

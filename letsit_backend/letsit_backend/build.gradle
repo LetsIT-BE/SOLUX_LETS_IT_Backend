@@ -25,6 +25,8 @@ repositories {
 
 dependencies {
 	//웹
+	implementation 'org.springframework.boot:spring-boot-starter'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//JPA
@@ -33,9 +35,13 @@ dependencies {
 	//OAuth2.0
 	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	//jwt
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.2'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.12.2'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.2'
+	dependencies {
+		implementation 'io.jsonwebtoken:jjwt-api:0.12.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.2'
+	}
+
+
 	//시큐리티
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
@@ -50,9 +56,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
+
 	runtimeOnly 'com.h2database:h2'
+	//providedCompile 'jakarta.servlet:jakarta.servlet-api:4.0.4'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-parameters"
 }

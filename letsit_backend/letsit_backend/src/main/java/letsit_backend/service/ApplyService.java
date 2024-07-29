@@ -15,6 +15,7 @@ import letsit_backend.repository.PostRepository;
 import letsit_backend.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +36,8 @@ public class ApplyService {
 
 
     public ApplyResponseDto create(Long postId, Long userId, ApplyRequestDto request) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException(""));
-        Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(""));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("구인글이 존재하지 않습니다."));
+        Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 회원입니다."));
         List<Apply> applies = applyRepository.findByPostId(post);
         // 이미 지원했는지 찾아보고
         boolean alreadyApplied = applies.stream()
@@ -65,16 +66,19 @@ public class ApplyService {
 
     // 지원자 목록(프사, 닉넴) 리스트업
     @Transactional(readOnly = true)
-    public List<ApplicantProfileDto> getApplicantProfiles(Long postId) {
+    public List<ApplicantProfileDto> getApplicantProfiles(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+        if (!member.getUserId().equals(post.getUserId().getUserId())) {
+            throw new AccessDeniedException("You do not have permission to access this resource");
+        }
         List<Apply> applies = applyRepository.findByPostId(post);
 
         log.info("Applicants for post Id : {}", postId);
         return applies.stream()
                 .filter(Apply::isNullYet)
                 .map(apply-> {
-                    Member member = apply.getUserId();
-                    Profile profile = profileRepository.findByUserId(member);
+                    Member applicant = apply.getUserId();
+                    Profile profile = profileRepository.findByUserId(applicant);
                     return ApplicantProfileDto.fromEntity(profile, apply);
                 })
                 .collect(Collectors.toList());

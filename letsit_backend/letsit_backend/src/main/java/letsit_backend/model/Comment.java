@@ -32,6 +32,7 @@ public class Comment {
     @Column(nullable = false)
     private String comContent;
 
+
     @CreatedDate
     private Timestamp comCreateDate;
 

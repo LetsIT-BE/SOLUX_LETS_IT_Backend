@@ -2,11 +2,15 @@ package letsit_backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+
 import letsit_backend.config.MapToJsonConverter;
+
 import lombok.*;
 import org.hibernate.annotations.Type;
 
 import java.util.List;
+import java.util.Map;
+
 import java.util.Map;
 
 @Builder
@@ -33,7 +37,7 @@ public class Profile {
         F
     }
 
-    private int mannerScore;
+    private double mannerScore;
 
     private String nickname;
 
@@ -58,8 +62,13 @@ public class Profile {
 
     private String selfIntro;
 
+
     @Lob
     @Convert(converter = MapToJsonConverter.class)
     private Map<String, Integer> skills;
+
+    public void mannserScoreUpdate(double mannerScore) {
+        this.mannerScore = mannerScore;
+    }
 
 }
