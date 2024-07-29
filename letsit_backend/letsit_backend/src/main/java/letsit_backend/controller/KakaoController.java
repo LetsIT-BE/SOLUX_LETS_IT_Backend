@@ -8,11 +8,13 @@ import letsit_backend.CurrentUser;
 import letsit_backend.dto.KakaoMemberDto;
 import letsit_backend.dto.KakaoTokenDto;
 import letsit_backend.dto.LoginResponseDto;
+import letsit_backend.dto.profile.ProfileRequestDto;
 import letsit_backend.jwt.JwtProvider;
 import letsit_backend.model.KakaoProfile;
 import letsit_backend.model.Member;
 import letsit_backend.repository.MemberRepository;
 import letsit_backend.service.KakaoService;
+import letsit_backend.service.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.slf4j.LoggerFactory;
@@ -49,6 +51,8 @@ public class KakaoController {
 
     @Autowired
     private JwtProvider jwtProvider;
+    @Autowired
+    private ProfileService profileService;
 
 
     @GetMapping(value = "/user/info")
@@ -97,6 +101,20 @@ public class KakaoController {
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
+
+            ProfileRequestDto profileDto = new ProfileRequestDto();
+            profileDto.setUserId(loginResponse.getMember().getUserId());
+            profileDto.setNickname(loginResponse.getMember().getName());
+            profileDto.setAge(loginResponse.getMember().getAgeRange());
+            profileDto.setProfileImageUrl(loginResponse.getMember().getProfileImageUrl());
+            profileDto.setBio("기본 소개");
+            profileDto.setSelfIntro("자기 소개");
+            profileService.createOrUpdateProfile(profileDto);
+
+            //response.sendRedirect("/home?token=" + jwtToken);
+        } //else {
+            //response.sendRedirect("/login?error=invalid_token");
 
 
         // 사용자 정보와 JWT 토큰을 응답에 포함

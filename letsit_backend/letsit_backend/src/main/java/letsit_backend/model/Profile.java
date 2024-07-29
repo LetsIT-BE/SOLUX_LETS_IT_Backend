@@ -2,13 +2,20 @@ package letsit_backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+
+import letsit_backend.config.MapToJsonConverter;
+
 import lombok.*;
+import org.hibernate.annotations.Type;
+
+import java.util.List;
+import java.util.Map;
 
 import java.util.Map;
 
 @Builder
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @Setter
+@NoArgsConstructor //(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
 public class Profile {
@@ -35,22 +42,33 @@ public class Profile {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    private Age age;
+    private String age;
+    /*
     public enum Age {
-        under20,
-        under30,
-        over30,
+        teens,
+        twenties,
+        overThirties
     }
 
-    private String profileUrl;
+     */
 
-    private String profileImage;
+    private String sns;
 
+    private String profileImageUrl;
+
+    @Column(length = 20)
+    @Size(max = 20, message = "Bio must be up to 20 characters long")
     private String bio;
 
     private String selfIntro;
 
+
+    @Lob
+    @Convert(converter = MapToJsonConverter.class)
+    private Map<String, Integer> skills;
+
     public void mannserScoreUpdate(double mannerScore) {
         this.mannerScore = mannerScore;
     }
+
 }

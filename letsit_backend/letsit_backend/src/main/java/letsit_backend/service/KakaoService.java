@@ -130,11 +130,12 @@ public class KakaoService {
 
         Member member = Member.builder()
                 .kakaoId(kakaoProfile.getId())
-                .username(username)
-                .name(kakaoProfile.getKakao_account().getName())
-                .age_range(kakaoProfile.getKakao_account().getAge_range())
-                .gender(kakaoProfile.getKakao_account().getGender())
-                .profile_image_url(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
+
+                .name(kakaoProfile.kakao_account.getName())
+                .ageRange(kakaoProfile.kakao_account.getAge_range())
+                .gender(kakaoProfile.kakao_account.getGender())
+                .profileImageUrl(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
+
                 .role(Role.USER)
                 .kakaoAccessToken(kakaoToken)
                 .build();

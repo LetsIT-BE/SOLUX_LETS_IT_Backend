@@ -13,6 +13,6 @@ public class ApplicantProfileDto {
     private String profileImage;
 
     public static ApplicantProfileDto fromEntity(Profile profile, Apply apply) {
-        return new ApplicantProfileDto(apply.getApplyId(), profile.getNickname(), profile.getProfileImage());
+        return new ApplicantProfileDto(apply.getApplyId(), profile.getNickname(), profile.getProfile_image_url());
     }
 }
