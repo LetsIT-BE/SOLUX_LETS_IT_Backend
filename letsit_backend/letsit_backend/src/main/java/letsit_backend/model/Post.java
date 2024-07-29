@@ -77,39 +77,7 @@ public class Post {
             throw new IllegalArgumentException("Unknown enum value: " + korean);
         }
     }
-    @Column(nullable = false)
 
-    private LocalDate recruitDueDate;
-
-    @Enumerated(EnumType.STRING)
-    private ProjectPeriod projectPeriod;
-    public enum ProjectPeriod {
-        oneMonth("1개월"),
-        twoMonths("2개월"),
-        threeMonths("3개월"),
-        fourMonths("4개월");
-
-        private final String korean;
-
-        ProjectPeriod(String korean) {
-            this.korean = korean;
-        }
-
-        @JsonValue
-        public String getKorean() {
-            return korean;
-        }
-
-        @JsonCreator
-        public static ProjectPeriod fromKorean(String korean) {
-            for (ProjectPeriod period : ProjectPeriod.values()) {
-                if (period.korean.equals(korean)) {
-                    return period;
-                }
-            }
-            throw new IllegalArgumentException("Unknown enum value: " + korean);
-        }
-    }
 
     //private int totalPersonnel; peopleNum이랑 맞추기
 
@@ -185,7 +153,6 @@ public class Post {
 
 
     @Enumerated(EnumType.STRING)
-//    private Boolean onOff;
     private OnOff onOff;
     public enum OnOff {
         ON("대면"),
