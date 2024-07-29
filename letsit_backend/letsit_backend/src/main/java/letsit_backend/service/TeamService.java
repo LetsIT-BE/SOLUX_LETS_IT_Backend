@@ -220,11 +220,36 @@ public class TeamService {
                 .total((evaluationRequestDto.getKindness()+
                         evaluationRequestDto.getFrequency()+
                         evaluationRequestDto.getFrequency()+
-                        evaluationRequestDto.getParticipate())/4.0)
+                        evaluationRequestDto.getParticipate())) // TODO 나누기4하지않기????
                 .build();
         teamEvaluationRepository.save(teamEvaluation);
 
-        // TODO teamMember의 iscomplete 객체 추가하고 true로 변경(기본false) -> 완료된사용자받아오기
+
+        // 평가받는자 member1의 mannerScore변경
+        profileMannerScoreUpdate(member1);
+        // 프로필 등급변경기능 호출
+    }
+
+    // 팀원평가시 -> 프로필 mannerScore 변경
+    private void profileMannerScoreUpdate(Member member) {
+        // 유저의 평가받은 전체목록 조회
+        List<TeamEvaluation> evaluationList = teamEvaluationRepository.findAllByEvaluatee(member);
+
+        // 목록이 비어있지않으면, 변경
+        if (!evaluationList.isEmpty()) {
+            int length = evaluationList.size();             // 총 평가 갯수
+            double total = evaluationList.stream()          // 평가 종합 합산
+                    .mapToDouble(TeamEvaluation::getTotal)
+                    .sum(); // 모든 score 값을 합산합니다.
+            double average = total / length;                // 합산값 평균내기
+
+            // mannserScore값 변경
+            Profile profile = profileRepository.findByUserId(member);
+            profile.mannserScoreUpdate(average);
+
+            // 저장
+            profileRepository.save(profile);
+        }
     }
 
     // 내가 평가한 팀원목록 조회
@@ -254,7 +279,7 @@ public class TeamService {
 
     // 캘린더 추가
     @Transactional
-    public void createCalendar(Long teamId, TeamCalendarRequestDto requestDto) {
+    public TeamCalendarResponseDto createCalendar(Long teamId, TeamCalendarRequestDto requestDto) {
 
         // 팀게시판 불러오기
         TeamPost teamPost = teamPostRepository.findById(teamId)
@@ -275,6 +300,16 @@ public class TeamService {
 
         // TODO 텍스트 입력 텍스트 반환인데 parseDate할필요가있는지?
         calendarRepository.save(calendar);
+
+        TeamCalendarResponseDto responseDto = new TeamCalendarResponseDto(
+                calendar.getCalendarId(),
+                calendar.getTitle(),
+                calendar.getDescription(),
+                calendar.getStartDate().toString(),
+                calendar.getEndDate().toString()
+        );
+
+        return responseDto;
     }
 
     // 캘린더 로드하기

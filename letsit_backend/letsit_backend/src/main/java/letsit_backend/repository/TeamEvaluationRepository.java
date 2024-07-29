@@ -11,4 +11,5 @@ import java.util.List;
 public interface TeamEvaluationRepository extends JpaRepository<TeamEvaluation, Long> {
     List<TeamEvaluation> findAllByTeamIdAndEvaluator(TeamPost teamPost, Member evaluator);
     boolean existsByTeamIdAndEvaluatorAndEvaluatee(TeamPost teamPost, Member evaluator, Member evaluatee);
+    List<TeamEvaluation> findAllByEvaluatee(Member evaluatee);
 }

@@ -1,7 +1,10 @@
 package letsit_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.Map;
 
 @Builder
 @Getter
@@ -27,9 +30,9 @@ public class Profile {
         F
     }
 
-    private int mannerGrade;
+    private double mannerScore;
 
-    private String name;
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     private Age age;
@@ -39,11 +42,15 @@ public class Profile {
         over30,
     }
 
-    private String profile_url;
+    private String profileUrl;
 
-    private String profile_picture;
+    private String profileImage;
 
     private String bio;
 
-    private String self_intro;
+    private String selfIntro;
+
+    public void mannserScoreUpdate(double mannerScore) {
+        this.mannerScore = mannerScore;
+    }
 }

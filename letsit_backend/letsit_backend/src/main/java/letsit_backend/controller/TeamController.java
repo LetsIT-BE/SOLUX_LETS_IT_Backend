@@ -104,8 +104,7 @@ public class TeamController {
     public Response<?> calendarCreate(@PathVariable Long teamId,
                                       @RequestBody TeamCalendarRequestDto requestDto) {
 
-        teamService.createCalendar(teamId,requestDto);
-        return Response.success("팀게시판 일정추가", null);
+        return Response.success("팀게시판 일정추가", teamService.createCalendar(teamId,requestDto));
     }
 
     @GetMapping("/calendar/{teamId}/info")
