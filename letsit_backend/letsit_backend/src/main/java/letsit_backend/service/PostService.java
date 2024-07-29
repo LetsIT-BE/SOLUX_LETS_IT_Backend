@@ -6,10 +6,8 @@ import letsit_backend.dto.PostResponseDto;
 import letsit_backend.model.Area;
 import letsit_backend.model.Member;
 import letsit_backend.model.Post;
-import letsit_backend.repository.AreaRepository;
-import letsit_backend.repository.CommentRepository;
-import letsit_backend.repository.MemberRepository;
-import letsit_backend.repository.PostRepository;
+import letsit_backend.model.Profile;
+import letsit_backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +24,7 @@ public class PostService {
     private final AreaRepository areaRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
+    private final ProfileRepository profileRepository;
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
 
@@ -162,14 +161,13 @@ public class PostService {
             postRepository.save(post);
 
             List<CommentResponseDto> comments = commentRepository.findByPostId(post).stream()
-                    .map(comment -> new CommentResponseDto(
-                            comment.getCommentId(),
-                            comment.getUserId().getUserId(),
-                            comment.getUserId().getName(),
-                            comment.getComContent(),
-                            comment.getComCreateDate(),
-                            comment.getComUpdateDate()
-                    ))
+                    .map(comment -> {
+                        Profile profile = profileRepository.findByUserId(comment.getUserId());
+                        CommentResponseDto dto = new CommentResponseDto(
+                                comment,
+                                profileRepository);
+                        return dto;
+                    })
                     .collect(Collectors.toList());
 
             return new PostResponseDto(
@@ -221,12 +219,8 @@ public class PostService {
     private PostResponseDto convertToResponseDto(Post post) {
         List<CommentResponseDto> comments = commentRepository.findByPostId(post).stream()
                 .map(comment -> new CommentResponseDto(
-                        comment.getCommentId(),
-                        comment.getUserId().getUserId(),
-                        comment.getUserId().getName(),
-                        comment.getComContent(),
-                        comment.getComCreateDate(),
-                        comment.getComUpdateDate()
+                        comment,
+                        profileRepository
                 ))
                 .collect(Collectors.toList());
 
