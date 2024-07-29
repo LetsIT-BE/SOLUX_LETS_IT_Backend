@@ -156,6 +156,11 @@ public class PostService {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
+
+            // viewCount 증가
+            post.setViewCount(post.getViewCount() + 1);
+            postRepository.save(post);
+
             List<CommentResponseDto> comments = commentRepository.findByPostId(post).stream()
                     .map(comment -> new CommentResponseDto(
                             comment.getCommentId(),
