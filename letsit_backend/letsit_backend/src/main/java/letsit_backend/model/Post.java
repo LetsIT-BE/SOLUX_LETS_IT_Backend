@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Arrays;
 
@@ -115,6 +116,40 @@ public class Post {
     @ColumnDefault("0")
     private int currentPersonnel;
 
+    // TODO 기간어떻게받을지...
+    @Column(nullable = false)
+    private LocalDate recruitDueDate;
+
+    @Enumerated(EnumType.STRING)
+    private ProjectPeriod projectPeriod;
+    public enum ProjectPeriod {
+        oneMonth("1개월"),
+        twoMonths("2개월"),
+        threeMonths("3개월"),
+        fourMonths("4개월");
+
+        private final String korean;
+
+        ProjectPeriod(String korean) {
+            this.korean = korean;
+        }
+
+        @JsonValue
+        public String getKorean() {
+            return korean;
+        }
+
+        @JsonCreator
+        public static ProjectPeriod fromKorean(String korean) {
+            for (ProjectPeriod period : ProjectPeriod.values()) {
+                if (period.korean.equals(korean)) {
+                    return period;
+                }
+            }
+            throw new IllegalArgumentException("Unknown enum value: " + korean);
+        }
+    }
+
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
     public enum Difficulty {
@@ -147,6 +182,7 @@ public class Post {
             throw new IllegalArgumentException("Unknown enum value: " + korean);
         }
     }
+
 
     @Enumerated(EnumType.STRING)
 //    private Boolean onOff;
@@ -224,6 +260,7 @@ public class Post {
 //    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
 //    @Column(name = "stack")
 //    private List<String> stack;
+
     @Column(name = "stack")
     private String stack;
     public void setStack(List<String> stack) {
@@ -233,6 +270,7 @@ public class Post {
     public List<String> getStack() {
         return Arrays.asList(stack.split(","));
     }
+
 
 
     private String preference;
