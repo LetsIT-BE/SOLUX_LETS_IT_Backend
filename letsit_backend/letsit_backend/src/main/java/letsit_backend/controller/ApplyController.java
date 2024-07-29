@@ -1,9 +1,11 @@
 package letsit_backend.controller;
 
-import letsit_backend.dto.ApplicantProfileDto;
-import letsit_backend.dto.ApplyRequestDto;
-import letsit_backend.dto.ApplyResponseDto;
+import letsit_backend.CurrentUser;
+import letsit_backend.dto.apply.ApplicantProfileDto;
+import letsit_backend.dto.apply.ApplyRequestDto;
+import letsit_backend.dto.apply.ApplyResponseDto;
 import letsit_backend.dto.Response;
+import letsit_backend.model.Member;
 import letsit_backend.service.ApplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +42,11 @@ public class ApplyController {
     }
 
     @GetMapping(value = "/{postId}/list")
-    public Response<List<ApplicantProfileDto>> getApplicantList(@PathVariable Long postId) {
-        List<ApplicantProfileDto> applicant = applyService.getApplicantProfiles(postId);
+    public Response<List<ApplicantProfileDto>> getApplicantList(@PathVariable Long postId, @CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("미인증 회원");
+        }
+        List<ApplicantProfileDto> applicant = applyService.getApplicantProfiles(postId, member);
         return Response.success("지원자 리스트", applicant);
     }
 
@@ -52,7 +57,7 @@ public class ApplyController {
     }
 
 
-    @PatchMapping(value = "/{postId}/list/{applyId}/approval")
+    @GetMapping(value = "/{postId}/list/{applyId}/approval")
     public Response<String> approvalApplicant(@PathVariable Long postId, @PathVariable Long applyId) {
         applyService.approveApplicant(postId, applyId);
         log.info("Approval request received for Post ID: {} and Apply ID: {}", postId, applyId);
@@ -60,7 +65,7 @@ public class ApplyController {
         return Response.success("지원서가 승인되었습니다.", null);
     }
 
-    @PatchMapping(value = "/{postId}/list/{applyId}/reject")
+    @GetMapping(value = "/{postId}/list/{applyId}/reject")
     public ResponseEntity<String> rejectionApplicant(@PathVariable Long postId, @PathVariable Long applyId) {
         applyService.rejectApplicant(postId, applyId);
         log.info("Approval request received for Post ID: {} and Apply ID: {}", postId, applyId);

@@ -15,5 +15,5 @@ public class TeamInfoResponseDto {
     private String teamName;
     private String notionLink;
     private String githubLink;
-    private List<Map<String, TeamMember.Role>> teamMemberInfo;
+    private List<TeamMemberLoadInfoDto> teamMemberInfo;
 }
