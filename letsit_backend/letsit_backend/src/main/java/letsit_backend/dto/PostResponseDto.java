@@ -17,7 +17,7 @@ public class PostResponseDto {
     private Long postId;
     private String title;
     private String content;
-    private Post.PeopleNum peopleNum;
+    private Post.TotalPersonnel totalPersonnel;
     private LocalDate recruitDueDate;
     private String preference;
     private List<String> stack;
@@ -35,12 +35,12 @@ public class PostResponseDto {
     private Post.ProjectPeriod projectPeriod;
     private List<CommentResponseDto> comments;
 
-    public PostResponseDto(Long userId, Long postId, String title, String content, Post.PeopleNum peopleNum, LocalDate recruitDueDate, String preference, List<String> stack, Post.Difficulty difficulty, Post.OnOff onOff, Boolean deadline, List<String> categoryId, Post.AgeGroup ageGroup, String region, String subRegion, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount, Post.ProjectPeriod projectPeriod, List<CommentResponseDto> comments) {
+    public PostResponseDto(Long userId, Long postId, String title, String content, Post.TotalPersonnel totalPersonnel, LocalDate recruitDueDate, String preference, List<String> stack, Post.Difficulty difficulty, Post.OnOff onOff, Boolean deadline, List<String> categoryId, Post.AgeGroup ageGroup, String region, String subRegion, Timestamp createdAt, Timestamp updatedAt, int viewCount, int scrapCount, Post.ProjectPeriod projectPeriod, List<CommentResponseDto> comments) {
         this.userId = userId;
         this.postId = postId;
         this.title = title;
         this.content = content;
-        this.peopleNum = peopleNum;
+        this.totalPersonnel = totalPersonnel;
         this.recruitDueDate = recruitDueDate;
         this.preference = preference;
         this.stack = stack;

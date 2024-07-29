@@ -39,20 +39,22 @@ public class Post {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private PeopleNum peopleNum;
-    public enum PeopleNum {
-        TWO("2명"),
-        THREE("3명"),
-        FOUR("4명"),
-        FIVE("5명"),
-        SIX("6명"),
-        SEVEN("7명"),
-        EIGHT("8명");
+    private TotalPersonnel totalPersonnel;
+    public enum TotalPersonnel {
+        TWO("2명", 2),
+        THREE("3명", 3),
+        FOUR("4명", 4),
+        FIVE("5명", 5),
+        SIX("6명", 6),
+        SEVEN("7명", 7),
+        EIGHT("8명", 8);
 
         private final String korean;
+        private final int value;
 
-        PeopleNum(String korean) {
+        TotalPersonnel(String korean, int value) {
             this.korean = korean;
+            this.value = value;
         }
 
         @JsonValue
@@ -60,9 +62,13 @@ public class Post {
             return korean;
         }
 
+        public int getValue() {
+            return value;
+        }
+
         @JsonCreator
-        public static PeopleNum fromKorean(String korean) {
-            for (PeopleNum num : PeopleNum.values()) {
+        public static TotalPersonnel fromKorean(String korean) {
+            for (TotalPersonnel num : TotalPersonnel.values()) {
                 if (num.korean.equals(korean)) {
                     return num;
                 }
@@ -269,10 +275,11 @@ public class Post {
 
     public void setDeadline(Boolean deadline) {
         this.deadline = deadline;
+    }
 
     // 마감여부 확인(기한 지났으면 + 마감true이면)
     private boolean isClosed() {
-        return this.recruitPeriod.isBefore(LocalDate.now()) || this.deadline;
+        return this.recruitDueDate.isBefore(LocalDate.now()) || this.deadline;
     }
 
 
@@ -295,7 +302,7 @@ public class Post {
      */
 
     public void approval(Apply apply) {
-        if (!isClosed() && this.totalPersonnel > this.currentPersonnel) {
+        if (!isClosed() && this.totalPersonnel.getValue() > this.currentPersonnel) {
         apply.approved();
         currentPersonnel++;
         }

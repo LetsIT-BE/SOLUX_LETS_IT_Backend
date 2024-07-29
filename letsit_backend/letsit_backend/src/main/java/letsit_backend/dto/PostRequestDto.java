@@ -16,7 +16,7 @@ public class PostRequestDto {
     private Long userId;
     private String title;
     private String content;
-    private Post.PeopleNum peopleNum;
+    private Post.TotalPersonnel totalPersonnel;
     private LocalDate recruitDueDate;
     private String preference;
 //    private ProjectInfo projectInfo;

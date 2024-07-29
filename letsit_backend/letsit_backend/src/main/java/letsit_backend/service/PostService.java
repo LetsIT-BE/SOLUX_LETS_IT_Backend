@@ -41,7 +41,7 @@ public class PostService {
                 .userId(user)
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .peopleNum(requestDto.getPeopleNum())
+                .totalPersonnel(requestDto.getTotalPersonnel())
                 .recruitDueDate(requestDto.getRecruitDueDate())
                 .projectPeriod(requestDto.getProjectPeriod())
                 .difficulty(requestDto.getDifficulty())
@@ -66,7 +66,7 @@ public class PostService {
                 savedPost.getPostId(),
                 savedPost.getTitle(),
                 savedPost.getContent(),
-                savedPost.getPeopleNum(),
+                savedPost.getTotalPersonnel(),
                 savedPost.getRecruitDueDate(),
                 savedPost.getPreference(),
                 savedPost.getStack(),
@@ -100,7 +100,7 @@ public class PostService {
 
         post.setTitle(postRequestDto.getTitle());
         post.setContent(postRequestDto.getContent());
-        post.setPeopleNum(postRequestDto.getPeopleNum());
+        post.setTotalPersonnel(postRequestDto.getTotalPersonnel());
         post.setRecruitDueDate(postRequestDto.getRecruitDueDate());
         post.setPreference(postRequestDto.getPreference());
         post.setRegion(region);
@@ -120,7 +120,7 @@ public class PostService {
                 updatedPost.getPostId(),
                 updatedPost.getTitle(),
                 updatedPost.getContent(),
-                updatedPost.getPeopleNum(),
+                updatedPost.getTotalPersonnel(),
                 updatedPost.getRecruitDueDate(),
                 updatedPost.getPreference(),
                 updatedPost.getStack(),
@@ -172,7 +172,7 @@ public class PostService {
                     post.getPostId(),
                     post.getTitle(),
                     post.getContent(),
-                    post.getPeopleNum(),
+                    post.getTotalPersonnel(),
                     post.getRecruitDueDate(),
                     post.getPreference(),
                     post.getStack(),
@@ -230,7 +230,7 @@ public class PostService {
                 post.getPostId(),
                 post.getTitle(),
                 post.getContent(),
-                post.getPeopleNum(),
+                post.getTotalPersonnel(),
                 post.getRecruitDueDate(),
                 post.getPreference(),
                 post.getStack(),
