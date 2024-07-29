@@ -22,9 +22,9 @@ public class CommentService {
     private final PostRepository postRepository;
     private final ProfileRepository profileRepository;
 
-    public CommentResponseDto upload(Long postId, CommentRequestDto request) {
+    public CommentResponseDto upload(Long postId, Long userId, CommentRequestDto request) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        Member member = memberRepository.findById(request.getUserId()).orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+        Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
 
         Comment comment = request.toEntity(post, member);
         Comment savedComment = commentRepository.save(comment);
@@ -38,12 +38,11 @@ public class CommentService {
             throw new IllegalArgumentException("댓글을 수정할 권한이 없습니다.");
         }
         comment.update(request.getComContent());
-
         Comment updatedComment = commentRepository.save(comment);
         return new CommentResponseDto(updatedComment, profileRepository);
     }
 
-    public void delete(Long postId, Long commentId, Long userId) {
+    public void delete(Long postId, Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
         commentRepository.delete(comment);
     }

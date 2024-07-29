@@ -1,4 +1,4 @@
-package letsit_backend.dto.comment;
+package letsit_backend.dto;
 
 import letsit_backend.model.Comment;
 import letsit_backend.model.Member;
@@ -15,7 +15,7 @@ public class CommentRequestDto {
     private Long postId;
     private Long userId;
     private String comContent;
-    //private Long commentId;
+    private Long commentId;
 
     public Comment toEntity(Post post, Member member) {
         return Comment.builder()
