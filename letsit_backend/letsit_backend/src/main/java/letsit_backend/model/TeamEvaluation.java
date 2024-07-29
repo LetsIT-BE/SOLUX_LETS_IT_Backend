@@ -25,9 +25,6 @@ public class TeamEvaluation {
     @JoinColumn(name = "evaluator_id")
     private Member evaluator; // 평가하는사람
 
-    //TODO 프로필과 일대다연결?
-    private Long profileId;
-
     @Column(nullable = false)
     private int frequency;
 

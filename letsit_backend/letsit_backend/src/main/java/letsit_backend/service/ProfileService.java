@@ -46,5 +46,10 @@ public class ProfileService {
         profile.setSelfIntro(profileDto.getSelfIntro());
         profileRepository.save(profile);
     }
+    public void updateMannerTier(Member userId) {
+        Profile profile = profileRepository.findByUserId(userId);
+        profile.updateMannerTier();
 
+        profileRepository.save(profile);
+    }
 }

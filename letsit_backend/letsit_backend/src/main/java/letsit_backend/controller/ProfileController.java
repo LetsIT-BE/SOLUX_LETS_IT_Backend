@@ -42,7 +42,6 @@ public class ProfileController {
     @PostMapping
     public Profile createProfile(@RequestBody ProfileRequestDto profileDto) {
         logger.debug("프로필 생성 요청: {}", profileDto);
-        Long userId = profileDto.getUserId();
         Member member = memberService.getMemberById(profileDto.getUserId());
         logger.debug("조회된 회원: {}", member);
         if (member == null) {

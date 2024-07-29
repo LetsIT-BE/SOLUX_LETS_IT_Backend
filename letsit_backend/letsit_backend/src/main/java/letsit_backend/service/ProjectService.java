@@ -71,9 +71,6 @@ public class ProjectService {
     }
 
 
-//    private OngoingProjectDto convertToOngoingProjectDto(TeamPost teamPost) {
-//        return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle());
-//    }
     private OngoingProjectDto convertToOngoingProjectDto(TeamPost teamPost) {
         List<String> profileImages = teamMemberRepository.findByTeamId_TeamId(teamPost.getTeamId()).stream()
             .map(teamMember -> {
@@ -95,12 +92,8 @@ public class ProjectService {
         projectDto.setStack(post.getStack());
         projectDto.setDifficulty(post.getDifficulty().getKorean());
         projectDto.setUserId(post.getUserId().getUserId());
-//        projectDto.setContent(post.getContent());
-//        projectDto.setTotalPersonnel(post.getTotalPersonnel());
-//        projectDto.setRecruitDueDate(post.getRecruitDueDate().toString());
         projectDto.setProjectPeriod(post.getProjectPeriod().getKorean());
-//        projectDto.setDeadline(post.getDeadline());
-//        projectDto.setCurrentPersonnel(post.getCurrentPersonnel());
+
         return projectDto;
     }
 }

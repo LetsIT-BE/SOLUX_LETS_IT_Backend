@@ -30,6 +30,7 @@ public class TeamService {
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
     private final CalendarRepository calendarRepository;
+    private final ProfileService profileService;
 
     // TODO 생성자주입, setter사용지향, 빌드주입하기로 수정필요
 
@@ -212,7 +213,6 @@ public class TeamService {
                 .teamId(teamPost)
                 .evaluatee(teamMemberEvaluatee.getUserId()) // 평가받은사람
                 .evaluator(teamMemberEvaluator.getUserId()) // 평가자
-                //.profileId(찾은거입력하기)
                 .kindness(evaluationRequestDto.getKindness())
                 .promise(evaluationRequestDto.getPromise())
                 .frequency(evaluationRequestDto.getFrequency())
@@ -228,6 +228,7 @@ public class TeamService {
         // 평가받는자 member1의 mannerScore변경
         profileMannerScoreUpdate(member1);
         // 프로필 등급변경기능 호출
+        profileService.updateMannerTier(member1);
     }
 
     // 팀원평가시 -> 프로필 mannerScore 변경
@@ -350,50 +351,4 @@ public class TeamService {
 
 
     }
-
-
-
-    // 회의인증
-
-//    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
-//
-//    public boolean meetingCertification(Long teamId, TeamMeetingCertificationRequestDto requestDto) {
-//        // 팀정보
-//        TeamPost team = teamPostRepository.findById(teamId)
-//                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
-//
-//        // 팀멤버목록
-//        List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamId(team);
-//
-//        // 회의불참인원
-//        // TODO 불참인원 Long타입말고 username으로 받아오기?
-//        List<Long> absentMemberIds = requestDto.getNonPartivipants();
-//
-//        // 불참인원빼기
-//        List<TeamMember> attendingMembers = teamMembers.stream()
-//                .filter(member-> !absentMemberIds.contains(member.getUserId()))
-//                .collect(Collectors.toList());
-//
-//        // 회의인증
-//        String imagePath = requestDto.getProofImages();
-//
-//        CascadeClassifier faceDetector = new CascadeClassifier("resources/haarcascades/haarcascade_frontalface_default.xml");
-//        Mat image = Imgcodecs.imread(imagePath);
-//        MatOfRect faceDetections = new MatOfRect();
-//        faceDetector.detectMultiScale(image, faceDetections);
-//
-//        return faceDetections.toArray().length == attendingMembers.size();
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
 }

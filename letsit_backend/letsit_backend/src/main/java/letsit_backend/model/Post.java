@@ -79,8 +79,6 @@ public class Post {
     }
 
 
-    //private int totalPersonnel; peopleNum이랑 맞추기
-
     @ColumnDefault("0")
     private int currentPersonnel;
 
@@ -183,9 +181,6 @@ public class Post {
         }
     }
 
-    // TODO 지역엔티티랑 매핑
-//    private Long regionId;
-
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Area region;
@@ -194,11 +189,6 @@ public class Post {
     @JoinColumn(name = "sub_region_id")
     private Area subRegion;
 
-    // TODO 분야엔티티랑 매핑
-//    @ElementCollection
-//    @CollectionTable(name = "post_category", joinColumns = @JoinColumn(name = "post_id"))
-//    @Column(name = "category_id")
-//    private List<String> categoryId;
 
     @Column(name = "category_id")
     private String categoryId;
@@ -223,11 +213,6 @@ public class Post {
     @Column(nullable = false)
     private Boolean deadline;
 
-//    @ElementCollection
-//    @CollectionTable(name = "post_stack", joinColumns = @JoinColumn(name = "post_id"))
-//    @Column(name = "stack")
-//    private List<String> stack;
-
     @Column(name = "stack")
     private String stack;
     public void setStack(List<String> stack) {
@@ -237,7 +222,6 @@ public class Post {
     public List<String> getStack() {
         return Arrays.asList(stack.split(","));
     }
-
 
 
     private String preference;
@@ -274,10 +258,6 @@ public class Post {
         }
     }
 
-//    @OneToMany(mappedBy = "postId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-//    @OrderBy("commentId asc")
-//    private List<Comment> comments;
-
     public void setDeadline(Boolean deadline) {
         this.deadline = deadline;
     }
@@ -286,25 +266,6 @@ public class Post {
     private boolean isClosed() {
         return this.recruitDueDate.isBefore(LocalDate.now()) || this.deadline;
     }
-
-
-
-    /*
-    모집자 관점) 신청자 승인 가능 여부
-    public boolean isApprovable(Apply applicants) {
-        return this.applicants.contains(applicants);
-        // enum peopleNum 이랑 비교하는 로직
-    }
-
-    // 지원자 관점) 지원 가능 여부
-    public boolean isApplyable(Long userId) {
-        return !isClosed(); // && !이미 지원했는가?(isApplied)
-    }
-    public boolean iswithdrawAble(Long userId) {
-        return !isClosed();
-        // && 이미 지원했는가 && 이미수락됐는가
-    }
-     */
 
     public void approval(Apply apply) {
         if (!isClosed() && this.totalPersonnel.getValue() > this.currentPersonnel) {

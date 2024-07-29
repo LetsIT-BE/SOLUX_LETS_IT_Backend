@@ -42,15 +42,10 @@ import java.util.logging.Logger;
 //import java.net.http.HttpHeaders;
 @Slf4j
 @RestController
-//@RequestMapping("/api")
 public class KakaoController {
-    //private static final Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private KakaoService kakaoService;
 
-    @Autowired
-    private JwtProvider jwtProvider;
     @Autowired
     private ProfileService profileService;
 
@@ -112,10 +107,6 @@ public class KakaoController {
             profileDto.setSelfIntro("자기 소개");
             profileService.createOrUpdateProfile(profileDto);
 
-            //response.sendRedirect("/home?token=" + jwtToken);
-        //else {
-            //response.sendRedirect("/login?error=invalid_token");
-
 
         // 사용자 정보와 JWT 토큰을 응답에 포함
         Map<String, Object> responseBody = new HashMap<>();
@@ -124,10 +115,7 @@ public class KakaoController {
 
 
         log.info("Returning response to frontend: {}", responseBody);
-        //return "redirect:/login/oauth2/callback/kakao";
         return ResponseEntity.ok(responseBody);
-        //response.sendRedirect("/?token=" + jwtToken);
-        //}
     }
 
     @PostMapping("/logout")

@@ -24,9 +24,6 @@ public class Member {
     @Column
     private Long kakaoId;
 
-    //@Column
-    //private String email;
-
     @Column
     private String name;
 
@@ -43,13 +40,10 @@ public class Member {
     private String profileImageUrl;
 
     @Enumerated(EnumType.STRING)
-    //@NotNull
     private Role role;
 
     @Setter
     private String kakaoAccessToken;
-
-
 
 
     @Builder
@@ -62,12 +56,4 @@ public class Member {
         this.gender = gender;
         this.kakaoAccessToken = kakaoAccessToken;
     }
-
-
-
-
-
-
-    // 가입일
-    // 본인인증여부
 }

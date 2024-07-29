@@ -25,12 +25,12 @@ public class Area {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Area> subAreas;
 
-    public Area(String name, Area parent) {
-        this.name = name;
-        this.parent = parent;
-    }
-
-    public Area(String name) {
-        this.name = name;
-    }
+//    public Area(String name, Area parent) {
+//        this.name = name;
+//        this.parent = parent;
+//    }
+//
+//    public Area(String name) {
+//        this.name = name;
+//    }
 }

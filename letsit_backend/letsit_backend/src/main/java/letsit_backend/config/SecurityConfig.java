@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
 
-                                .requestMatchers("/", "/home", "/login/**", "/static/**", "/index.html", "/assets/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error", "/login/oauth2/callback/kakao", "/profile").permitAll() // 정적 파일 및 특정 경로 허용
+                                .requestMatchers("/", "/home", "/login/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error", "/login/oauth2/callback/kakao", "/profile/**").permitAll() // 정적 파일 및 특정 경로 허용
                                 .anyRequest().authenticated()
                 )
 
@@ -65,7 +65,6 @@ public class SecurityConfig {
                  */
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 정책을 STATELESS로 설정
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // JwtFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
-                //.csrf(csrf -> csrf.disable()); // 필요에 따라 CSRF 보호 비활성화
                 //.formLogin(formLogin -> formLogin.disable()); // 기본 로그인 폼 비활성화
         http.logout(logout -> logout.disable());
         return http.build();
@@ -76,7 +75,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", configuration);

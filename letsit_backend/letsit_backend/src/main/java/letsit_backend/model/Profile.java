@@ -13,6 +13,9 @@ import java.util.Map;
 
 import java.util.Map;
 
+import static letsit_backend.model.Profile.Manner_tier.B;
+import static letsit_backend.model.Profile.Manner_tier.S;
+
 @Builder
 @Getter @Setter
 @NoArgsConstructor //(access = AccessLevel.PROTECTED)
@@ -41,16 +44,7 @@ public class Profile {
 
     private String nickname;
 
-    //@Enumerated(EnumType.STRING)
     private String age;
-    /*
-    public enum Age {
-        teens,
-        twenties,
-        overThirties
-    }
-
-     */
 
     private String sns;
 
@@ -71,4 +65,18 @@ public class Profile {
         this.mannerScore = mannerScore;
     }
 
+    public void updateMannerTier() {
+        if (this.mannerScore >= 90) {
+            this.mannerTier = S;
+        } else if (this.mannerScore >= 80) {
+            this.mannerTier = Manner_tier.A;
+        } else if (this.mannerScore >= 70) {
+            this.mannerTier = B;
+        } else if (this.mannerScore >= 60) {
+            this.mannerTier = Manner_tier.C;
+        } else {
+            this.mannerTier = Manner_tier.F;
+        }
+
+    }
 }
