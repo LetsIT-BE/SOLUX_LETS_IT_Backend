@@ -6,6 +6,7 @@ import letsit_backend.model.Member;
 import letsit_backend.model.Profile;
 import letsit_backend.service.MemberService;
 import letsit_backend.service.ProfileService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
+@RequiredArgsConstructor
 public class ProfileController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
 
-    @Autowired
+
     private ProfileService profileService;
 
-    @Autowired
+
     private MemberService memberService;
 
     @GetMapping
