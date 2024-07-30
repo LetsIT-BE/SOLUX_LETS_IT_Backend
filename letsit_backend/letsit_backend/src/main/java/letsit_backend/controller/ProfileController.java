@@ -30,6 +30,7 @@ public class ProfileController {
     @Autowired
     private MemberService memberService;
 
+
     @GetMapping
     public List<ProfileResponseDto> getAllProfiles() {
         logger.debug("모든 프로필 조회 요청");
@@ -37,16 +38,40 @@ public class ProfileController {
         return profiles.stream().map(this::convertToResponseDto).collect(Collectors.toList());
     }
 
+    //자기 자신 프로필 조회
     @GetMapping("/{userId}")
-    public ProfileResponseDto getProfileById(@PathVariable("userId") Long userId) {
+    public Response<ProfileResponseDto> getMyProfile(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("미인증 회원");
+        }
+        logger.debug("현재 사용자 프로필 조회 요청: {}", member.getUserId());
+        Profile profile = profileService.getProfileById(member.getUserId());
+        if (profile == null) {
+            return Response.fail("프로필을 찾을 수 없습니다.");
+        }
+        logger.debug("조회된 프로필: {}", profile);
+        ProfileResponseDto profileResponseDto = convertToResponseDto(profile);
+        return Response.success("나의 프로필 조회 성공", profileResponseDto);
+    }
+
+    //다른 사용자 프로필 조회
+    @GetMapping("/{userId}")
+    public Response<ProfileResponseDto> getProfileById(@PathVariable Long userId, @CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("미인증 회원");
+        }
         logger.debug("userId로 프로필 조회 요청: {}", userId);
         Profile profile = profileService.getProfileById(userId);
+        if (profile == null) {
+            return Response.fail("프로필을 찾을 수 없습니다.");
+        }
         logger.debug("조회된 프로필: {}", profile);
-        return convertToResponseDto(profile);
+        ProfileResponseDto profileResponseDto = convertToResponseDto(profile);
+        return Response.success("다른 사용자 프로필 조회 성공", profileResponseDto);
     }
 
     @PostMapping
-    public ProfileResponseDto createProfile(@RequestBody ProfileDto profileDto) {
+    public Response<ProfileResponseDto> createProfile(@RequestBody ProfileDto profileDto) {
         logger.debug("프로필 생성 요청: {}", profileDto);
         Member member = memberService.getMemberById(profileDto.getUserId());
         logger.debug("조회된 회원: {}", member);
@@ -58,17 +83,17 @@ public class ProfileController {
         profile.setUserId(member);
         Profile savedProfile = profileService.saveProfile(profile);
         logger.debug("생성된 프로필: {}", savedProfile);
-        return convertToResponseDto(savedProfile);
+        ProfileResponseDto profileResponseDto = convertToResponseDto(savedProfile);
+        return Response.success("프로필 생성 완료", profileResponseDto);
     }
 
     @PutMapping("/{userId}")
-    public ProfileResponseDto createOrUpdateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
-        logger.debug("userId와 profileDto로 프로필 생성 또는 수정 요청: {}와 {}", userId, profileDto);
+    public Response<ProfileResponseDto> createOrUpdateProfile( @RequestBody ProfileDto profileDto, @CurrentUser Member member) {
+        logger.debug("userId와 profileDto로 프로필 생성 또는 수정 요청: {}와 {}", member.getUserId(), profileDto);
 
-        Member member = memberService.getMemberById(userId);
         logger.debug("조회된 회원: {}", member);
         if (member == null) {
-            throw new IllegalArgumentException("유효하지 않은 userId " + userId);
+            throw new IllegalArgumentException("유효하지 않은 userId " + member.getUserId());
         }
 
         validateAndSetDefaults(profileDto);
@@ -76,17 +101,19 @@ public class ProfileController {
         Profile profile = convertFromDtoToEntity(profileDto);
         profile.setUserId(member);
 
-        Profile existingProfile = profileService.getProfileById(userId);
+        Profile existingProfile = profileService.getProfileById(member.getUserId());
         Profile savedProfile;
         if (existingProfile == null) {
             logger.debug("기존 프로필이 없어 새로 생성합니다.");
             savedProfile = profileService.saveProfile(profile);
         } else {
             logger.debug("기존 프로필을 업데이트합니다.");
-            savedProfile = profileService.updateProfile(profileDto); // DTO를 전달하도록 수정
+            savedProfile = profileService.updateProfile(profileDto, member); // DTO를 전달하도록 수정
         }
         logger.debug("생성 또는 수정된 프로필: {}", savedProfile);
-        return convertToResponseDto(savedProfile);
+
+        ProfileResponseDto profileResponseDto = convertToResponseDto(savedProfile);
+        return Response.success("프로필 최초 수정 완료", profileResponseDto);
     }
 
     private void validateAndSetDefaults(ProfileDto profileDto) {
@@ -108,30 +135,30 @@ public class ProfileController {
     }
 
     @PatchMapping("/{userId}")
-    public ProfileResponseDto updateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
-        logger.debug("userId와 profileDto로 프로필 수정 요청: {}와 {}", userId, profileDto);
+    public Response<ProfileResponseDto> updateProfile(@CurrentUser Member member, @RequestBody ProfileDto profileDto) {
+        logger.debug("userId와 profileDto로 프로필 수정 요청: {}와 {}", member.getUserId(), profileDto);
 
-        Member member = memberService.getMemberById(profileDto.getUserId());
         logger.debug("조회된 회원: {}", member);
         if (member == null) {
             throw new IllegalArgumentException("유효하지 않은 userId " + profileDto.getUserId());
         }
 
-        profileDto.setUserId(userId);
-        profileService.updateProfile(profileDto);
-        Profile updatedProfile = profileService.getProfileById(userId);
+        profileDto.setUserId(member.getUserId());
+        Profile updatedProfile = profileService.updateProfile(profileDto, member);
         logger.debug("수정된 프로필: {}", updatedProfile);
-        return convertToResponseDto(updatedProfile);
+        ProfileResponseDto profileResponseDto = convertToResponseDto(updatedProfile);
+        return Response.success("프로필 수정 완료", profileResponseDto);
     }
 
 
     @DeleteMapping("/{userId}")
-    public void deleteProfile(@PathVariable("userId") Long userId) {
-        logger.debug("userId로 프로필 삭제 요청: {}", userId);
-        profileService.deleteProfileById(userId);
-        logger.debug("삭제된 프로필 userId: {}", userId);
+    public void deleteProfile(@CurrentUser Member member) {
+        logger.debug("userId로 프로필 삭제 요청: {}", member.getUserId());
+        profileService.deleteProfileById(member.getUserId());
+        logger.debug("삭제된 프로필 userId: {}", member.getUserId());
     }
 
+    /*
     private Profile convertFromRequestDtoToEntity(ProfileRequestDto profileRequestDto) {
         Member member = memberService.getMemberById(profileRequestDto.getUserId());
         logger.debug("ProfileRequestDto를 Profile 엔티티로 변환: {}", member);
@@ -141,6 +168,8 @@ public class ProfileController {
                 .age(profileRequestDto.getAge())
                 .build();
     }
+
+     */
 
     private Profile convertFromDtoToEntity(ProfileDto profileDto) {
         Member member = memberService.getMemberById(profileDto.getUserId());

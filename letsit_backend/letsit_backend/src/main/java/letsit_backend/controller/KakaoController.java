@@ -106,7 +106,7 @@ public class KakaoController {
             profileDto.setSelfIntro("자기 소개");
             profileDto.setMannerScore(75.0);
             profileDto.setMannerTier(Profile.Manner_tier.B);
-            profileService.createOrUpdateProfile(profileDto);
+            profileService.createOrUpdateProfile(profileDto, loginResponse.getMember());
         }
 
 
