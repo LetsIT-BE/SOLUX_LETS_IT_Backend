@@ -18,7 +18,7 @@ public class CommentController {
     private final CommentService commentService;
 
     // TODO {userId} 빼기
-    @PostMapping("/{postId}/upload/{userId}")
+    @PostMapping("/{postId}/upload")
     public Response<CommentResponseDto> postNewComment(@PathVariable("postId") Long postId, @CurrentUser Member member, @RequestBody CommentRequestDto request) {
         CommentResponseDto savedComment = commentService.upload(postId, member, request);
 
@@ -26,7 +26,7 @@ public class CommentController {
     }
 
     // TODO {userId} 빼기
-    @PatchMapping("/{postId}/update/{commentId}/{userId}")
+    @PatchMapping("/{postId}/update/{commentId}")
     public Response<CommentResponseDto> updateComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @CurrentUser Member member, @RequestBody CommentRequestDto request) {
         CommentResponseDto updatedComment = commentService.updateComment(postId, commentId, member, request);
         return Response.success("댓글 수정 완료", updatedComment);
