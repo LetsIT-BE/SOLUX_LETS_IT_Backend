@@ -1,5 +1,6 @@
 package letsit_backend.service;
 
+import letsit_backend.dto.profile.ProfileDto;
 import letsit_backend.dto.profile.ProfileRequestDto;
 import letsit_backend.model.Member;
 import letsit_backend.model.Profile;
@@ -41,9 +42,37 @@ public class ProfileService {
         }
         profile.setNickname(profileDto.getNickname());
         profile.setAge(profileDto.getAge());
-        profile.setProfileImageUrl(profileDto.getProfileImageUrl());
-        profile.setBio(profileDto.getBio());
-        profile.setSelfIntro(profileDto.getSelfIntro());
+        profileRepository.save(profile);
+    }
+
+    public void updateProfile(ProfileDto profileDto) {
+        Member member = new Member();
+        member.setUserId(profileDto.getUserId());
+        Profile profile = profileRepository.findByUserId(member);
+        if (profile == null) {
+            throw new IllegalArgumentException("프로필이 존재하지 않습니다.");
+        }
+        if (profileDto.getMannerTier() != null) {
+            profile.setMannerTier(profileDto.getMannerTier());
+        }
+        if (profileDto.getMannerScore() != 0) {
+            profile.setMannerScore(profileDto.getMannerScore());
+        }
+        if (profileDto.getSns() != null) {
+            profile.setSns(profileDto.getSns());
+        }
+        if (profileDto.getProfileImageUrl() != null) {
+            profile.setProfileImageUrl(profileDto.getProfileImageUrl());
+        }
+        if (profileDto.getBio() != null) {
+            profile.setBio(profileDto.getBio());
+        }
+        if (profileDto.getSelfIntro() != null) {
+            profile.setSelfIntro(profileDto.getSelfIntro());
+        }
+        if (profileDto.getSkills() != null) {
+            profile.setSkills(profileDto.getSkills());
+        }
         profileRepository.save(profile);
     }
     public void updateMannerTier(Member userId) {

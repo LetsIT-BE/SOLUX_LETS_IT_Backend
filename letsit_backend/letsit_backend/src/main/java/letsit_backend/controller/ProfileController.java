@@ -40,7 +40,7 @@ public class ProfileController {
     }
 
     @PostMapping
-    public Profile createProfile(@RequestBody ProfileRequestDto profileDto) {
+    public Profile createProfile(@RequestBody ProfileDto profileDto) {
         logger.debug("프로필 생성 요청: {}", profileDto);
         Member member = memberService.getMemberById(profileDto.getUserId());
         logger.debug("조회된 회원: {}", member);
@@ -48,7 +48,7 @@ public class ProfileController {
             throw new IllegalArgumentException("유효하지 않은 userId " + profileDto.getUserId());
         }
 
-        Profile profile = convertToEntity(profileDto);
+        Profile profile = convertFromDtoToEntity(profileDto);
         profile.setUserId(member);
         Profile savedProfile = profileService.saveProfile(profile);
         logger.debug("생성된 프로필: {}", savedProfile);
@@ -56,7 +56,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/{userId}")
-    public Profile updateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileRequestDto profileDto) {
+    public Profile updateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
         logger.debug("userId와 profileDto로 프로필 수정 요청: {}와 {}", userId, profileDto);
 
         Member member = memberService.getMemberById(profileDto.getUserId());
@@ -65,10 +65,10 @@ public class ProfileController {
             throw new IllegalArgumentException("유효하지 않은 userId " + profileDto.getUserId());
         }
 
-        Profile profile = convertToEntity(profileDto);
-        profile.setProfileId(userId);
-        profile.setUserId(member);
-        Profile updatedProfile = profileService.saveProfile(profile);
+        //Profile profile = convertFromDtoToEntity(profileDto);
+        profileDto.setUserId(userId);
+        profileService.updateProfile(profileDto);
+        Profile updatedProfile = profileService.getProfileById(userId);
         logger.debug("수정된 프로필: {}", updatedProfile);
         return updatedProfile;
     }
@@ -80,6 +80,32 @@ public class ProfileController {
         logger.debug("삭제된 프로필 userId: {}", userId);
     }
 
+    private Profile convertFromRequestDtoToEntity(ProfileRequestDto profileRequestDto) {
+        Member member = memberService.getMemberById(profileRequestDto.getUserId());
+        logger.debug("ProfileRequestDto를 Profile 엔티티로 변환: {}", member);
+        return Profile.builder()
+                .userId(member)
+                .nickname(profileRequestDto.getNickname())
+                .age(profileRequestDto.getAge())
+                .build();
+    }
+
+    private Profile convertFromDtoToEntity(ProfileDto profileDto) {
+        Member member = memberService.getMemberById(profileDto.getUserId());
+        logger.debug("ProfileDto를 Profile 엔티티로 변환: {}", member);
+        return Profile.builder()
+                .profileId(profileDto.getProfileId())
+                .userId(member)
+                .nickname(profileDto.getNickname())
+                .age(profileDto.getAge())
+                .sns(profileDto.getSns())
+                .profileImageUrl(profileDto.getProfileImageUrl())
+                .bio(profileDto.getBio())
+                .selfIntro(profileDto.getSelfIntro())
+                .skills(profileDto.getSkills())
+                .build();
+    }
+    /*
     private Profile convertToEntity(ProfileRequestDto profileDto) {
         Member member = memberService.getMemberById(profileDto.getUserId());
         logger.debug("ProfileDto를 Profile 엔티티로 변환: {}", member);
@@ -97,4 +123,6 @@ public class ProfileController {
                 .skills(profileDto.getSkills())
                 .build();
     }
+
+     */
 }

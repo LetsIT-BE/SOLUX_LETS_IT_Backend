@@ -15,7 +15,7 @@ public class ProfileRequestDto {
     private Long userId;
     private Long profileId;
     private Profile.Manner_tier mannerTier;
-    private int mannerScore;
+    private double mannerScore;
     private String nickname;
     private String age;
     private String sns;

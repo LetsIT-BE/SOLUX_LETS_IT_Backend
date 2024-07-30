@@ -12,6 +12,7 @@ import letsit_backend.dto.profile.ProfileRequestDto;
 import letsit_backend.jwt.JwtProvider;
 import letsit_backend.model.KakaoProfile;
 import letsit_backend.model.Member;
+import letsit_backend.model.Profile;
 import letsit_backend.repository.MemberRepository;
 import letsit_backend.service.KakaoService;
 import letsit_backend.service.ProfileService;
@@ -95,17 +96,20 @@ public class KakaoController {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        }
-
 
             ProfileRequestDto profileDto = new ProfileRequestDto();
             profileDto.setUserId(loginResponse.getMember().getUserId());
             profileDto.setNickname(loginResponse.getMember().getName());
             profileDto.setAge(loginResponse.getMember().getAgeRange());
-            profileDto.setProfileImageUrl(loginResponse.getMember().getProfileImageUrl());
+            //profileDto.setProfileImageUrl(loginResponse.getMember().getProfileImageUrl());
             profileDto.setBio("기본 소개");
             profileDto.setSelfIntro("자기 소개");
+            profileDto.setMannerScore(75.0);
+            profileDto.setMannerTier(Profile.Manner_tier.B);
             profileService.createOrUpdateProfile(profileDto);
+        }
+
+
 
 
         // 사용자 정보와 JWT 토큰을 응답에 포함
