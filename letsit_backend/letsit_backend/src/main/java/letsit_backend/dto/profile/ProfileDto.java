@@ -37,7 +37,7 @@ public class ProfileDto {
     }
 
      */
-    private String sns;
+    private Map<String, String> sns;
     private String profileImageUrl;
     @Size(max = 20, message = "Bio must be up to 20 characters long")
     private String bio;

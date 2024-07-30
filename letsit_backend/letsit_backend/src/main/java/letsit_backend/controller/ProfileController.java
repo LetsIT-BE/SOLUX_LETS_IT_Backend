@@ -39,7 +39,7 @@ public class ProfileController {
     }
 
     //자기 자신 프로필 조회
-    @GetMapping("/{userId}")
+    @GetMapping
     public Response<ProfileResponseDto> getMyProfile(@CurrentUser Member member) {
         if (member == null) {
             return Response.fail("미인증 회원");
@@ -87,6 +87,8 @@ public class ProfileController {
         return Response.success("프로필 생성 완료", profileResponseDto);
     }
 
+
+    /*
     @PutMapping("/{userId}")
     public Response<ProfileResponseDto> createOrUpdateProfile( @RequestBody ProfileDto profileDto, @CurrentUser Member member) {
         logger.debug("userId와 profileDto로 프로필 생성 또는 수정 요청: {}와 {}", member.getUserId(), profileDto);
@@ -134,7 +136,11 @@ public class ProfileController {
         }
     }
 
-    @PatchMapping("/{userId}")
+     */
+
+
+
+    @PatchMapping
     public Response<ProfileResponseDto> updateProfile(@CurrentUser Member member, @RequestBody ProfileDto profileDto) {
         logger.debug("userId와 profileDto로 프로필 수정 요청: {}와 {}", member.getUserId(), profileDto);
 
@@ -151,7 +157,7 @@ public class ProfileController {
     }
 
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public void deleteProfile(@CurrentUser Member member) {
         logger.debug("userId로 프로필 삭제 요청: {}", member.getUserId());
         profileService.deleteProfileById(member.getUserId());
