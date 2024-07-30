@@ -32,9 +32,12 @@ public class ProfileService {
         profileRepository.deleteById(id);
     }
 
-    public void createOrUpdateProfile(ProfileRequestDto profileDto) {
+    public Profile createOrUpdateProfile(ProfileRequestDto profileDto) {
         Member member = new Member();
-        member.setUserId(profileDto.getUserId());
+        //member.setUserId(profileDto.getUserId());
+        if (member == null) {
+            throw new IllegalArgumentException("유효하지 않은 USER ID " + profileDto.getUserId());
+        }
         Profile profile = profileRepository.findByUserId(member);
         if (profile == null) {
             profile = new Profile();
@@ -42,13 +45,17 @@ public class ProfileService {
         }
         profile.setNickname(profileDto.getNickname());
         profile.setAge(profileDto.getAge());
-        profileRepository.save(profile);
+        return profileRepository.save(profile);
     }
 
-    public void updateProfile(ProfileDto profileDto) {
+    public Profile updateProfile(ProfileDto profileDto) {
         Member member = new Member();
-        member.setUserId(profileDto.getUserId());
+        //member.setUserId(profileDto.getUserId());
         Profile profile = profileRepository.findByUserId(member);
+        if (member == null) {
+            throw new IllegalArgumentException("유효하지 않은 userId " + profileDto.getUserId());
+        }
+
         if (profile == null) {
             throw new IllegalArgumentException("프로필이 존재하지 않습니다.");
         }

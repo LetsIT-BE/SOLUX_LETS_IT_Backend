@@ -1,7 +1,10 @@
 package letsit_backend.controller;
 
+import letsit_backend.CurrentUser;
+import letsit_backend.dto.Response;
 import letsit_backend.dto.profile.ProfileDto;
 import letsit_backend.dto.profile.ProfileRequestDto;
+import letsit_backend.dto.profile.ProfileResponseDto;
 import letsit_backend.model.Member;
 import letsit_backend.model.Profile;
 import letsit_backend.service.MemberService;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/profile")
@@ -27,21 +31,22 @@ public class ProfileController {
     private MemberService memberService;
 
     @GetMapping
-    public List<Profile> getAllProfiles() {
+    public List<ProfileResponseDto> getAllProfiles() {
         logger.debug("모든 프로필 조회 요청");
-        return profileService.getAllProfiles();
+        List<Profile> profiles = profileService.getAllProfiles();
+        return profiles.stream().map(this::convertToResponseDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{userId}")
-    public Profile getProfileById(@PathVariable("userId") Long userId) {
+    public ProfileResponseDto getProfileById(@PathVariable("userId") Long userId) {
         logger.debug("userId로 프로필 조회 요청: {}", userId);
         Profile profile = profileService.getProfileById(userId);
         logger.debug("조회된 프로필: {}", profile);
-        return profile;
+        return convertToResponseDto(profile);
     }
 
     @PostMapping
-    public Profile createProfile(@RequestBody ProfileDto profileDto) {
+    public ProfileResponseDto createProfile(@RequestBody ProfileDto profileDto) {
         logger.debug("프로필 생성 요청: {}", profileDto);
         Member member = memberService.getMemberById(profileDto.getUserId());
         logger.debug("조회된 회원: {}", member);
@@ -53,40 +58,35 @@ public class ProfileController {
         profile.setUserId(member);
         Profile savedProfile = profileService.saveProfile(profile);
         logger.debug("생성된 프로필: {}", savedProfile);
-        return savedProfile;
+        return convertToResponseDto(savedProfile);
     }
 
     @PutMapping("/{userId}")
-    public Profile createOrUpdateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
+    public ProfileResponseDto createOrUpdateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
         logger.debug("userId와 profileDto로 프로필 생성 또는 수정 요청: {}와 {}", userId, profileDto);
 
-        //userId로 member에서 조회
         Member member = memberService.getMemberById(userId);
         logger.debug("조회된 회원: {}", member);
         if (member == null) {
             throw new IllegalArgumentException("유효하지 않은 userId " + userId);
         }
 
-        profileDto.setUserId(userId); // userId 설정
-
-        //null 값 검증 및 기본 값 설정
         validateAndSetDefaults(profileDto);
-        Profile existingProfile = profileService.getProfileById(userId);
 
-        //profile이 null 이면 새로운 프로필 생성
+        Profile profile = convertFromDtoToEntity(profileDto);
+        profile.setUserId(member);
+
+        Profile existingProfile = profileService.getProfileById(userId);
+        Profile savedProfile;
         if (existingProfile == null) {
             logger.debug("기존 프로필이 없어 새로 생성합니다.");
-            Profile profile = convertFromDtoToEntity(profileDto);
-            Profile savedProfile = profileService.saveProfile(profile);
-            logger.debug("생성된 프로필: {}", savedProfile);
-            return savedProfile;
+            savedProfile = profileService.saveProfile(profile);
         } else {
             logger.debug("기존 프로필을 업데이트합니다.");
-            profileService.updateProfile(profileDto);
-            Profile updatedProfile = profileService.getProfileById(userId);
-            logger.debug("수정된 프로필: {}", updatedProfile);
-            return updatedProfile;
+            savedProfile = profileService.updateProfile(profileDto); // DTO를 전달하도록 수정
         }
+        logger.debug("생성 또는 수정된 프로필: {}", savedProfile);
+        return convertToResponseDto(savedProfile);
     }
 
     private void validateAndSetDefaults(ProfileDto profileDto) {
@@ -108,7 +108,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/{userId}")
-    public Profile updateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
+    public ProfileResponseDto updateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
         logger.debug("userId와 profileDto로 프로필 수정 요청: {}와 {}", userId, profileDto);
 
         Member member = memberService.getMemberById(profileDto.getUserId());
@@ -117,13 +117,13 @@ public class ProfileController {
             throw new IllegalArgumentException("유효하지 않은 userId " + profileDto.getUserId());
         }
 
-        //Profile profile = convertFromDtoToEntity(profileDto);
         profileDto.setUserId(userId);
         profileService.updateProfile(profileDto);
         Profile updatedProfile = profileService.getProfileById(userId);
         logger.debug("수정된 프로필: {}", updatedProfile);
-        return updatedProfile;
+        return convertToResponseDto(updatedProfile);
     }
+
 
     @DeleteMapping("/{userId}")
     public void deleteProfile(@PathVariable("userId") Long userId) {
@@ -157,24 +157,19 @@ public class ProfileController {
                 .skills(profileDto.getSkills())
                 .build();
     }
-    /*
-    private Profile convertToEntity(ProfileRequestDto profileDto) {
-        Member member = memberService.getMemberById(profileDto.getUserId());
-        logger.debug("ProfileDto를 Profile 엔티티로 변환: {}", member);
-        return Profile.builder()
-                .profileId(profileDto.getProfileId())
-                .userId(member)
-                .mannerTier(profileDto.getMannerTier())
-                .mannerScore(profileDto.getMannerScore())
-                .nickname(profileDto.getNickname())
-                .age(profileDto.getAge())
-                .sns(profileDto.getSns())
-                .profileImageUrl(profileDto.getProfileImageUrl())
-                .bio(profileDto.getBio())
-                .selfIntro(profileDto.getSelfIntro())
-                .skills(profileDto.getSkills())
-                .build();
+    private ProfileResponseDto convertToResponseDto(Profile profile) {
+        return new ProfileResponseDto(
+                profile.getProfileId(),
+                profile.getUserId().getUserId(),
+                profile.getMannerTier(),
+                profile.getMannerScore(),
+                profile.getNickname(),
+                profile.getAge(),
+                profile.getSns(),
+                profile.getProfileImageUrl(),
+                profile.getBio(),
+                profile.getSelfIntro(),
+                profile.getSkills()
+        );
     }
-
-     */
 }
