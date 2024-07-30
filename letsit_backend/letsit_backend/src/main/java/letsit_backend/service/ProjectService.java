@@ -35,49 +35,48 @@ public class ProjectService {
         this.profileRepository = profileRepository;
     }
 
-    public List<ProjectDto> getProjectsByUserId(Long userId) {
-        Member user = memberRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
+    public List<ProjectDto> getProjectsByUserId(Member member) {
+        Member user = memberRepository.findById(member.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
         List<Post> posts = postRepository.findByUserIdAndDeadlineFalse(user);
         return posts.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
-    public List<ProjectDto> getAppliedProjectsByUserId(Long userId) {
-        Member user = memberRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
+    public List<ProjectDto> getAppliedProjectsByUserId(Member member) {
+        Member user = memberRepository.findById(member.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
         List<Apply> applies = applyRepository.findByUserId(user);
         return applies.stream()
                 .map(apply -> convertToDto(apply.getPostId()))
                 .collect(Collectors.toList());
     }
 
-    public List<OngoingProjectDto> getOngoingProjectsByUserId(Long userId) {
-        Member user = memberRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteFalse(userId);
+    public List<OngoingProjectDto> getOngoingProjectsByUserId(Member member) {
+        Member user = memberRepository.findById(member.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
+        List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteFalse(member.getUserId());
         return teamPosts.stream()
                 .map(this::convertToOngoingProjectDto)
                 .collect(Collectors.toList());
     }
 
-    public List<OngoingProjectDto> getCompletedProjectsByUserId(Long userId) {
-        Member user = memberRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteTrue(userId);
+    public List<OngoingProjectDto> getCompletedProjectsByUserId(Member member) {
+        Member user = memberRepository.findById(member.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
+        List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteTrue(member.getUserId());
         return teamPosts.stream()
                 .map(this::convertToOngoingProjectDto)
                 .collect(Collectors.toList());
     }
-
 
     private OngoingProjectDto convertToOngoingProjectDto(TeamPost teamPost) {
         List<String> profileImages = teamMemberRepository.findByTeamId_TeamId(teamPost.getTeamId()).stream()
-            .map(teamMember -> {
-                Profile profile = profileRepository.findByUserId(teamMember.getUserId());
-                return profile != null ? profile.getProfileImageUrl() : null;
-            })
-            .collect(Collectors.toList());
+                .map(teamMember -> {
+                    Profile profile = profileRepository.findByUserId(teamMember.getUserId());
+                    return profile != null ? profile.getProfileImageUrl() : null;
+                })
+                .collect(Collectors.toList());
         return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle(), profileImages);
     }
 
