@@ -90,9 +90,9 @@ public class Post {
     private ProjectPeriod projectPeriod;
     public enum ProjectPeriod {
         oneMonth("1개월"),
-        twoMonths("2개월"),
-        threeMonths("3개월"),
-        fourMonths("4개월");
+        twoMonths("3개월"),
+        threeMonths("6개월"),
+        fourMonths("1년 이상");
 
         private final String korean;
 

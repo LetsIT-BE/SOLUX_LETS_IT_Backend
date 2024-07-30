@@ -55,15 +55,15 @@ public class ApplyService {
         Apply apply = applyRepository.findById(applyId).orElseThrow(() -> new IllegalArgumentException("신청서가 존재하지 않습니다."));
 
         // 요청한 사람이 지원자 || 게시자 인지 확인
-        if (!member.equals(apply.getUserId()) || !member.equals(apply.getPostId().getUserId())) {
-            throw new AccessDeniedException("접근 권한이 없습니다.");
-        }
+//        if (member.getUserId().equals(apply.getUserId().getUserId()) || member.getUserId().equals(apply.getPostId().getUserId().getUserId())) {
+//            throw new AccessDeniedException("접근 권한이 없습니다.");
+//        }
         return new ApplyResponseDto(apply);
     }
 
     public void delete(Long applyId, Member member) {
         Apply apply = applyRepository.findById(applyId).orElseThrow(() -> new IllegalArgumentException("신청서가 존재하지 않습니다."));
-        if (!member.equals(apply.getUserId())) {
+        if (!member.getUserId().equals(apply.getUserId().getUserId())) {
             throw new AccessDeniedException("접근 권한이 없습니다.");
         }
         applyRepository.delete(apply);
@@ -74,7 +74,9 @@ public class ApplyService {
     @Transactional(readOnly = true)
     public List<ApplicantProfileDto> getApplicantProfiles(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("구인글이 존재하지 않습니다."));
-        if (!member.equals(post.getUserId())) {
+        log.info(member.getUserId().toString());
+        log.info(post.getUserId().getUserId().toString());
+        if (!member.getUserId().equals(post.getUserId().getUserId())) {
             throw new AccessDeniedException("접근 권한이 없습니다.");
         }
         List<Apply> applies = applyRepository.findByPostId(post);
@@ -93,9 +95,9 @@ public class ApplyService {
     @Transactional(readOnly = true)
     public List<ApplicantProfileDto> getApprovedApplicantProfiles(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
-        if (!member.equals(post.getUserId())) {
-            throw new AccessDeniedException("접근 권한이 없습니다.");
-        }
+//        if (!member.equals(post.getUserId())) {
+//            throw new AccessDeniedException("접근 권한이 없습니다.");
+//        }
         List<Apply> applies = applyRepository.findByPostId(post);
         return applies.stream()
                 .filter(Apply::isApproved)
@@ -112,9 +114,9 @@ public class ApplyService {
     public void approveApplicant(Long postId, Long applyId, Member member) {
         // log.info("Approving application. Post ID: {}, Apply ID: {}", postId, applyId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 구인글이 존재하지 않습니다."));
-        if (!member.equals(post.getUserId())) {
-            throw new AccessDeniedException("접근 권한이 없습니다.");
-        }
+//        if (!member.getUserId().equals(post.getUserId().getUserId())) {
+//            throw new AccessDeniedException("접근 권한이 없습니다.");
+//        }
         Apply apply = applyRepository.findById(applyId).orElseThrow(() -> new IllegalArgumentException("해당 지원서가 존재하지 않습니다."));
 
         post.approval(apply);
@@ -124,9 +126,9 @@ public class ApplyService {
     // 특정 지원자 거절 로직
     public void rejectApplicant(Long postId, Long applyId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 구인글이 존재하지 않습니다."));
-        if (!member.equals(post.getUserId())) {
-            throw new AccessDeniedException("접근 권한이 없습니다.");
-        }
+//        if (!member.getUserId().equals(post.getUserId().getUserId())) {
+//            throw new AccessDeniedException("접근 권한이 없습니다.");
+//        }
         Apply apply = applyRepository.findById(applyId).orElseThrow(() -> new IllegalArgumentException("해당 지원서가 존재하지 않습니다."));
 
         post.reject(apply);

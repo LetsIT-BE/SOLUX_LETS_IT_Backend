@@ -49,6 +49,9 @@ public class ProjectService {
         return applies.stream()
                 .map(apply -> convertToDto(apply.getPostId()))
                 .collect(Collectors.toList());
+
+        // TODO teamMember 에서 member(currentuser)로 findall해서 list받아옴
+        // TODO 그 list에서 stream()돌면서 teamPostId를 받아서 teamPost에 iscomplete가 False면 ongoing,True면 end
     }
 
     public List<OngoingProjectDto> getOngoingProjectsByUserId(Member member) {

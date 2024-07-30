@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
 
-                                .requestMatchers("/", "/home", "/login/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error", "/login/oauth2/callback/kakao", "/profile/**").permitAll() // 정적 파일 및 특정 경로 허용
+                                .requestMatchers("/", "/home","/apply/**", "/login/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error", "/login/oauth2/callback/kakao", "/profile/**").permitAll() // 정적 파일 및 특정 경로 허용
                                 .anyRequest().authenticated()
                 )
 

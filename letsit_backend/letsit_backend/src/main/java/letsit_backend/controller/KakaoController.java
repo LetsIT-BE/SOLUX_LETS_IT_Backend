@@ -101,7 +101,7 @@ public class KakaoController {
             profileDto.setUserId(loginResponse.getMember().getUserId());
             profileDto.setNickname(loginResponse.getMember().getName());
             profileDto.setAge(loginResponse.getMember().getAgeRange());
-            //profileDto.setProfileImageUrl(loginResponse.getMember().getProfileImageUrl());
+            profileDto.setProfileImageUrl(loginResponse.getMember().getProfileImageUrl());
             profileDto.setBio("기본 소개");
             profileDto.setSelfIntro("자기 소개");
             profileDto.setMannerScore(75.0);

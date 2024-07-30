@@ -10,6 +10,7 @@ import letsit_backend.model.Profile;
 import letsit_backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -198,6 +199,7 @@ public class PostService {
         }
     }
 
+    @Transactional
     public boolean closePost(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {

@@ -40,7 +40,7 @@ public class Profile {
         F
     }
 
-    private double mannerScore = 75;
+    private double mannerScore = 75.0;
 
     private String nickname;
 

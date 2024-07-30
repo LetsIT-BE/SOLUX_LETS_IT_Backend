@@ -55,6 +55,8 @@ public class ProfileService {
         if (profile == null) {
             profile = new Profile();
             profile.setUserId(member);
+            profile.setMannerScore(75.0); // 기본값 설정
+            profile.setMannerTier(Profile.Manner_tier.B); // 기본값 설정
         }
         //profile.setNickname(profileDto.getNickname());
         profile.setAge(profileDto.getAge());
@@ -84,9 +86,13 @@ public class ProfileService {
         }
         if (profileDto.getMannerTier() != null) {
             profile.setMannerTier(profileDto.getMannerTier());
+        } else {
+            profile.setMannerTier(Profile.Manner_tier.B); // 기본값 설정
         }
         if (profileDto.getMannerScore() != 0) {
             profile.setMannerScore(profileDto.getMannerScore());
+        } else {
+            profile.setMannerScore(75.0); // 기본값 설정
         }
         if (profileDto.getSns() != null) {
             profile.setSns(profileDto.getSns());

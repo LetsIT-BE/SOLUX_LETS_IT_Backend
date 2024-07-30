@@ -15,7 +15,7 @@ import java.util.Map;
 public class ProfileDto {
     private Long profileId;
     private Long userId;
-    private Profile.Manner_tier mannerTier;
+    private Profile.Manner_tier mannerTier= Profile.Manner_tier.B;
     /*
     public enum Manner_tier {
         S,
@@ -26,7 +26,7 @@ public class ProfileDto {
     }
 
      */
-    private int mannerScore;
+    private double mannerScore = 75.0;
     private String nickname;
     private String age;
     /*
@@ -47,4 +47,5 @@ public class ProfileDto {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
 }

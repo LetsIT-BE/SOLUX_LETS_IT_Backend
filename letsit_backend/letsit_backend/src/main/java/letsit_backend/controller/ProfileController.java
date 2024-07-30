@@ -31,7 +31,7 @@ public class ProfileController {
     private MemberService memberService;
 
 
-    @GetMapping
+    @GetMapping("/all")
     public List<ProfileResponseDto> getAllProfiles() {
         logger.debug("모든 프로필 조회 요청");
         List<Profile> profiles = profileService.getAllProfiles();
@@ -39,7 +39,7 @@ public class ProfileController {
     }
 
     //자기 자신 프로필 조회
-    @GetMapping
+    @GetMapping("/my")
     public Response<ProfileResponseDto> getMyProfile(@CurrentUser Member member) {
         if (member == null) {
             return Response.fail("미인증 회원");
@@ -190,6 +190,8 @@ public class ProfileController {
                 .bio(profileDto.getBio())
                 .selfIntro(profileDto.getSelfIntro())
                 .skills(profileDto.getSkills())
+                .mannerScore(profileDto.getMannerScore())
+                .mannerTier(profileDto.getMannerTier())
                 .build();
     }
     private ProfileResponseDto convertToResponseDto(Profile profile) {

@@ -25,7 +25,6 @@ public class TeamController {
 
         // TODO 해당 게시글이 자신의 게시글인지 확인과정필요(자신의 글일때만 가능한기능)
         // TODO 팀게시판생성창에서 신청승인된 팀원목록 보여지는건 loadApplyConfirmUser()로 따로 구현?
-
         // TODO 일단 필수부분 구현하고, 보안로직 리펙토링하기(트랜젝션 동시성문제)
         // TODO testcode미작성
         Long teamPostId = teamService.creatTeam(postId, teamCreateDto);
