@@ -1,9 +1,11 @@
 package letsit_backend.controller;
 
 import jakarta.validation.Valid;
+import letsit_backend.CurrentUser;
 import letsit_backend.dto.PostRequestDto;
 import letsit_backend.dto.PostResponseDto;
 import letsit_backend.dto.Response;
+import letsit_backend.model.Member;
 import letsit_backend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,16 +22,19 @@ public class PostController {
     private final PostService postService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{userId}/upload")
-    public Response<PostResponseDto> createPost(@PathVariable Long userId, @Valid @RequestBody PostRequestDto requestDto) {
-        requestDto.setUserId(userId);  // URL에서 전달된 userId를 requestDto에 설정
+    @PostMapping("/upload")
+    public Response<PostResponseDto> createPost(@Valid @RequestBody PostRequestDto requestDto, @CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("미인증 회원");
+        }
+        requestDto.setUserId(member.getUserId());
         PostResponseDto responseDto = postService.createPost(requestDto);
         return Response.success("구인 글이 성공적으로 등록되었습니다.", responseDto);
     }
 
     // 게시글 수정
     @PutMapping("/{postId}/update")
-    public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
+    public ResponseEntity<?> updatePost(@PathVariable("postId") Long postId, @RequestBody PostRequestDto postRequestDto) {
         try {
             PostResponseDto updatedPost = postService.updatePost(postId, postRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response<>(true, "구인 글이 성공적으로 수정되었습니다.", updatedPost));
@@ -38,9 +43,12 @@ public class PostController {
         }
     }
 
-    @DeleteMapping("/{userId}/delete/{postId}")
-    public ResponseEntity<Response<Void>> deletePost(@PathVariable Long userId, @PathVariable Long postId) {
-        boolean isDeleted = postService.deletePost(userId, postId);
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<Response<Void>> deletePost(@CurrentUser Member member, @PathVariable("postId") Long postId) {
+        if (member == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Response.fail("인증이 필요합니다. 로그인 후 다시 시도해 주세요."));
+        }
+        boolean isDeleted = postService.deletePost(member, postId);
         if (isDeleted) {
             return ResponseEntity.status(HttpStatus.OK).body(Response.success("게시글이 성공적으로 삭제되었습니다.", null));
         } else {
@@ -49,7 +57,7 @@ public class PostController {
     }
 
     @GetMapping("{postId}")
-    public ResponseEntity<?> getPostById(@PathVariable Long postId) {
+    public ResponseEntity<?> getPostById(@PathVariable("postId") Long postId) {
         try {
             PostResponseDto postResponseDto = postService.getPostById(postId);
             return ResponseEntity.status(HttpStatus.OK).body(postResponseDto);
@@ -75,18 +83,4 @@ public class PostController {
         List<PostResponseDto> posts = postService.getAllPostsByDeadlineFalseOrderByCreatedAt();
         return ResponseEntity.ok(posts);
     }
-
-//    // 스크랩순으로 모든 게시글 조회
-//    @GetMapping("/list/scrap")
-//    public ResponseEntity<List<PostResponseDto>> getAllPostsOrderByScrapCount() {
-//        List<PostResponseDto> posts = postService.getAllPostsOrderByScrapCount();
-//        return ResponseEntity.ok(posts);
-//    }
-//
-//    // 조회순으로 모든 게시글 조회
-//    @GetMapping("/list/view")
-//    public ResponseEntity<List<PostResponseDto>> getAllPostsOrderByViewCount() {
-//        List<PostResponseDto> posts = postService.getAllPostsOrderByViewCount();
-//        return ResponseEntity.ok(posts);
-//    }
 }
