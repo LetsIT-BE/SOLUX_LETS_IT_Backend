@@ -82,7 +82,7 @@ public class ProjectService {
     private ProjectDto convertToDto(Post post) {
         ProjectDto projectDto = new ProjectDto();
         projectDto.setPostId(post.getPostId());
-        projectDto.setPrtTitle(post.getTitle());
+        projectDto.setTitle(post.getTitle());
         projectDto.setRegionId(post.getRegion().getName());
         projectDto.setSubRegionId(post.getSubRegion().getName());
         projectDto.setOnoff(post.getOnOff().getKorean());
