@@ -8,7 +8,6 @@ import letsit_backend.model.Post;
 import letsit_backend.model.TeamPost;
 import letsit_backend.model.Profile;
 import letsit_backend.repository.*;
-//import letsit_backend.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +52,8 @@ public class ProjectService {
     }
 
     public List<OngoingProjectDto> getOngoingProjectsByUserId(Member member) {
-        Member user = memberRepository.findById(member.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
+//        Member user = memberRepository.findById(member.getUserId())
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
         List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteFalse(member.getUserId());
         return teamPosts.stream()
                 .map(this::convertToOngoingProjectDto)
@@ -62,8 +61,8 @@ public class ProjectService {
     }
 
     public List<OngoingProjectDto> getCompletedProjectsByUserId(Member member) {
-        Member user = memberRepository.findById(member.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
+//        Member user = memberRepository.findById(member.getUserId())
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
         List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteTrue(member.getUserId());
         return teamPosts.stream()
                 .map(this::convertToOngoingProjectDto)
@@ -79,7 +78,6 @@ public class ProjectService {
                 .collect(Collectors.toList());
         return new OngoingProjectDto(teamPost.getTeamId(), teamPost.getPrjTitle(), profileImages);
     }
-
 
     private ProjectDto convertToDto(Post post) {
         ProjectDto projectDto = new ProjectDto();
