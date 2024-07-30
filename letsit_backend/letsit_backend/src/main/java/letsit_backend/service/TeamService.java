@@ -57,6 +57,7 @@ public class TeamService {
     }
 
     // 팀멤버 생성
+    // TODO 팀장은 currentUser로 만들지?
     @Transactional
     public void creatTeamMember(Long teamPostId) {
 
@@ -142,6 +143,7 @@ public class TeamService {
     }
 
     // 팀장위임
+    // TODO 팀장정보를 currentUser로 받아오기?
     @Transactional
     public void changeTeamLeader(Long teamId, Long userId) {
 
@@ -182,6 +184,7 @@ public class TeamService {
     }
 
     // 팀원평가
+    // TODO evaluator를 currentUser로 받아오기?
     @Transactional
     public void teamEvaluation(Long teamId, Long evaluator, Long evaluatee, TeamEvaluationRequestDto evaluationRequestDto) {
         // TODO userId가 authentiction과 일치시 종료
@@ -232,6 +235,7 @@ public class TeamService {
     }
 
     // 팀원평가시 -> 프로필 mannerScore 변경
+    // TODO member를 currentUserId로 변경 -> 팀원평가바꾸면 안해도됨.
     private void profileMannerScoreUpdate(Member member) {
         // 유저의 평가받은 전체목록 조회
         List<TeamEvaluation> evaluationList = teamEvaluationRepository.findAllByEvaluatee(member);
@@ -254,6 +258,7 @@ public class TeamService {
     }
 
     // 내가 평가한 팀원목록 조회
+    // TODO my에대한 식별을 CurrentUser로 받아오기?
     public List<Map<String, Long>> myEvaluationList(Long teamId, Long userId) {
         // 팀정보찾기
         TeamPost teamPost = teamPostRepository.findById(teamId)
