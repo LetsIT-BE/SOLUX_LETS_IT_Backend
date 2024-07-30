@@ -139,11 +139,11 @@ public class PostService {
         );
     }
 
-    public boolean deletePost(Long userId, Long postId) {
+    public boolean deletePost(Member user, Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
-            if (post.getUserId().getUserId().equals(userId)) {
+            if (post.getUserId().getUserId().equals(user.getUserId())) {
                 postRepository.deleteById(postId);
                 return true;
             }

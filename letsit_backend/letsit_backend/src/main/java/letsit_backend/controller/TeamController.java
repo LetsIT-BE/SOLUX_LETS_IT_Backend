@@ -20,7 +20,7 @@ public class TeamController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{postId}/create")
-    public Response<?> creatTeam(@PathVariable Long postId,
+    public Response<?> creatTeam(@PathVariable("postId") Long postId,
                                  @RequestBody TeamCreateDto teamCreateDto) {
 
         // TODO 해당 게시글이 자신의 게시글인지 확인과정필요(자신의 글일때만 가능한기능)
@@ -34,7 +34,7 @@ public class TeamController {
     }
 
     @GetMapping("/{teamId}/main")
-    public Response<TeamInfoResponseDto> roadTeamInfo(@PathVariable Long teamId) {
+    public Response<TeamInfoResponseDto> roadTeamInfo(@PathVariable("teamId") Long teamId) {
 
         // TODO 팀장인사람->화면, 팀원인사람-> 화면구분어떻게다르게???
 
@@ -47,7 +47,7 @@ public class TeamController {
 
     // TODO 팀장만(팀장의 userId를 받아와서 검증필요)
     @PatchMapping("/{teamId}/update")
-    public Response<?> teamInfoUpdate(@PathVariable Long teamId,
+    public Response<?> teamInfoUpdate(@PathVariable("teamId") Long teamId,
                                       @RequestBody @Valid TeamUpdateRequestDto teamUpdateRequestDto) {
 
         // TODO 팀아이디 불러오기
@@ -58,19 +58,23 @@ public class TeamController {
 
 
     // TODO api명시적으로 변경하기
+    // 여기서의 userId는 위임받는 팀원의 아이디 이므로 currentUser필요x
     @PatchMapping("/{teamId}/{userId}")
-    public Response<?> teamLeaderChange(@PathVariable Long teamId,
-                                        @PathVariable Long userId) {
+    public Response<?> teamLeaderChange(@PathVariable("teamId") Long teamId,
+                                        @PathVariable("userId") Long userId) {
 
 
         teamService.changeTeamLeader(teamId,userId);
         return Response.success("팀정보수정->팀장위임", null);
     }
 
+    // TODO currentUser annotation필요?
+    // evaluator는 currnet로 찾아서 주입 해야하는지?
+    // /evaluation/{teamId}/{evaluatee} and evaluator를 @currentUser Member member
     @PostMapping("/evaluation/{teamId}/{evaluator}/{evaluatee}")
-    public Response<?> evaluation(@PathVariable Long teamId,
-                                  @PathVariable Long evaluator,
-                                  @PathVariable Long evaluatee,
+    public Response<?> evaluation(@PathVariable("teamId") Long teamId,
+                                  @PathVariable("evaluator") Long evaluator,
+                                  @PathVariable("evaluatee") Long evaluatee,
                                   @RequestBody TeamEvaluationRequestDto teamEvaluationRequestDto) {
 
         // TODO 팀원평가랑 팀원신고기능에서 팀원목록 리스트업은 어떻게 처리하는지??->팀원로드기능따로구현?
@@ -81,9 +85,11 @@ public class TeamController {
         return Response.success("팀원평가", null);
     }
 
+    // TODO currentUser annotation 필요?
+    // /evaluation/info/{teamId} and
     @GetMapping("/evaluation/info/{teamId}/{userId}")
-    public Response<List<Map<String, Long>>> myEvaluationList(@PathVariable Long teamId,
-                                                              @PathVariable Long userId) {
+    public Response<List<Map<String, Long>>> myEvaluationList(@PathVariable("teamId") Long teamId,
+                                                              @PathVariable("userId") Long userId) {
 
         return Response.success("팀원평가->평가한사람목록불러오기", teamService.myEvaluationList(teamId,userId));
     }
@@ -91,7 +97,7 @@ public class TeamController {
 
     // TODO 팀장만(팀장의 userId를 받아와서 검증필요)
     @PatchMapping("/{teamId}/complete")
-    public Response<?> projectComplete(@PathVariable Long teamId) {
+    public Response<?> projectComplete(@PathVariable("teamId") Long teamId) {
 
         // TODO 팀게시판, 유저아이디 -> 팀장인지검증
         teamService.projectComplete(teamId);
@@ -101,20 +107,20 @@ public class TeamController {
 
     // ---- 필수x ----
     @PostMapping("/calendar/{teamId}/create")
-    public Response<?> calendarCreate(@PathVariable Long teamId,
+    public Response<?> calendarCreate(@PathVariable("teamId") Long teamId,
                                       @RequestBody TeamCalendarRequestDto requestDto) {
 
         return Response.success("팀게시판 일정추가", teamService.createCalendar(teamId,requestDto));
     }
 
     @GetMapping("/calendar/{teamId}/info")
-    public Response<?> calendarRoad(@PathVariable Long teamId) {
+    public Response<?> calendarRoad(@PathVariable("teamId") Long teamId) {
 
         return Response.success("팀게시판 일정 로드", teamService.roadCalendar(teamId));
     }
 
     @DeleteMapping("/calendar/{calendarId}/delete")
-    public Response<?> calendarDelete(@PathVariable Long calendarId) {
+    public Response<?> calendarDelete(@PathVariable("calendarId") Long calendarId) {
 
         teamService.deleteCalendar(calendarId);
         return Response.success("팀게시판 일정삭제", null);
@@ -123,7 +129,7 @@ public class TeamController {
     // ----- 이후에 ----
     // TODO 팀장만
     @GetMapping("/{teamId}/meeting")
-    public Response<?> meetingCertification(@PathVariable Long teamId) {
+    public Response<?> meetingCertification(@PathVariable("teamId") Long teamId) {
 
         // TODO 이미지정보, 불참팀원 받아옴
         // TODO OpenCv랑 연결 -> 인증완료시 true반환
