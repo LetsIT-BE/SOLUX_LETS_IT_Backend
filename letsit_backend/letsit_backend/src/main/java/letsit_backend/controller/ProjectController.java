@@ -26,37 +26,38 @@ public class ProjectController {
     }
 
     @GetMapping("/organizinglist")
-    public ResponseEntity<Map<String, List<ProjectDto>>> getOrganizingList(@CurrentUser Member member) {
+    public Response<List<ProjectDto>> getOrganizingList(@CurrentUser Member member) {
         if (member == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((Map<String, List<ProjectDto>>) Response.fail("인증되지 않은 회원"));
+            return Response.fail("인증되지 않은 회원");
         }
         List<ProjectDto> projects = projectService.getProjectsByUserId(member);
-        Map<String, List<ProjectDto>> response = new HashMap<>();
-        response.put("projects", projects);
-        return ResponseEntity.ok(response);
+        return Response.success("구인 중인 프로젝트 목록", projects);
     }
 
     @GetMapping("/appliedlist")
-    public ResponseEntity<Map<String, List<ProjectDto>>> getAppliedList(@CurrentUser Member member) {
+    public Response<List<ProjectDto>> getAppliedList(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("인증되지 않은 회원");
+        }
         List<ProjectDto> projects = projectService.getAppliedProjectsByUserId(member);
-        Map<String, List<ProjectDto>> response = new HashMap<>();
-        response.put("projects", projects);
-        return ResponseEntity.ok(response);
+        return Response.success("신청한 프로젝트 목록", projects);
     }
 
     @GetMapping("/ongoinglist")
-    public ResponseEntity<Map<String, List<OngoingProjectDto>>> getOngoingList(@CurrentUser Member member) {
+    public Response<List<OngoingProjectDto>> getOngoingList(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("인증되지 않은 회원");
+        }
         List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(member);
-        Map<String, List<OngoingProjectDto>> response = new HashMap<>();
-        response.put("projects", ongoingProjects);
-        return ResponseEntity.ok(response);
+        return Response.success("신청한 프로젝트 목록", ongoingProjects);
     }
 
     @GetMapping("/completedlist")
-    public ResponseEntity<Map<String, List<OngoingProjectDto>>> getCompletedList(@CurrentUser Member member) {
-        List<OngoingProjectDto> completedProjects = projectService.getCompletedProjectsByUserId(member);
-        Map<String, List<OngoingProjectDto>> response = new HashMap<>();
-        response.put("projects", completedProjects);
-        return ResponseEntity.ok(response);
+    public Response<List<OngoingProjectDto>> getCompletedList(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("인증되지 않은 회원");
+        }
+        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(member);
+        return Response.success("신청한 프로젝트 목록", ongoingProjects);
     }
 }
