@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileRequestDto {
-    private Long userId;
+public class ProfileResponseDto {
     private Long profileId;
+    private Long userId;
     private Profile.Manner_tier mannerTier;
     private double mannerScore;
     private String nickname;
@@ -24,4 +23,3 @@ public class ProfileRequestDto {
     private String selfIntro;
     private Map<String, Integer> skills;
 }
-
