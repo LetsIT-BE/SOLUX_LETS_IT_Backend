@@ -269,8 +269,8 @@ public class Post {
 
     public void approval(Apply apply) {
         if (!isClosed() && this.totalPersonnel.getValue() > this.currentPersonnel) {
-        apply.approved();
-        currentPersonnel++;
+            apply.approved();
+            currentPersonnel++;
         }
     }
     public void reject(Apply apply) {
