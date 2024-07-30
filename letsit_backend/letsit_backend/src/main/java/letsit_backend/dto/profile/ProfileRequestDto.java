@@ -18,7 +18,7 @@ public class ProfileRequestDto {
     private double mannerScore;
     private String nickname;
     private String age;
-    private String sns;
+    private Map<String, String> sns;
     private String profileImageUrl;
     private String bio;
     private String selfIntro;

@@ -46,7 +46,9 @@ public class Profile {
 
     private String age;
 
-    private String sns;
+    @Lob
+    @Convert(converter = MapToJsonConverter.class)
+    private Map<String, String> sns;
 
     private String profileImageUrl;
 

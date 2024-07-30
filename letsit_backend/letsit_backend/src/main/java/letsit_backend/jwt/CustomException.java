@@ -1,6 +1,5 @@
 package letsit_backend.jwt;
 
-import letsit_backend.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

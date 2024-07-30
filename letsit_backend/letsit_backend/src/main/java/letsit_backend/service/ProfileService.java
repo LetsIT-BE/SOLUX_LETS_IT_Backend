@@ -56,7 +56,7 @@ public class ProfileService {
             profile = new Profile();
             profile.setUserId(member);
         }
-        profile.setNickname(profileDto.getNickname());
+        //profile.setNickname(profileDto.getNickname());
         profile.setAge(profileDto.getAge());
         return profileRepository.save(profile);
     }
@@ -78,6 +78,9 @@ public class ProfileService {
 
         if (profile == null) {
             throw new IllegalArgumentException("프로필이 존재하지 않습니다.");
+        }
+        if (profileDto.getNickname() != null) {
+            profile.setNickname(profileDto.getNickname());
         }
         if (profileDto.getMannerTier() != null) {
             profile.setMannerTier(profileDto.getMannerTier());
