@@ -2,11 +2,8 @@ package letsit_backend.service;
 
 import letsit_backend.dto.OngoingProjectDto;
 import letsit_backend.dto.ProjectDto;
-import letsit_backend.model.Apply;
-import letsit_backend.model.Member;
-import letsit_backend.model.Post;
-import letsit_backend.model.TeamPost;
-import letsit_backend.model.Profile;
+import letsit_backend.dto.team.TeamCalendarResponseDto;
+import letsit_backend.model.*;
 import letsit_backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,27 +47,65 @@ public class ProjectService {
                 .map(apply -> convertToDto(apply.getPostId()))
                 .collect(Collectors.toList());
 
-        // TODO teamMember 에서 member(currentuser)로 findall해서 list받아옴
         // TODO 그 list에서 stream()돌면서 teamPostId를 받아서 teamPost에 iscomplete가 False면 ongoing,True면 end
     }
 
     public List<OngoingProjectDto> getOngoingProjectsByUserId(Member member) {
-//        Member user = memberRepository.findById(member.getUserId())
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
-        List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteFalse(member.getUserId());
-        return teamPosts.stream()
-                .map(this::convertToOngoingProjectDto)
+        // Fetch the list of team members for the given user
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByUserId(member);
+
+        // Filter and map to OngoingProjectDto
+        List<OngoingProjectDto> ongoingProjectDtoList = teamMemberList.stream()
+                .filter(teamMember -> !teamMember.getTeamId().getIsComplete()) // Corrected the filter condition
+                .map(teamMember -> {
+                    // Fetch all team members for the team
+                    List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamId(teamMember.getTeamId());
+
+                    // Collect profile images of team members
+                    List<String> profileImages = teamMembers.stream()
+                            .map(tm -> tm.getUserId().getProfileImageUrl()) // Assuming getProfileImageUrl() method exists
+                            .collect(Collectors.toList());
+
+                    // Build and return OngoingProjectDto
+                    return OngoingProjectDto.builder()
+                            .teamId(teamMember.getTeamId().getTeamId())
+                            .prjTitle(teamMember.getTeamId().getPrjTitle())
+                            .profileImages(profileImages)
+                            .build();
+                })
                 .collect(Collectors.toList());
+
+        return ongoingProjectDtoList;
     }
 
     public List<OngoingProjectDto> getCompletedProjectsByUserId(Member member) {
-//        Member user = memberRepository.findById(member.getUserId())
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
-        List<TeamPost> teamPosts = teamPostRepository.findByUser_UserIdAndIsCompleteTrue(member.getUserId());
-        return teamPosts.stream()
-                .map(this::convertToOngoingProjectDto)
+        // Fetch the list of team members for the given user
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByUserId(member);
+
+        // Filter and map to OngoingProjectDto
+        List<OngoingProjectDto> ongoingProjectDtoList = teamMemberList.stream()
+                .filter(teamMember -> teamMember.getTeamId().getIsComplete() == true) // Correct filter condition for completed projects
+                .map(teamMember -> {
+                    // Fetch all team members for the team
+                    List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamId(teamMember.getTeamId());
+
+                    // Collect profile images of team members
+                    List<String> profileImages = teamMembers.stream()
+                            .map(tm -> tm.getUserId().getProfileImageUrl()) // Assuming getProfileImageUrl() method exists
+                            .collect(Collectors.toList());
+
+                    // Build and return OngoingProjectDto
+                    return OngoingProjectDto.builder()
+                            .teamId(teamMember.getTeamId().getTeamId())
+                            .prjTitle(teamMember.getTeamId().getPrjTitle())
+                            .profileImages(profileImages)
+                            .build();
+                })
                 .collect(Collectors.toList());
+
+        return ongoingProjectDtoList;
     }
+
 
     private OngoingProjectDto convertToOngoingProjectDto(TeamPost teamPost) {
         List<String> profileImages = teamMemberRepository.findByTeamId_TeamId(teamPost.getTeamId()).stream()

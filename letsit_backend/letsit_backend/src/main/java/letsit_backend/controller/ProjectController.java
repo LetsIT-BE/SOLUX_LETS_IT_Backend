@@ -53,7 +53,7 @@ public class ProjectController {
         if (member == null) {
             return Response.fail("인증되지 않은 회원");
         }
-        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(member);
+        List<OngoingProjectDto> ongoingProjects = projectService.getCompletedProjectsByUserId(member);
         return Response.success("신청한 프로젝트 목록", ongoingProjects);
     }
 }

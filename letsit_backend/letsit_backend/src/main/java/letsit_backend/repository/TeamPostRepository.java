@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TeamPostRepository extends JpaRepository<TeamPost, Long> {
-    List<TeamPost> findByUser_UserIdAndIsCompleteFalse(Long userId);
-    List<TeamPost> findByUser_UserIdAndIsCompleteTrue(Long userId);
+    //List<TeamPost> findByUser_UserIdAndIsCompleteFalse(Long userId);
+   // List<TeamPost> findByUser_UserIdAndIsCompleteTrue(Long userId);
 }

@@ -43,7 +43,7 @@ public class CommentService {
     public void delete(Long postId, Long commentId, Member member) {
         postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
-        if (!comment.getUserId().equals(member)) {
+        if (!comment.getUserId().getUserId().equals(member.getUserId())) {
             throw new AccessDeniedException("댓글을 삭제할 권한이 없습니다.");
         }
         commentRepository.delete(comment);

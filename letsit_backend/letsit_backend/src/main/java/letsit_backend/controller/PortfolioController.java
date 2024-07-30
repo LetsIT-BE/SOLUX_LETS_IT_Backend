@@ -10,6 +10,7 @@ import letsit_backend.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.annotation.Repeatable;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -37,5 +38,11 @@ public class PortfolioController {
     public Response<DailyPortfolioResponseDto> getPrt(@PathVariable Long prtId, @CurrentUser Member member) {
         DailyPortfolioResponseDto prt = portfolioService.read(prtId, member);
         return Response.success("포트폴리오 상세조회", prt);
+    }
+
+    // 나의 포트폴리오 목록 리스트업
+    @GetMapping(value = "/total/list")
+    public Response<?> totalList(@CurrentUser Member member) {
+        return Response.success("포트폴리오 전체목록 리스트업", portfolioService.totalList(member));
     }
 }

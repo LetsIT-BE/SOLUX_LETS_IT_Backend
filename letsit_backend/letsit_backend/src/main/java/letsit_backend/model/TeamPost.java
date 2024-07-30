@@ -19,10 +19,6 @@ public class TeamPost {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teamId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id") // 추가된 부분
-    private Member user;
-
     @OneToOne
     @JoinColumn(name = "POST_ID")
     private Post postId;
