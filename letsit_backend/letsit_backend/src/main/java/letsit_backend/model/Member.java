@@ -27,7 +27,6 @@ public class Member {
     @Column
     private String name;
 
-
     @Column
     private String ageRange;
 

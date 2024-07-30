@@ -23,11 +23,9 @@ public class PortfolioService {
     private final MemberRepository memberRepository;
     private final PortfolioRepository portfolioRepository;
 
-    public DailyPortfolioResponseDto create(Long teamId, Long userId, DailyPortfolioRequestDto request) {
+    public DailyPortfolioResponseDto create(Long teamId, Member member, DailyPortfolioRequestDto request) {
         TeamPost team = teamPostRepository.findById(teamId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 프로젝트입니다."));
-        // TODO 회원 확인 로직 구현 후, userId 관련 내용은 삭제
-        Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(""));
-
+        // 보안을 위해 {userId}를 받아야 할까?
         ProjectPortfolio prt = request.toEntity(team, member);
         portfolioRepository.save(prt);
 
@@ -35,9 +33,8 @@ public class PortfolioService {
     }
 
 
-    public List<DailyPortfolioListDto> getPrtList(Long teamId, Long userId) {
+    public List<DailyPortfolioListDto> getPrtList(Long teamId, Member member) {
         TeamPost team = teamPostRepository.findById(teamId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 프로젝트입니다."));
-        Member member = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(""));
         List<ProjectPortfolio> prt = portfolioRepository.findAllByTeamIdAndUserId(team, member);
 
         return prt.stream()
@@ -51,8 +48,12 @@ public class PortfolioService {
                 .collect(Collectors.toList());
     }
 
-    public DailyPortfolioResponseDto read(Long prtId) {
+    public DailyPortfolioResponseDto read(Long prtId, Member member) {
         ProjectPortfolio prt = portfolioRepository.findById(prtId).orElseThrow(() -> new IllegalArgumentException("신청서가 존재하지 않습니다."));;
+        if (!prt.getUserId().equals(member)) {
+
+        }
+
         return new DailyPortfolioResponseDto(prt);
     }
 }

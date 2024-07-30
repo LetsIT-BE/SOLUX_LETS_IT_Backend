@@ -39,6 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
+            logger.info(token);
             try {
                 kakaoId = jwtProvider.getSubject(token);
             } catch (IllegalArgumentException e) {

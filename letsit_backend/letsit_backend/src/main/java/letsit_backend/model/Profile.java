@@ -31,7 +31,7 @@ public class Profile {
     private Member userId;
 
     @Enumerated(EnumType.STRING)
-    private Manner_tier mannerTier;
+    private Manner_tier mannerTier = B;
     public enum Manner_tier {
         S,
         A,
@@ -40,13 +40,15 @@ public class Profile {
         F
     }
 
-    private double mannerScore;
+    private double mannerScore = 75;
 
     private String nickname;
 
     private String age;
 
-    private String sns;
+    @Lob
+    @Convert(converter = MapToJsonConverter.class)
+    private Map<String, String> sns;
 
     private String profileImageUrl;
 
