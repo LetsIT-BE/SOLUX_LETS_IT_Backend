@@ -1,15 +1,15 @@
 package letsit_backend.controller;
 
+import letsit_backend.CurrentUser;
 import letsit_backend.dto.OngoingProjectDto;
 import letsit_backend.dto.ProjectDto;
+import letsit_backend.dto.Response;
+import letsit_backend.model.Member;
 import letsit_backend.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/projects")
@@ -21,35 +21,39 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping("/{userId}/organizinglist")
-    public ResponseEntity<Map<String, List<ProjectDto>>> getOrganizingList(@PathVariable("userId") Long userId) {
-        List<ProjectDto> projects = projectService.getProjectsByUserId(userId);
-        Map<String, List<ProjectDto>> response = new HashMap<>();
-        response.put("projects", projects);
-        return ResponseEntity.ok(response);
+    @GetMapping("/organizinglist")
+    public Response<List<ProjectDto>> getOrganizingList(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("인증되지 않은 회원");
+        }
+        List<ProjectDto> projects = projectService.getProjectsByUserId(member);
+        return Response.success("구인 중인 프로젝트 목록", projects);
     }
 
-    @GetMapping("/{userId}/appliedlist")
-    public ResponseEntity<Map<String, List<ProjectDto>>> getAppliedList(@PathVariable("userId") Long userId) {
-        List<ProjectDto> projects = projectService.getAppliedProjectsByUserId(userId);
-        Map<String, List<ProjectDto>> response = new HashMap<>();
-        response.put("projects", projects);
-        return ResponseEntity.ok(response);
+    @GetMapping("/appliedlist")
+    public Response<List<ProjectDto>> getAppliedList(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("인증되지 않은 회원");
+        }
+        List<ProjectDto> projects = projectService.getAppliedProjectsByUserId(member);
+        return Response.success("신청한 프로젝트 목록", projects);
     }
 
-    @GetMapping("/{userId}/ongoinglist")
-    public ResponseEntity<Map<String, List<OngoingProjectDto>>> getOngoingList(@PathVariable("userId") Long userId) {
-        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(userId);
-        Map<String, List<OngoingProjectDto>> response = new HashMap<>();
-        response.put("projects", ongoingProjects);
-        return ResponseEntity.ok(response);
+    @GetMapping("/ongoinglist")
+    public Response<List<OngoingProjectDto>> getOngoingList(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("인증되지 않은 회원");
+        }
+        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(member);
+        return Response.success("신청한 프로젝트 목록", ongoingProjects);
     }
 
-    @GetMapping("/{userId}/completedlist")
-    public ResponseEntity<Map<String, List<OngoingProjectDto>>> getCompletedList(@PathVariable("userId") Long userId) {
-        List<OngoingProjectDto> completedProjects = projectService.getCompletedProjectsByUserId(userId);
-        Map<String, List<OngoingProjectDto>> response = new HashMap<>();
-        response.put("projects", completedProjects);
-        return ResponseEntity.ok(response);
+    @GetMapping("/completedlist")
+    public Response<List<OngoingProjectDto>> getCompletedList(@CurrentUser Member member) {
+        if (member == null) {
+            return Response.fail("인증되지 않은 회원");
+        }
+        List<OngoingProjectDto> ongoingProjects = projectService.getOngoingProjectsByUserId(member);
+        return Response.success("신청한 프로젝트 목록", ongoingProjects);
     }
 }

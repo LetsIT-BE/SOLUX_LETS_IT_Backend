@@ -124,7 +124,7 @@ public class KakaoService {
             return ResponseEntity.badRequest().build(); // 예시로 bad request 반환
         }
 
-        String username = String.valueOf(kakaoProfile.getId());
+        //String username = String.valueOf(kakaoProfile.getId());
 
         // log.info("username set to : {}", username);
 
@@ -134,7 +134,7 @@ public class KakaoService {
                 .name(kakaoProfile.kakao_account.getName())
                 .ageRange(kakaoProfile.kakao_account.getAge_range())
                 .gender(kakaoProfile.kakao_account.getGender())
-                .profileImageUrl(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
+                //.profileImageUrl(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
 
                 .role(Role.USER)
                 .kakaoAccessToken(kakaoToken)
