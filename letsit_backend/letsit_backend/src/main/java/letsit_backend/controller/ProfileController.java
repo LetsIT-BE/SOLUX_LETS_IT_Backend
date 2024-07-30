@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -53,6 +54,57 @@ public class ProfileController {
         Profile savedProfile = profileService.saveProfile(profile);
         logger.debug("생성된 프로필: {}", savedProfile);
         return savedProfile;
+    }
+
+    @PutMapping("/{userId}")
+    public Profile createOrUpdateProfile(@PathVariable("userId") Long userId, @RequestBody ProfileDto profileDto) {
+        logger.debug("userId와 profileDto로 프로필 생성 또는 수정 요청: {}와 {}", userId, profileDto);
+
+        //userId로 member에서 조회
+        Member member = memberService.getMemberById(userId);
+        logger.debug("조회된 회원: {}", member);
+        if (member == null) {
+            throw new IllegalArgumentException("유효하지 않은 userId " + userId);
+        }
+
+        profileDto.setUserId(userId); // userId 설정
+
+        //null 값 검증 및 기본 값 설정
+        validateAndSetDefaults(profileDto);
+        Profile existingProfile = profileService.getProfileById(userId);
+
+        //profile이 null 이면 새로운 프로필 생성
+        if (existingProfile == null) {
+            logger.debug("기존 프로필이 없어 새로 생성합니다.");
+            Profile profile = convertFromDtoToEntity(profileDto);
+            Profile savedProfile = profileService.saveProfile(profile);
+            logger.debug("생성된 프로필: {}", savedProfile);
+            return savedProfile;
+        } else {
+            logger.debug("기존 프로필을 업데이트합니다.");
+            profileService.updateProfile(profileDto);
+            Profile updatedProfile = profileService.getProfileById(userId);
+            logger.debug("수정된 프로필: {}", updatedProfile);
+            return updatedProfile;
+        }
+    }
+
+    private void validateAndSetDefaults(ProfileDto profileDto) {
+        if (profileDto.getSns() == null) {
+            throw new IllegalArgumentException("sns은 null이 될 수 없습니다.");
+        }
+        if (profileDto.getProfileImageUrl() == null) {
+            profileDto.setProfileImageUrl("");
+        }
+        if (profileDto.getBio() == null) {
+            profileDto.setBio("");
+        }
+        if (profileDto.getSelfIntro() == null) {
+            profileDto.setSelfIntro("");
+        }
+        if (profileDto.getSkills() == null) {
+            profileDto.setSkills(new HashMap<>());
+        }
     }
 
     @PatchMapping("/{userId}")
