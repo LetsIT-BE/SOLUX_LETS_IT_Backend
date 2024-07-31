@@ -102,7 +102,7 @@ public class TeamService {
                     //
                     TeamMemberLoadInfoDto dto = new TeamMemberLoadInfoDto(
                             teamMember.getUserId().getUserId(),
-                            teamMember.getUserId().getName(),
+                            profile.getNickname(),
                             teamMember.getTeamMemberRole().toString(),
                             // 프로필사진까지 같이 로드하기
                             // TODO 프로필 null인지 유무 체크필요
@@ -181,6 +181,14 @@ public class TeamService {
         TeamPost teamPost = teamPostRepository.findById(teamId)
                 .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
         teamPost.projectEnd();
+    }
+
+    // 프로젝틑 종료되었는지 검증
+    public boolean isCompleted(Long teamId) {
+        TeamPost teamPost = teamPostRepository.findById(teamId)
+                .orElseThrow(()-> new IllegalIdentifierException("team is not found"));
+
+        return teamPost.getIsComplete();
     }
 
     // 팀원평가
