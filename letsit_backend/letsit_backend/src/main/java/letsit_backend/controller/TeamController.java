@@ -55,8 +55,6 @@ public class TeamController {
         return Response.success("회의인증->프로젝트정보수정버튼(프로젝트관리)", null);
     }
 
-
-    // TODO api명시적으로 변경하기
     // 여기서의 userId는 위임받는 팀원의 아이디 이므로 currentUser필요x
     @PatchMapping("/{teamId}/{userId}")
     public Response<?> teamLeaderChange(@PathVariable("teamId") Long teamId,
@@ -94,6 +92,9 @@ public class TeamController {
     }
 
 
+    // TODO 평가안한 팀원있으면 팀원평가 목록에 post보여주는 기능 필요
+
+
     // TODO 팀장만(팀장의 userId를 받아와서 검증필요)
     @PatchMapping("/{teamId}/complete")
     public Response<?> projectComplete(@PathVariable("teamId") Long teamId) {
@@ -103,6 +104,11 @@ public class TeamController {
         return Response.success("프로젝트종료", null);
     }
 
+    // 프로젝트 종료되었는지 검증하는 코드(팀원평가막기위해서)
+    @GetMapping("/{teamId}/is/complete")
+    public Response<?> projectIsComplete(@PathVariable("teamId") Long teamId) {
+        return Response.success("프로젝트마감여부 반환", teamService.isCompleted(teamId));
+    }
 
     // ---- 필수x ----
     @PostMapping("/calendar/{teamId}/create")
