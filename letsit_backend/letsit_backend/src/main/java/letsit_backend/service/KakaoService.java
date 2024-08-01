@@ -134,7 +134,7 @@ public class KakaoService {
                 .name(kakaoProfile.kakao_account.getName())
                 .ageRange(kakaoProfile.kakao_account.getAge_range())
                 .gender(kakaoProfile.kakao_account.getGender())
-                //.profileImageUrl(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
+                .profileImageUrl(kakaoProfile.getKakao_account().getProfile().getProfile_image_url())
 
                 .role(Role.USER)
                 .kakaoAccessToken(kakaoToken)

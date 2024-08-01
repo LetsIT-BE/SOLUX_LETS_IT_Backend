@@ -57,9 +57,11 @@ public class ProfileService {
             profile.setUserId(member);
             profile.setMannerScore(75.0); // 기본값 설정
             profile.setMannerTier(Profile.Manner_tier.B); // 기본값 설정
+            //profile.setNickname(member.getName());
         }
-        //profile.setNickname(profileDto.getNickname());
+        profile.setName(member.getName());
         profile.setAge(profileDto.getAge());
+        profile.setProfileImageUrl(profileDto.getProfileImageUrl());
         return profileRepository.save(profile);
     }
 

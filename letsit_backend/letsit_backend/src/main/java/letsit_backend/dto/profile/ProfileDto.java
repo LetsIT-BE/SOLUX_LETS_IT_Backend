@@ -6,12 +6,13 @@ import letsit_backend.model.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 @Data
-@Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProfileDto {
     private Long profileId;
     private Long userId;
@@ -28,6 +29,7 @@ public class ProfileDto {
      */
     private double mannerScore = 75.0;
     private String nickname;
+    private String name;
     private String age;
     /*
     public enum Age {

@@ -56,7 +56,7 @@ public class ProfileController {
 
     //다른 사용자 프로필 조회
     @GetMapping("/{userId}")
-    public Response<ProfileResponseDto> getProfileById(@PathVariable Long userId, @CurrentUser Member member) {
+    public Response<ProfileResponseDto> getProfileById(@PathVariable("userId") Long userId, @CurrentUser Member member) {
         if (member == null) {
             return Response.fail("미인증 회원");
         }
@@ -140,7 +140,7 @@ public class ProfileController {
 
 
 
-    @PatchMapping
+    @PatchMapping("/upload")
     public Response<ProfileResponseDto> updateProfile(@CurrentUser Member member, @RequestBody ProfileDto profileDto) {
         logger.debug("userId와 profileDto로 프로필 수정 요청: {}와 {}", member.getUserId(), profileDto);
 
@@ -183,6 +183,7 @@ public class ProfileController {
         return Profile.builder()
                 .profileId(profileDto.getProfileId())
                 .userId(member)
+                .name(profileDto.getName())
                 .nickname(profileDto.getNickname())
                 .age(profileDto.getAge())
                 .sns(profileDto.getSns())
@@ -200,6 +201,7 @@ public class ProfileController {
                 profile.getUserId().getUserId(),
                 profile.getMannerTier(),
                 profile.getMannerScore(),
+                profile.getName(),
                 profile.getNickname(),
                 profile.getAge(),
                 profile.getSns(),
