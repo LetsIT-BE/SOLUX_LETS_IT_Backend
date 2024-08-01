@@ -153,7 +153,7 @@ public class PostController {
 
     @PostMapping("/{postId}/close")
     @ResponseStatus(HttpStatus.OK)
-    public Response<?> closePost(@PathVariable Long postId) {
+    public Response<?> closePost(@PathVariable("postId") Long postId) {
         boolean isClosed = postService.closePost(postId);
         if (isClosed) {
             return Response.success("모집이 마감되었습니다.", postService.closePost(postId));
