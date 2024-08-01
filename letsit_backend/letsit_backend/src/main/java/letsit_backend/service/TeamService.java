@@ -237,32 +237,39 @@ public class TeamService {
 
 
         // 평가받는자 member1의 mannerScore변경
-        profileMannerScoreUpdate(member1);
+        profileMannerScoreUpdate(member1, teamEvaluation.getTotal());
         // 프로필 등급변경기능 호출
         profileService.updateMannerTier(member1);
     }
 
     // 팀원평가시 -> 프로필 mannerScore 변경
     // TODO member를 currentUserId로 변경 -> 팀원평가바꾸면 안해도됨.
-    private void profileMannerScoreUpdate(Member member) {
+    private void profileMannerScoreUpdate(Member member, double evaluationTotal) {
         // 유저의 평가받은 전체목록 조회
-        List<TeamEvaluation> evaluationList = teamEvaluationRepository.findAllByEvaluatee(member);
+        Profile profile = profileRepository.findByUserId(member);
+        double currentScore = profile.getMannerScore();
 
-        // 목록이 비어있지않으면, 변경
-        if (!evaluationList.isEmpty()) {
-            int length = evaluationList.size();             // 총 평가 갯수
-            double total = evaluationList.stream()          // 평가 종합 합산
-                    .mapToDouble(TeamEvaluation::getTotal)
-                    .sum(); // 모든 score 값을 합산합니다.
-            double average = total / length;                // 합산값 평균내기
-
-            // mannserScore값 변경
-            Profile profile = profileRepository.findByUserId(member);
-            profile.mannserScoreUpdate(average);
-
-            // 저장
-            profileRepository.save(profile);
+        // 가중치 설정
+        double temp = evaluationTotal;
+        if (evaluationTotal <= 100 && evaluationTotal > 80) {
+            temp *= 0.02;
+        } else if (evaluationTotal>60) {
+            temp *= 0.01;
+        } else if (evaluationTotal>40) {
+            temp *= -0.05;
+        } else if (evaluationTotal>30) {
+            temp *= -0.1;
+        } else if (evaluationTotal>=20) {
+            temp *= -0.2;
         }
+
+        // 가중치 반영해서 더하기
+        currentScore += temp;
+        profile.mannserScoreUpdate(currentScore);
+
+        // 저장
+        profileRepository.save(profile);
+
     }
 
     // 내가 평가한 팀원목록 조회
@@ -361,7 +368,6 @@ public class TeamService {
         } else {
             throw new EntityNotFoundException("캘린더 일정을 찾을수없습니다.");
         }
-
 
     }
 }
