@@ -9,10 +9,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ApplicantProfileDto {
     private Long applyId;
+    private String name;
     private String nickname;
     private String profileImage;
 
     public static ApplicantProfileDto fromEntity(Profile profile, Apply apply) {
-        return new ApplicantProfileDto(apply.getApplyId(), profile.getNickname(), profile.getProfileImageUrl());
+        return new ApplicantProfileDto(apply.getApplyId(), profile.getNickname(), profile.getUserId().getName(), profile.getProfileImageUrl());
     }
 }
