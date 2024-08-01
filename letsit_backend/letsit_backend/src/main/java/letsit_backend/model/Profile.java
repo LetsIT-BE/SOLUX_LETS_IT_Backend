@@ -42,6 +42,8 @@ public class Profile {
 
     private double mannerScore = 75.0;
 
+    private String name;
+
     private String nickname;
 
     private String age;

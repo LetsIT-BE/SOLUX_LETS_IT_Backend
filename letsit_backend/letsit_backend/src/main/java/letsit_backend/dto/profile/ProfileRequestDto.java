@@ -17,6 +17,7 @@ public class ProfileRequestDto {
     private Profile.Manner_tier mannerTier = Profile.Manner_tier.B;
     private double mannerScore = 75.0;
     private String nickname;
+    private String name;
     private String age;
     private Map<String, String> sns;
     private String profileImageUrl;

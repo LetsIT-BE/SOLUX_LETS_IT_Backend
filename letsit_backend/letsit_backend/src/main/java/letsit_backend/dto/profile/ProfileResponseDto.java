@@ -15,6 +15,7 @@ public class ProfileResponseDto {
     private Long userId;
     private Profile.Manner_tier mannerTier;
     private double mannerScore;
+    private String name;
     private String nickname;
     private String age;
     private Map<String, String> sns;
