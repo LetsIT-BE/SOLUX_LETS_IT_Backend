@@ -26,16 +26,16 @@ public class TeamEvaluation {
     private Member evaluator; // 평가하는사람
 
     @Column(nullable = false)
-    private int frequency;
+    private double frequency;
 
     @Column(nullable = false)
-    private int participate;
+    private double participate;
 
     @Column(nullable = false)
-    private int kindness;
+    private double kindness;
 
     @Column(nullable = false)
-    private int promise;
+    private double promise;
 
     private double total;
 }

@@ -31,7 +31,7 @@ public class TeamService {
     private final ProfileRepository profileRepository;
     private final CalendarRepository calendarRepository;
     private final ProfileService profileService;
-
+    
     // TODO 생성자주입, setter사용지향, 빌드주입하기로 수정필요
 
     // 팀 게시판 생성
@@ -251,22 +251,23 @@ public class TeamService {
 
         // 가중치 설정
         double temp = evaluationTotal;
-        if (evaluationTotal <= 100 && evaluationTotal > 80) {
-            temp *= 0.02;
-        } else if (evaluationTotal>60) {
-            temp *= 0.01;
-        } else if (evaluationTotal>40) {
-            temp *= -0.05;
-        } else if (evaluationTotal>30) {
-            temp *= -0.1;
-        } else if (evaluationTotal>=20) {
-            temp *= -0.2;
+        if (evaluationTotal <= 50 && evaluationTotal > 25) {
+            temp *= 0.04; // 최대 2점 상승
+        } else if (evaluationTotal>=0) {
+            temp *= 0.02; // 최대 0.5점 상승
+        } else if (evaluationTotal>-25) {
+            temp *= 0.04; // 최대 1점 하락
+        } else if (evaluationTotal>-40) {
+            temp *= 0.05; // 최대 2점 하락
+        } else if (evaluationTotal>=-50) {
+            temp *= 0.08; // 최대 4점 하락
         }
+
+        //System.out.println("변경되는 숫자 = " + temp);
 
         // 가중치 반영해서 더하기
         currentScore += temp;
-        profile.mannserScoreUpdate(currentScore);
-
+        profile.mannserScoreUpdate(Math.round(currentScore));
         // 저장
         profileRepository.save(profile);
 
