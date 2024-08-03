@@ -43,8 +43,10 @@ public class ProjectService {
         Member user = memberRepository.findById(member.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + member.getUserId()));
         List<Apply> applies = applyRepository.findByUserId(user);
+
         return applies.stream()
-                .map(apply -> convertToDto(apply.getPostId()))
+                .filter(apply -> !apply.getPostId().isClosed())
+                .map(apply ->  convertToDto(apply.getPostId()))
                 .collect(Collectors.toList());
 
         // TODO 그 list에서 stream()돌면서 teamPostId를 받아서 teamPost에 iscomplete가 False면 ongoing,True면 end

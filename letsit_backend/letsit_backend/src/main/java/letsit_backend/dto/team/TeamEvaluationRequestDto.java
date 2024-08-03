@@ -2,16 +2,18 @@ package letsit_backend.dto.team;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class TeamEvaluationRequestDto {
-    private int frequency;
-    private int participate;
-    private int kindness;
-    private int promise;
+    private double frequency;
+    private double participate;
+    private double kindness;
+    private double promise;
 
     @Builder
-    public TeamEvaluationRequestDto(int frequency, int participate, int kindness, int promise) {
+    public TeamEvaluationRequestDto(double frequency, double participate, double kindness, double promise) {
         this.frequency = frequency;
         this.participate = participate;
         this.kindness = kindness;

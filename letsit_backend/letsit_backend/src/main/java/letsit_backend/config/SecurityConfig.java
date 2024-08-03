@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
 
-                                .requestMatchers("/", "/home","/apply/**", "/login/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error", "/login/oauth2/callback/kakao", "/profile/**").permitAll() // 정적 파일 및 특정 경로 허용
+                                .requestMatchers("/", "/home","/apply/**", "/login/**", "/vite.svg", "/posts/**", "/favicon.ico", "/error", "/login/oauth2/callback/kakao", "/profile/**", "index.html").permitAll() // 정적 파일 및 특정 경로 허용
                                 .anyRequest().authenticated()
                 )
 
@@ -74,7 +74,7 @@ public class SecurityConfig {
     private CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080", "http://localhost:80", "http://172.20.8.238:80", "http://172.20.8.238:8080"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

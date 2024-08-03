@@ -263,7 +263,7 @@ public class Post {
     }
 
     // 마감여부 확인(기한 지났으면 + 마감true이면)
-    private boolean isClosed() {
+    public boolean isClosed() {
         return this.recruitDueDate.isBefore(LocalDate.now()) || this.deadline;
     }
 

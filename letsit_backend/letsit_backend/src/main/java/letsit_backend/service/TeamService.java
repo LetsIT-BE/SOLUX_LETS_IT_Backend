@@ -52,6 +52,7 @@ public class TeamService {
                 teamCreateDto.getGithubLink());
 
         teamPostRepository.save(newTeamPost); // 저장
+        System.out.println("TeamId = " + newTeamPost.getTeamId());
         return newTeamPost.getTeamId();
 
     }
@@ -134,6 +135,7 @@ public class TeamService {
                         teamUpdateRequestDto.getGithubLink(),
                         teamUpdateRequestDto.getNotionLink());
 
+        teamPostRepository.save(teamPost);
         // TODO 팀장위임기능(따로함수분리하기)
         // TODO 팀원정보 선택후 changeLeader로 user정보 전달
         // TODO TeamId와 User로 TeamMember에서 유저찾기
