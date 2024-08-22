@@ -1,12 +1,13 @@
-package letsit_backend.jwt;
+package letsit_backend.exception;
 
+import letsit_backend.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 public class CustomException extends RuntimeException {
 
-    private final ErrorCode errorCode;
+    private final letsit_backend.exception.ErrorCode errorCode;
 
     public CustomException(ErrorCode errorCode) {
         super(errorCode.getMessage()); // 예외 메시지로 ErrorCode의 메시지 사용

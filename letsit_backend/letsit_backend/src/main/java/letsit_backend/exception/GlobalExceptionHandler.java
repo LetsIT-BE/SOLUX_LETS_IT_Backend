@@ -1,6 +1,8 @@
-package letsit_backend.jwt;
+package letsit_backend.exception;
 
 import letsit_backend.dto.Response;
+import letsit_backend.exception.CustomException;
+import letsit_backend.exception.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

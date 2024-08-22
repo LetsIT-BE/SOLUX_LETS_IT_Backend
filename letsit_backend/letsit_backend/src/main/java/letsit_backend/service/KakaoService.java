@@ -7,7 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 import letsit_backend.dto.KakaoTokenDto;
 import letsit_backend.dto.LoginResponseDto;
-import letsit_backend.jwt.CustomException;
+import letsit_backend.exception.CustomException;
 import letsit_backend.jwt.JwtProvider;
 import letsit_backend.model.KakaoProfile;
 import letsit_backend.model.Member;
@@ -18,9 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -124,7 +121,7 @@ public class KakaoService {
             return ResponseEntity.badRequest().build(); // 예시로 bad request 반환
         }
 
-        //String username = String.valueOf(kakaoProfile.getId());
+        // String username = String.valueOf(kakaoProfile.getId());
 
         // log.info("username set to : {}", username);
 
