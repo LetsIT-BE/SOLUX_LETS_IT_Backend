@@ -18,25 +18,24 @@ public class TeamEvaluation {
     private TeamPost teamId;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private Member userId; //평가받는자
+    @JoinColumn(name = "evaluatee_id")
+    private Member evaluatee; // 평가받는사람
 
-    //TODO 프로필과 일대다연결?
-    private Long profileId;
-
-    @Column(nullable = false)
-    private int frequency;
+    @ManyToOne
+    @JoinColumn(name = "evaluator_id")
+    private Member evaluator; // 평가하는사람
 
     @Column(nullable = false)
-    private int participate;
+    private double frequency;
 
     @Column(nullable = false)
-    private int kindness;
+    private double participate;
 
     @Column(nullable = false)
-    private int promise;
+    private double kindness;
 
-    private int total;
+    @Column(nullable = false)
+    private double promise;
 
-
+    private double total;
 }

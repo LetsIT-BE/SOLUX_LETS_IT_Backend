@@ -1,12 +1,18 @@
 package letsit_backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
+import java.util.List;
+
+
 @Builder
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -15,24 +21,36 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, unique = true)
-    private String loginId;
+    @Column
+    private Long kakaoId;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(length = 10, nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
-    private String birth;
+    @Column
+    private String ageRange;
 
-    @Column(nullable = false)
+    @Column
     private String gender;
 
-    // 가입일
-    // 본인인증여부
+    @Column
+    private String profileImageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Setter
+    private String kakaoAccessToken;
+
+
+    @Builder
+    public Member(String name, String ProfileImageUrl, Role role, Long kakaoId, String gender, String age_range, String kakaoAccessToken) {
+        this.name = name;
+        this.role = role;
+        this.profileImageUrl = ProfileImageUrl;
+        this.ageRange = age_range;
+        this.kakaoId = kakaoId;
+        this.gender = gender;
+        this.kakaoAccessToken = kakaoAccessToken;
+    }
 }
